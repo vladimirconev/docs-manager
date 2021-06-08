@@ -1,0 +1,24 @@
+{
+	"properties": {
+		"content": {
+			"type": "binary",
+			"index": false
+		},
+		"creationDate": {
+			"type": "date",
+			"index": false
+		},
+		"extension": {
+			"type": "keyword"
+		},
+		"fileName": {
+			"type": "keyword"
+		},
+		"id": {
+			"type": "keyword"
+		},
+		"userId": {
+			"type": "keyword"
+		}
+	}
+}
