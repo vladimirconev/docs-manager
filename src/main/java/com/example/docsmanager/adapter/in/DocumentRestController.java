@@ -40,7 +40,7 @@ public class DocumentRestController {
 	@PostMapping(path = "/documents", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	ResponseEntity<DocumentMetadataResponseDto> uploadFile(
+	ResponseEntity<DocumentMetadataResponseDto> uploadDocument(
 			final @RequestPart("file") MultipartFile multiPartfile,
 			final @RequestParam("userId") String user) {
 		log.info("Starting of Uploading a document.");
@@ -55,7 +55,7 @@ public class DocumentRestController {
 	@DeleteMapping(path= "/documents",
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	ResponseEntity<Void> deleteFiles(
+	ResponseEntity<Void> deleteDocuments(
 			final @RequestParam("documentIds") Set<String> documentIds) {
 		log.info("Deleting documents via following IDs:{}.", documentIds);
 		documentManagent.deleteDocuments(documentIds);
