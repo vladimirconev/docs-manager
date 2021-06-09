@@ -18,6 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DocumentRestMapper {
+	
+	private DocumentRestMapper() {
+		
+	}
 
 	public static DocumentMetadataResponseDto mapDocumentToDocumentMetadataResponseDto(final Document document) {
 		var documentMetadataResponseDto = new DocumentMetadataResponseDto();

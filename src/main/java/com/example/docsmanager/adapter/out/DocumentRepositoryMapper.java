@@ -8,6 +8,9 @@ import com.example.docsmanager.domain.entity.Document;
 
 public class DocumentRepositoryMapper {
 
+	private DocumentRepositoryMapper() {
+		
+	}
 	
 	public static DocumentElasticDto mapDocumentToDocumentElasticDto(final Document document) {
 		var dto = new DocumentElasticDto();

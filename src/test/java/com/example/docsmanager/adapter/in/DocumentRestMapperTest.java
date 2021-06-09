@@ -39,4 +39,14 @@ public class DocumentRestMapperTest extends TestObjectFactory {
 		
 	}
 	
+	@Test
+	void mapMultipartFileToDocumentWhenPassingOnFaultyContentType() {
+		Document document = DocumentRestMapper.mapMultipartFileToDocument(buildMockMultiplepartFileWithFaultyContentType(), SAMPLE_USER_ID);
+
+		assertNotNull(document);
+		assertNotNull(document.getId());
+		assertNotNull(document.getCreationDate());
+		assertEquals(SAMPLE_USER_ID, document.getUserId());
+	}
+	
 }
