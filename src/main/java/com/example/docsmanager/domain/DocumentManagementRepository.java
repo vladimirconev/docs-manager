@@ -12,6 +12,8 @@ public interface DocumentManagementRepository {
 	
 	void deleteDocuments(final Set<String> documentIds);
 	
+	Set<Document> getAllDocumentsByUserId(final String userId);
+	
 	
 
 }
