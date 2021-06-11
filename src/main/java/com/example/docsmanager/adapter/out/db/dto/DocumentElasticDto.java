@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Document(indexName = "#{@documentIndexName}", createIndex = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DocumentElasticDto implements Serializable {
 	
 	private static final long serialVersionUID = 307136746625657662L;

@@ -2,6 +2,7 @@ package com.example.docsmanager.adapter.in;
 
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,6 +61,17 @@ public class DocumentRestController {
 		log.info("Deleting documents via following IDs:{}.", documentIds);
 		documentManagent.deleteDocuments(documentIds);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/documents", produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<Set<DocumentMetadataResponseDto>> 
+		getDocumentsByUserId(
+				final @RequestParam("userId") String userId) {
+		Set<Document> documentsByUserId = documentManagent.getDocumentsByUserId(userId);
+		Set<DocumentMetadataResponseDto> documentMetadataDtos = documentsByUserId.stream()
+				.map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto).collect(Collectors.toSet());
+		return new ResponseEntity<>(documentMetadataDtos, HttpStatus.OK);
+
 	}
 	
 	

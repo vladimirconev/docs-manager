@@ -27,4 +27,9 @@ public class DocumentManager implements DocumentManagement {
 		return docManagerRepository.getDocumentContent(id);
 	}
 
+	@Override
+	public Set<Document> getDocumentsByUserId(final String userId) {
+		return docManagerRepository.getAllDocumentsByUserId(userId);
+	}
+
 }

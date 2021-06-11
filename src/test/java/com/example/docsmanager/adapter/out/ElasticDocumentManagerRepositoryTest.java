@@ -11,9 +11,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import org.elasticsearch.client.RestHighLevelClient;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,11 +25,20 @@ import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 @ExtendWith(MockitoExtension.class)
 public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
 	
-	@InjectMocks
 	private ElasticDocumentManagerRepository elasticDocumentManagerRepo;
 	
 	@Mock
 	private DocumentElasticRepository documentElasticRepository;
+	
+	@Mock
+	private RestHighLevelClient restHighLevelClient;
+	
+	@BeforeEach
+	void setup() {
+		elasticDocumentManagerRepo =
+				new ElasticDocumentManagerRepository(documentElasticRepository, restHighLevelClient,
+						"test-drive");
+	}
 	
 	@Test
 	void uploadDocumentTest() {
@@ -78,5 +88,7 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
 		
 		Mockito.verify(documentElasticRepository, times(1)).deleteAllById(Set.of(DOCUMENT_ID));
 	}
+	
+	
 	
 }

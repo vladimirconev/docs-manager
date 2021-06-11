@@ -58,15 +58,13 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().filter(QueryBuilders.termQuery(USER_ID, userId));
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().query(boolQueryBuilder).size(MAX_SIZE);
 		SearchRequest searchRequest = new SearchRequest(documentIndexName).source(searchSourceBuilder);
-
 		SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
 		SearchHit[] hits = searchResponse.getHits().getHits();
-		Set<Document> documents = Arrays.asList(hits).parallelStream()
-				.filter(Objects::nonNull)
-				.map(searchHit -> new ObjectMapper().convertValue(searchHit.getSourceAsMap(), Document.class))
+		Set<DocumentElasticDto> documents = Arrays.asList(hits).parallelStream().filter(Objects::nonNull)
+				.map(searchHit -> new ObjectMapper().convertValue(searchHit.getSourceAsMap(), DocumentElasticDto.class))
 				.collect(Collectors.toSet());
-
-		return documents;
+		return documents.parallelStream().map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument)
+				.collect(Collectors.toSet());
 	}
 
 }

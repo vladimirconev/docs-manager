@@ -17,5 +17,7 @@ public interface DocumentManagement {
 	void deleteDocuments(final Set<String> documentIds);
 	
 	byte[] getDocumentContent(final String id);
+	
+	Set<Document> getDocumentsByUserId(final String userId);
 
 }
