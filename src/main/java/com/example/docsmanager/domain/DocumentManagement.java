@@ -18,6 +18,6 @@ public interface DocumentManagement {
 	
 	byte[] getDocumentContent(final String id);
 	
-	Set<Document> getDocumentsByUserId(final String userId);
+	Set<Document> getDocumentsByUserId(final String userId, final String extension);
 
 }

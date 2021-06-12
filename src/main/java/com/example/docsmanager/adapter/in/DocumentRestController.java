@@ -66,8 +66,9 @@ public class DocumentRestController {
 	@GetMapping(path = "/documents", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<Set<DocumentMetadataResponseDto>> 
 		getDocumentsByUserId(
-				final @RequestParam("userId") String userId) {
-		Set<Document> documentsByUserId = documentManagent.getDocumentsByUserId(userId);
+				final @RequestParam("userId") String userId,
+				final @RequestParam(name = "extension", required = false) String extension) {
+		Set<Document> documentsByUserId = documentManagent.getDocumentsByUserId(userId, extension);
 		Set<DocumentMetadataResponseDto> documentMetadataDtos = documentsByUserId.stream()
 				.map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto).collect(Collectors.toSet());
 		return new ResponseEntity<>(documentMetadataDtos, HttpStatus.OK);

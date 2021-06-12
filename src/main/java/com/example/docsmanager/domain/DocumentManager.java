@@ -28,8 +28,8 @@ public class DocumentManager implements DocumentManagement {
 	}
 
 	@Override
-	public Set<Document> getDocumentsByUserId(final String userId) {
-		return docManagerRepository.getAllDocumentsByUserId(userId);
+	public Set<Document> getDocumentsByUserId(final String userId, final String extension) {
+		return docManagerRepository.getAllDocumentsByUserId(userId, extension);
 	}
 
 }

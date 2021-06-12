@@ -12,7 +12,7 @@ public interface DocumentManagementRepository {
 	
 	void deleteDocuments(final Set<String> documentIds);
 	
-	Set<Document> getAllDocumentsByUserId(final String userId);
+	Set<Document> getAllDocumentsByUserId(final String userId, final String extension);
 	
 	
 
