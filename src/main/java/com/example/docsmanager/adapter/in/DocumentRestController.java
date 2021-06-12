@@ -20,17 +20,24 @@ import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
 import com.example.docsmanager.domain.DocumentManagement;
 import com.example.docsmanager.domain.entity.Document;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Api(tags = {"Documents"},value = "/documents")
 public class DocumentRestController {
 	
 	private final DocumentManagement documentManagent;
 	
 	
+	@ApiOperation(value = "Retrieve a document by ID", tags = { "Documents" })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = byte[].class) })
 	@GetMapping(path = "/documents/{documentId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	ResponseEntity<byte[]> getDocumentContent(final @PathVariable("documentId") String documentId) {
 		log.info("Fetching Document Data with id:{}.", documentId);
@@ -38,6 +45,9 @@ public class DocumentRestController {
 		return new ResponseEntity<>(content, HttpStatus.OK);
 	}
 	
+	
+	@ApiOperation(value = "Upload a document", tags = { "Documents" })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = DocumentMetadataResponseDto.class) })
 	@PostMapping(path = "/documents", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -53,6 +63,8 @@ public class DocumentRestController {
 	
 	}
 	
+	@ApiOperation(value = "Delete a document by ID", tags = { "Documents" })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = Void.class) })
 	@DeleteMapping(path= "/documents",
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -63,6 +75,9 @@ public class DocumentRestController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "Retrieve a document by user id and extension", tags = { "Documents" })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", responseContainer = "Set",
+	          response = DocumentMetadataResponseDto.class) })
 	@GetMapping(path = "/documents", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<Set<DocumentMetadataResponseDto>> 
 		getDocumentsByUserId(
