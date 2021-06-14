@@ -65,9 +65,7 @@ public class DocumentRestController {
 	
 	@ApiOperation(value = "Delete a document by ID", tags = { "Documents" })
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = Void.class) })
-	@DeleteMapping(path= "/documents",
-			produces = MediaType.APPLICATION_JSON_VALUE, 
-			consumes = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(path= "/documents")
 	ResponseEntity<Void> deleteDocuments(
 			final @RequestParam("documentIds") Set<String> documentIds) {
 		log.info("Deleting documents via following IDs:{}.", documentIds);
