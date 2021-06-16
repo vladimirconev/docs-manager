@@ -1,18 +1,24 @@
 package com.example.docsmanager.adapter.out;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.search.ClearScrollRequest;
+import org.elasticsearch.action.search.ClearScrollResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
@@ -23,13 +29,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ElasticDocumentManagerRepository implements DocumentManagementRepository {
 	
 	private static final String USER_ID = "userId";
 	private static final String EXTENSION = "extension";
-	private static final int MAX_SIZE = 10000;
 	
 	private final DocumentElasticRepository documentElasticRepository;
 	private final RestHighLevelClient restHighLevelClient;
@@ -57,19 +64,42 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 	@SneakyThrows
 	@Override
 	public Set<Document> getAllDocumentsByUserId(final String userId, final String extension) {
+		Set<Document> documents= new HashSet<>();
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().filter(QueryBuilders.termQuery(USER_ID, userId));
 		if (StringUtils.isNotBlank(extension)) {
 			boolQueryBuilder.must(QueryBuilders.boolQuery().filter(QueryBuilders.termQuery(EXTENSION, extension)));
 		}
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().query(boolQueryBuilder).size(MAX_SIZE);
-		SearchRequest searchRequest = new SearchRequest(documentIndexName).source(searchSourceBuilder);
-		SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-		SearchHit[] hits = searchResponse.getHits().getHits();
-		Set<DocumentElasticDto> documents = Arrays.asList(hits).parallelStream().filter(Objects::nonNull)
-				.map(searchHit -> new ObjectMapper().convertValue(searchHit.getSourceAsMap(), DocumentElasticDto.class))
-				.collect(Collectors.toSet());
-		return documents.parallelStream().map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument)
-				.collect(Collectors.toSet());
+		final Scroll scroll = new Scroll(TimeValue.timeValueMinutes(1L));
+		SearchRequest searchRequest = new SearchRequest(documentIndexName);
+		searchRequest.scroll(scroll);
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder.query(boolQueryBuilder);
+		searchRequest.source(searchSourceBuilder);
+
+		SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT); 
+		String scrollId = searchResponse.getScrollId();
+		SearchHit[] searchHits = searchResponse.getHits().getHits();
+
+		while (searchHits != null && searchHits.length > 0) {
+			Set<Document> docs = Arrays.asList(searchHits).parallelStream().filter(Objects::nonNull).map(
+					searchHit -> new ObjectMapper().convertValue(searchHit.getSourceAsMap(), DocumentElasticDto.class))
+					.map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument).collect(Collectors.toSet());
+			if(!docs.isEmpty()) {
+				documents.addAll(docs);
+			}
+			SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
+			scrollRequest.scroll(scroll);
+			searchResponse = restHighLevelClient.scroll(scrollRequest, RequestOptions.DEFAULT);
+			scrollId = searchResponse.getScrollId();
+			searchHits = searchResponse.getHits().getHits();
+		}
+
+		ClearScrollRequest clearScrollRequest = new ClearScrollRequest(); 
+		clearScrollRequest.addScrollId(scrollId);
+		ClearScrollResponse clearScrollResponse = restHighLevelClient.clearScroll(clearScrollRequest, RequestOptions.DEFAULT);
+		boolean succeeded = clearScrollResponse.isSucceeded();
+		log.debug("Is scroll cleared out:{}.", succeeded);
+		return documents;
 	}
 
 }
