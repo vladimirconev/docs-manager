@@ -3,6 +3,7 @@ Documents manager that allows Upload and deleting of files. It basically a playg
 
 # Setup
 - JDK 11
+- Maven v3.6.3 +  
 - Elasticsearch v7.12.1 (https://www.elastic.co/downloads/past-releases#elasticsearch)
 - Postman (Optional as Swagger is Enabled)
 
