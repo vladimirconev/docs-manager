@@ -8,7 +8,7 @@ Documents manager that allows Upload and deleting of files. It basically a playg
 
 # Running local
  - Please make sure that your Elastic Instance is Up and running.
- - Under `src/main/resources/application.properties` you can define your preferable index name under `custom.document.index.name`. 
+ - Under `src/main/resources/application.properties` you can define your preferable index name as `custom.document.index.name`. 
  - On start up it will check whether this index is already existing and if not it will be created and explicit mappings `src\main\resources\explicit_mappings.json` will be applied. 
 
 ````
