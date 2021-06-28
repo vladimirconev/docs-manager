@@ -7,8 +7,6 @@ import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.tngtech.archunit.library.dependencies.SliceRule;
 import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ModularArchitectureTest {
 
 	@ArchTest
-	final ArchRule core_domain_classes_should_not_have_any_external_dependencies = noClasses().that()
+	final ArchRule core_domain_classes_should_not_have_any_external_dependencies = ArchRuleDefinition.noClasses().that()
 			.resideInAPackage("..domain..").should().dependOnClassesThat().resideInAnyPackage("..boot..",
 					"..adapter..", "..org.springframework.." );
 	
@@ -55,11 +53,4 @@ public class ModularArchitectureTest {
 		    SlicesRuleDefinition.slices()
 		        .matching("com.example.docsmanager.adapters.(**)..")
 		        .should().notDependOnEachOther();
-  
-	
-	
-	
-	
-	
-
 }
