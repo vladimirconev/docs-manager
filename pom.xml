@@ -19,6 +19,7 @@
 		<commons-io.version>2.9.0</commons-io.version>
 		<mockito-core.version>3.11.0</mockito-core.version>
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
+		<archunit.version>0.19.0</archunit.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -72,6 +73,24 @@
 		</dependency>
 		
 		<!-- Testing -->
+		<dependency>
+    		<groupId>com.tngtech.archunit</groupId>
+    		<artifactId>archunit</artifactId>
+    		<version>${archunit.version}</version>
+    		<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit5</artifactId>
+			<version>${archunit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit5-engine</artifactId>
+			<version>${archunit.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
