@@ -37,7 +37,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 	
 	private static final String USER_ID = "userId";
 	private static final String EXTENSION = "extension";
-	private static final String[] INCLUDED_SOURCE_FIELDS = {"creationDate", "extension", "userId", "id", "fileName"};
+	private static final String[] INCLUDED_SOURCE_FIELDS = {"creationDate", EXTENSION, USER_ID, "id", "fileName"};
 	private static final String[] EXCLUDED_SOURCE_FIELDS = {"content"};
 	
 	private final DocumentElasticRepository documentElasticRepository;
