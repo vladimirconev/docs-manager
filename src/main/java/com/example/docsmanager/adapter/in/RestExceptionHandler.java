@@ -65,9 +65,9 @@ public class RestExceptionHandler {
 		Map<String, Object> errors = errorAttributes.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults());
 		final Throwable webRequestThrowable = errorAttributes.getError(webRequest);
 
-		String exception = webRequestThrowable.getCause() != null
-				? webRequestThrowable.getCause().getClass().getSimpleName()
-				: webRequestThrowable.getClass().getSimpleName();
+		String exception = Optional.ofNullable(webRequestThrowable.getCause())
+				.map(cause -> cause.getClass().getSimpleName())
+				.orElse(webRequestThrowable.getClass().getSimpleName());
 		return ErrorResponseDto.builder()
 				.status(httpStatus == HttpStatus.INTERNAL_SERVER_ERROR
 						? HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()
