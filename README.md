@@ -1,5 +1,5 @@
 # Description
-Documents manager that allows Upload and deleting of files. It basically a playground to check up Elasticsearch capabilities as underlying storage Unit.
+Documents manager that allows Upload and deleting of files. It is basically a playground to check up Elasticsearch capabilities as underlying storage Unit.
 
 # Setup
 - JDK 11
@@ -23,3 +23,8 @@ mvn spring-boot:run
 Check up swagger UI on: http://localhost:8080/swagger-ui.html
 
 Happy Coding!!!
+
+# Feature List
+- Exception handling
+- Swagger UI to document exposed API
+- Caching mechanism to improve performance on serving docs content

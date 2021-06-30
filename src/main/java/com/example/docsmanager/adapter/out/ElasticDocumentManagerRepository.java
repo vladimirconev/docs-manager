@@ -21,6 +21,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.cache.annotation.Cacheable;
 
 import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import com.example.docsmanager.domain.DocumentManagementRepository;
@@ -51,6 +52,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 		return DocumentRepositoryMapper.mapDocumentElasticDtoToDocument(dto);
 	}
 
+	@Cacheable(cacheNames = "docs_byte_content")
 	@Override
 	public byte[] getDocumentContent(final String id) {
 		DocumentElasticDto documentElasticDto = documentElasticRepository.findById(id)
