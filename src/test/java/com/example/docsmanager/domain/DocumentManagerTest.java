@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import org.elasticsearch.common.collect.Set;
 import org.junit.jupiter.api.Test;
@@ -28,16 +30,16 @@ public class DocumentManagerTest extends TestObjectFactory {
 	
 	
 	@Test
-	void uploadDocumentTest() {
+	void uploadDocumentsTest() {
 		Document document = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT);
-		Mockito.when(docsManagementRepo.uploadDocument(Mockito.any(Document.class))).thenReturn(document);
+		Mockito.when(docsManagementRepo.uploadDocuments(Mockito.anyList())).thenReturn(Arrays.asList(document));
 		
-		Document output = documentManager.uploadDocument(document);
+		List<Document> output = documentManager.uploadDocuments(Arrays.asList(document));
 		
 		assertNotNull(output);
-		assertEquals(document, output);
+		assertEquals(document, output.stream().findAny().get());
 		
-		Mockito.verify(docsManagementRepo, times(1)).uploadDocument(Mockito.any(Document.class));
+		Mockito.verify(docsManagementRepo, times(1)).uploadDocuments(Mockito.anyList());
 		Mockito.verifyNoMoreInteractions(docsManagementRepo);
 	}
 	

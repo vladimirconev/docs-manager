@@ -3,10 +3,13 @@ package com.example.docsmanager.adapter.in;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.elasticsearch.common.collect.Set;
@@ -52,21 +55,26 @@ public class DocumentRestControllerTest extends TestObjectFactory {
 	@Test
 	void uploadDocumentTest() {
 		MultipartFile multipartFile = buildMockMultipartFile();
+		MultipartFile[] multipartFiles = {multipartFile};
 		Document sampleDocument = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT);
-		Mockito.when(documentManager.uploadDocument(Mockito.any())).thenReturn(sampleDocument);
+		Mockito.when(documentManager.uploadDocuments(Mockito.anyList())).thenReturn(Arrays.asList(sampleDocument));
 
-		ResponseEntity<DocumentMetadataResponseDto> responseEntity = documentRestController
-				.uploadDocument(multipartFile, SAMPLE_USER_ID);
+		ResponseEntity<List<DocumentMetadataResponseDto>> responseEntity = documentRestController
+				.uploadDocuments(multipartFiles, SAMPLE_USER_ID);
 
 		assertNotNull(responseEntity);
 		assertNotNull(responseEntity.getBody());
-		assertEquals(PNG_EXTENSION, responseEntity.getBody().getExtension());
-		assertEquals(FILE_NAME, responseEntity.getBody().getFileName());
-		assertEquals(SAMPLE_USER_ID, responseEntity.getBody().getUserId());
-		assertNotNull(responseEntity.getBody().getCreationDate());
-		assertNotNull(sampleDocument.getId(), responseEntity.getBody().getId());
+		assertTrue(responseEntity.getBody().size() == 1);
+		
+		DocumentMetadataResponseDto documentMetadataResponseDto = responseEntity.getBody().stream().findFirst().get();
+		
+		assertEquals(PNG_EXTENSION, documentMetadataResponseDto.getExtension());
+		assertEquals(FILE_NAME, documentMetadataResponseDto.getFileName());
+		assertEquals(SAMPLE_USER_ID, documentMetadataResponseDto.getUserId());
+		assertNotNull(documentMetadataResponseDto.getCreationDate());
+		assertNotNull(sampleDocument.getId(), documentMetadataResponseDto.getId());
 
-		Mockito.verify(documentManager, times(1)).uploadDocument(Mockito.any());
+		Mockito.verify(documentManager, times(1)).uploadDocuments(Mockito.anyList());
 		Mockito.verifyNoMoreInteractions(documentManager);
 	}
 	
@@ -76,8 +84,9 @@ public class DocumentRestControllerTest extends TestObjectFactory {
 		Mockito.when(multipartFile.getContentType()).thenReturn("image/png");
 		Mockito.when(multipartFile.getOriginalFilename()).thenReturn(FILE_NAME.concat(".").concat(PNG_EXTENSION));
 		Mockito.when(multipartFile.getInputStream()).thenThrow(IOException.class);
-		
-		assertThrows(IllegalStateException.class, () -> documentRestController.uploadDocument(multipartFile,
+		MultipartFile[] multipartFiles = {multipartFile};
+		assertThrows(IllegalStateException.class, () -> documentRestController.uploadDocuments(
+				multipartFiles,
 				SAMPLE_USER_ID));
 	}
 	

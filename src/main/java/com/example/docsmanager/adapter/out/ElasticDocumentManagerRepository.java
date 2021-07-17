@@ -2,12 +2,16 @@ package com.example.docsmanager.adapter.out;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.search.ClearScrollRequest;
 import org.elasticsearch.action.search.ClearScrollResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -106,6 +110,14 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 		boolean succeeded = clearScrollResponse.isSucceeded();
 		log.debug("Is scroll cleared out:{}.", succeeded);
 		return documents;
+	}
+
+	@Override
+	public List<Document> uploadDocuments(final List<Document> documents) {
+		Iterable<DocumentElasticDto> dtos = documentElasticRepository
+				.saveAll(DocumentRepositoryMapper.mapDocumentsToDocumentElasticDtos(documents));
+		return StreamSupport.stream(dtos.spliterator(), false)
+				.map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument).collect(Collectors.toList());
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.example.docsmanager.domain;
 
+import java.util.List;
 import java.util.Set;
 
 import com.example.docsmanager.domain.entity.Document;
@@ -13,8 +14,8 @@ public class DocumentManager implements DocumentManagement {
 	private final DocumentManagementRepository docManagerRepository;
 	
 	@Override
-	public Document uploadDocument(final Document document) {
-		return docManagerRepository.uploadDocument(document);
+	public List<Document> uploadDocuments(final List<Document> documents) {
+		return docManagerRepository.uploadDocuments(documents);
 	}
 
 	@Override

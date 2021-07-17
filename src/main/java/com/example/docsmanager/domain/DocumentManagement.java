@@ -1,5 +1,6 @@
 package com.example.docsmanager.domain;
 
+import java.util.List;
 import java.util.Set;
 
 import com.example.docsmanager.domain.entity.Document;
@@ -12,7 +13,7 @@ import com.example.docsmanager.domain.entity.Document;
  */
 public interface DocumentManagement {
 	
-	Document uploadDocument(final Document document);
+	List<Document> uploadDocuments(final List<Document> documents);
 	
 	void deleteDocuments(final Set<String> documentIds);
 	

@@ -3,7 +3,9 @@ package com.example.docsmanager.adapter.in;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -59,6 +61,19 @@ public class DocumentRestMapper {
 				LocalDateTime.now(), 
 				content,
 				userId);
+	}
+	
+	public static List<Document> mapMultipartFilesToDocuments(
+			final List<MultipartFile> multipartFiles, 
+			final String userId) {
+		return multipartFiles.parallelStream().map(multipartFile -> mapMultipartFileToDocument(multipartFile, userId))
+				.collect(Collectors.toList());
+	}
+	
+	public static List<DocumentMetadataResponseDto> mapDocumentsToDocumentMetadataResponseDtos(
+			final List<Document> documents) {
+		return documents.parallelStream().map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto)
+				.collect(Collectors.toList());
 	}
 
 }

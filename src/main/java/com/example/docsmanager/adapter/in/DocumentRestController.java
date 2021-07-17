@@ -1,6 +1,8 @@
 package com.example.docsmanager.adapter.in;
 
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,7 @@ import com.example.docsmanager.domain.entity.Document;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = {"Documents"},value = "/")
-@RequestMapping(value={"#{'${enable.api.versioning:true}' ? '/api/v' + '${build.version}'.split('\\.')[0]:'' }"})
+@RequestMapping(value={"#{'${enable.api.versioning:true}' ? '/api/v' + '${application.version}'.split('\\.')[0]:'' }"})
 public class DocumentRestController {
 	
 	private final DocumentManagement documentManagent;
@@ -51,22 +54,28 @@ public class DocumentRestController {
 		return new ResponseEntity<>(content, HttpStatus.OK);
 	}
 	
-	
-	@ApiOperation(value = "Upload a document", tags = { "Documents" })
+	/**
+	 * Swagger UI v2.9.2 does not Support an array of {@link MultipartFile}. <br/>
+	 * Expected fix should be delivered under v3.x.x per https://github.com/OAI/OpenAPI-Specification/issues/254 <br/>
+	 * 
+	 * You can try it out via Postman: HTTP POST -> api/vX/documents and under Body tab select 'form-data' to add files and user id.
+	 */
+	@ApiOperation(value = "Upload documents", tags = { "Documents" })
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "OK", response = DocumentMetadataResponseDto.class),
+			@ApiResponse(code = 200, message = "OK", responseContainer = "List", 
+					response = DocumentMetadataResponseDto.class),
 			@ApiResponse(code = 503, message = "Service temporally unavailable", response = ErrorResponseDto.class)})
 	@PostMapping(path = "/documents", 
 			produces = MediaType.APPLICATION_JSON_VALUE, 
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	ResponseEntity<DocumentMetadataResponseDto> uploadDocument(
-			final @RequestPart("file") MultipartFile multiPartfile,
-			final @RequestParam("userId") String user) {
-		log.info("Start of Uploading a document for user: {}.", user);
-		Document document = DocumentRestMapper.mapMultipartFileToDocument(multiPartfile, 
-				user);
-		Document uploadedDocument = documentManagent.uploadDocument(document);
-		return new ResponseEntity<>(DocumentRestMapper.mapDocumentToDocumentMetadataResponseDto(uploadedDocument), 
+	ResponseEntity<List<DocumentMetadataResponseDto>> uploadDocuments(
+			final @RequestPart("files") MultipartFile[] files,
+			final @RequestParam("userId") String userId) {
+		log.info("Start of Uploading documents for user: {}.", userId);
+		List<Document> documents = DocumentRestMapper.mapMultipartFilesToDocuments(Arrays.asList(files), 
+				userId);
+		List<Document> uploadedDocuments = documentManagent.uploadDocuments(documents);
+		return new ResponseEntity<>(DocumentRestMapper.mapDocumentsToDocumentMetadataResponseDtos(uploadedDocuments), 
 				HttpStatus.OK);
 	
 	}
