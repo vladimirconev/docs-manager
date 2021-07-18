@@ -68,17 +68,16 @@ public class RestExceptionHandler {
 		String exception = Optional.ofNullable(webRequestThrowable.getCause())
 				.map(cause -> cause.getClass().getSimpleName())
 				.orElse(webRequestThrowable.getClass().getSimpleName());
-		return ErrorResponseDto.builder()
-				.status(httpStatus == HttpStatus.INTERNAL_SERVER_ERROR
-						? HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()
-						: httpStatus.getReasonPhrase())
-				.code(httpStatus == HttpStatus.INTERNAL_SERVER_ERROR ? String.valueOf(HttpStatus.SERVICE_UNAVAILABLE)
-						: String.valueOf(httpStatus.value()))
-				.message(Optional.ofNullable(messageDetails).orElse(Optional.ofNullable(errors.get(MESSAGE_KEY))
-						.map(Object::toString).orElse(null)))
-				.path(Optional.ofNullable(errors.get(PATH_KEY)).map(Object::toString).orElse(request.getRequestURI()))
-				.httpMethod(request.getMethod()).exception(exception)
-				.timestamp(new SimpleDateFormat(DATE_TIME_FORMAT).format(new Date())).build();
+		String status = httpStatus == HttpStatus.INTERNAL_SERVER_ERROR
+				? HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()
+				: httpStatus.getReasonPhrase();
+		String code = httpStatus == HttpStatus.INTERNAL_SERVER_ERROR ? String.valueOf(HttpStatus.SERVICE_UNAVAILABLE)
+				: String.valueOf(httpStatus.value());
+		String message = Optional.ofNullable(messageDetails).orElse(Optional.ofNullable(errors.get(MESSAGE_KEY))
+				.map(Object::toString).orElse(null));
+		String path = Optional.ofNullable(errors.get(PATH_KEY)).map(Object::toString).orElse(request.getRequestURI());
+		return new ErrorResponseDto(status, code, message, path, request.getMethod(), exception,
+				new SimpleDateFormat(DATE_TIME_FORMAT).format(new Date()));
 	}
 
 	@ResponseBody

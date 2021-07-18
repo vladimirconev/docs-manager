@@ -23,6 +23,13 @@ public class DocumentManagerStartupListener implements ApplicationListener<Conte
 	
 	@Override
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
+		createIndex();
+	}
+
+	/**
+	 * Creates an index If does not exists and applies Explicit mappings. 
+	 */
+	private void createIndex() {
 		try {
 			boolean indexExists = restHighLevelClient.indices().exists(new GetIndexRequest(indexName),
 					RequestOptions.DEFAULT);
@@ -36,7 +43,6 @@ public class DocumentManagerStartupListener implements ApplicationListener<Conte
 		} catch (Exception exception) {
 			log.error("Error on creating index and apply Explicit mappings due to:{}.", exception.getMessage());
 		}
-
 	}
 
 }

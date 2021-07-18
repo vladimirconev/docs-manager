@@ -20,6 +20,9 @@
 		<mockito-core.version>3.11.0</mockito-core.version>
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
 		<archunit.version>0.19.0</archunit.version>
+		<hamcrest.version>2.2</hamcrest.version>
+		<bean-matchers.version>0.13</bean-matchers.version>
+		<reflections.version>0.9.12</reflections.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -113,6 +116,24 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+    		<groupId>org.hamcrest</groupId>
+    		<artifactId>hamcrest</artifactId>
+    		<scope>test</scope>
+		</dependency>
+		<dependency>
+  			<groupId>com.google.code.bean-matchers</groupId>
+   			<artifactId>bean-matchers</artifactId>
+   			<version>${bean-matchers.version}</version>
+   			<scope>test</scope>
+		</dependency>
+		<dependency>
+    		<groupId>org.reflections</groupId>
+    		<artifactId>reflections</artifactId> 
+    		<version>${reflections.version}</version>
+    		<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
