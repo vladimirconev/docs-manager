@@ -16,7 +16,7 @@ public class DocumentRestMapperTest extends TestObjectFactory {
 
 	@Test
 	void mapDocumentToDocumentMetadataResponseDtoTest() {
-		Document document = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT);
+		Document document = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT, SAMPLE_USER_ID);
 
 		DocumentMetadataResponseDto dto = DocumentRestMapper.mapDocumentToDocumentMetadataResponseDto(document);
 

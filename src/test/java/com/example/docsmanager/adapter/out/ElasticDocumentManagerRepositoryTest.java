@@ -45,7 +45,7 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
 		var documentElasticDto = buildDocumentElasticDto(DOCUMENT_ID, BYTE_CONTENT);
 		Mockito.when(documentElasticRepository.save(Mockito.any(DocumentElasticDto.class)))
 				.thenReturn(documentElasticDto);
-		var document = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT);
+		var document = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT, SAMPLE_USER_ID);
 		var uploadedDocument = elasticDocumentManagerRepo.uploadDocument(document);
 
 		assertNotNull(uploadedDocument);

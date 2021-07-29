@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value={"#{'${enable.api.versioning:true}' ? '/api/v' + '${application.version}'.split('\\.')[0]:'' }"})
 public class DocumentRestController {
 	
-	private final DocumentManagement documentManagent;
+	private final DocumentManagement documentManagement;
 	
 	
 	@ApiOperation(value = "Retrieve a document by ID", tags = { "Documents" })
@@ -50,7 +50,7 @@ public class DocumentRestController {
 	@GetMapping(path = "/documents/{documentId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	ResponseEntity<byte[]> getDocumentContent(final @PathVariable("documentId") String documentId) {
 		log.info("Fetching Document Data content with id:{}.", documentId);
-		byte[] content = documentManagent.getDocumentContent(documentId);
+		byte[] content = documentManagement.getDocumentContent(documentId);
 		return new ResponseEntity<>(content, HttpStatus.OK);
 	}
 	
@@ -74,7 +74,7 @@ public class DocumentRestController {
 		log.info("Start of Uploading documents for user: {}.", userId);
 		List<Document> documents = DocumentRestMapper.mapMultipartFilesToDocuments(Arrays.asList(files), 
 				userId);
-		List<Document> uploadedDocuments = documentManagent.uploadDocuments(documents);
+		List<Document> uploadedDocuments = documentManagement.uploadDocuments(documents);
 		return new ResponseEntity<>(DocumentRestMapper.mapDocumentsToDocumentMetadataResponseDtos(uploadedDocuments), 
 				HttpStatus.OK);
 	
@@ -88,7 +88,7 @@ public class DocumentRestController {
 	ResponseEntity<Void> deleteDocuments(
 			final @RequestParam("documentIds") Set<String> documentIds) {
 		log.info("Deleting documents with following IDs:{}.", documentIds);
-		documentManagent.deleteDocuments(documentIds);
+		documentManagement.deleteDocuments(documentIds);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -103,7 +103,7 @@ public class DocumentRestController {
 				final @RequestParam("userId") String userId,
 				final @RequestParam(name = "extension", required = false) String extension) {
 		log.info("Fetch documents metadata bu user:{} and by extension (optionally):{}.", userId, extension);
-		Set<Document> documentsByUserId = documentManagent.getDocumentsByUserId(userId, extension);
+		Set<Document> documentsByUserId = documentManagement.getDocumentsByUserId(userId, extension);
 		Set<DocumentMetadataResponseDto> documentMetadataDtos = documentsByUserId.stream()
 				.map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto).collect(Collectors.toSet());
 		return new ResponseEntity<>(documentMetadataDtos, HttpStatus.OK);

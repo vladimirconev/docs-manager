@@ -4,13 +4,16 @@ Documents manager that allows Upload and deleting of files. It is basically a pl
 # Setup
 - JDK 11
 - Maven v3.6.3 +  
-- Elasticsearch v7.12.1 (https://www.elastic.co/downloads/past-releases#elasticsearch)
+- Elasticsearch v7.12.1+ (https://www.elastic.co/downloads/past-releases#elasticsearch)
 - Postman (Optional as Swagger is Enabled)
+- Docker
 
 # Running local
  - Please make sure that your Elastic Instance is Up and running.
+ - Please make sure your Docker instance is Up and running otherwise Integration tests (implemented with Test Containers) will fail.   
  - Under `src/main/resources/application.properties` you can define your preferable index name as `custom.document.index.name`. 
  - On start up it will check whether this index is already existing and if not it will be created and explicit mappings `src\main\resources\explicit_mappings.json` will be applied. 
+ - Optionally you can spin up Dockerized Elasticsearch instance by executing `docker-compose -f docker-infrastructure.yml up -d`
 
 To Build:
 ````
@@ -29,3 +32,4 @@ Happy Coding!!!
 - Swagger UI to document exposed API
 - Caching mechanism to improve performance on serving docs content
 - API versioning
+- Integration tests using Test Containers

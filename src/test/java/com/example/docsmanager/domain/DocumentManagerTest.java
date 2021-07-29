@@ -31,7 +31,7 @@ public class DocumentManagerTest extends TestObjectFactory {
 	
 	@Test
 	void uploadDocumentsTest() {
-		Document document = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT);
+		Document document = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT, SAMPLE_USER_ID);
 		Mockito.when(docsManagementRepo.uploadDocuments(Mockito.anyList())).thenReturn(Arrays.asList(document));
 		
 		List<Document> output = documentManager.uploadDocuments(Arrays.asList(document));

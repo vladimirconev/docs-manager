@@ -21,9 +21,9 @@ public class TestObjectFactory {
 	
 	protected Document buildDocumentInstance(final String id, 
 			final LocalDateTime creationDate,
-			final byte[] content) {
+			final byte[] content, final String user) {
 		return new Document(id, FILE_NAME, PNG_EXTENSION, LocalDateTime.now(), 
-				content, SAMPLE_USER_ID);
+				content, user);
 	}
 	
 	protected DocumentElasticDto buildDocumentElasticDto(final String id, final byte[] content) {

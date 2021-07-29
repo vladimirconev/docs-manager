@@ -1,12 +1,5 @@
 package com.example.docsmanager;
 
-import com.tngtech.archunit.junit.AnalyzeClasses;
-import com.tngtech.archunit.junit.ArchTest;
-import com.tngtech.archunit.lang.ArchRule;
-import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
-import com.tngtech.archunit.library.dependencies.SliceRule;
-import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchTest;
+import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import com.tngtech.archunit.library.dependencies.SliceRule;
+import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
 
 
 @AnalyzeClasses(packages = "com.example.docsmanager")
@@ -46,7 +46,7 @@ public class ModularArchitectureTest {
 	@ArchTest
 	final SliceRule no_cyclic_dependencies_allowed = 
 		    SlicesRuleDefinition.slices()
-		        .matching("com.example.docsmanager.(*)..")
+		        .matching("com.example.docsmanager.domain.(*)..")
 		        .should().beFreeOfCycles();
 	@ArchTest
 	final SliceRule adapters_should_not_depend_on_each_other =

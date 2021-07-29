@@ -56,7 +56,7 @@ public class DocumentRestControllerTest extends TestObjectFactory {
 	void uploadDocumentTest() {
 		MultipartFile multipartFile = buildMockMultipartFile();
 		MultipartFile[] multipartFiles = {multipartFile};
-		Document sampleDocument = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT);
+		Document sampleDocument = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT, SAMPLE_USER_ID);
 		Mockito.when(documentManager.uploadDocuments(Mockito.anyList())).thenReturn(Arrays.asList(sampleDocument));
 
 		ResponseEntity<List<DocumentMetadataResponseDto>> responseEntity = documentRestController
