@@ -26,7 +26,6 @@ import com.example.docsmanager.domain.entity.Document;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +61,7 @@ public class DocumentRestController {
 	 */
 	@ApiOperation(value = "Upload documents", tags = { "Documents" })
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "OK", responseContainer = "List", 
+			@ApiResponse(code = 201, message = "CREATED", responseContainer = "List",
 					response = DocumentMetadataResponseDto.class),
 			@ApiResponse(code = 503, message = "Service temporally unavailable", response = ErrorResponseDto.class)})
 	@PostMapping(path = "/documents", 
@@ -76,20 +75,20 @@ public class DocumentRestController {
 				userId);
 		List<Document> uploadedDocuments = documentManagement.uploadDocuments(documents);
 		return new ResponseEntity<>(DocumentRestMapper.mapDocumentsToDocumentMetadataResponseDtos(uploadedDocuments), 
-				HttpStatus.OK);
+				HttpStatus.CREATED);
 	
 	}
 	
 	@ApiOperation(value = "Delete a document by ID", tags = { "Documents" })
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "OK", response = Void.class),
+			@ApiResponse(code = 204, message = "NO_CONTENT"),
 			@ApiResponse(code = 503, message = "Service temporally unavailable", response = ErrorResponseDto.class)})
 	@DeleteMapping(path= "/documents")
 	ResponseEntity<Void> deleteDocuments(
 			final @RequestParam("documentIds") Set<String> documentIds) {
 		log.info("Deleting documents with following IDs:{}.", documentIds);
 		documentManagement.deleteDocuments(documentIds);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 	@ApiOperation(value = "Retrieve a document by user id and extension", tags = { "Documents" })
