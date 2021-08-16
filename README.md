@@ -19,6 +19,13 @@ To Build:
 ````
 mvn clean verify
 ````
+
+Prettier check (optional as on running Build command by default plugin prettier goal is `write`):
+````
+mvn prettier:check 
+````
+Details can be found on https://github.com/HubSpot/prettier-maven-plugin in ReadMe section.
+
 To Run:
 ````
 mvn spring-boot:run
