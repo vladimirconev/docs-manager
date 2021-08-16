@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  elasticsearch:
+    image: elasticsearch:7.13.4
+    container_name: elasticsearch
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    networks:
+      - elastic
+  web:
+    container_name: docs_manager_web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - elasticsearch
+    environment:
+      - SPRING_ELASTICSEARCH_REST_URIS=http://elasticsearch:9200
+    networks:
+      - elastic
+
+networks:
+  elastic:
+    driver: bridge

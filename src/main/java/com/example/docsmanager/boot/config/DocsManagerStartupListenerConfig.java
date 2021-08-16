@@ -3,25 +3,23 @@ package com.example.docsmanager.boot.config;
 import com.example.docsmanager.boot.DocumentManagerStartupListener;
 import java.nio.charset.StandardCharsets;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 
 @Configuration
 public class DocsManagerStartupListenerConfig {
+
+  private static final String EXPLICIT_MAPPINGS_JSON_PATH = "/explicit_mappings.json";
 
   @Autowired
   private RestHighLevelClient restHighLevelClient;
 
   @Value("${custom.document.index.name}")
   private String documentIndexName;
-
-  @Value("classpath:explicit_mappings.json")
-  private Resource explicitMappingsResource;
 
   @Bean
   public String documentIndexName() {
@@ -34,10 +32,7 @@ public class DocsManagerStartupListenerConfig {
     return new DocumentManagerStartupListener(
       restHighLevelClient,
       documentIndexName,
-      FileUtils.readFileToString(
-        explicitMappingsResource.getFile(),
-        StandardCharsets.UTF_8
-      )
+      IOUtils.resourceToString(EXPLICIT_MAPPINGS_JSON_PATH, StandardCharsets.UTF_8)
     );
   }
 }
