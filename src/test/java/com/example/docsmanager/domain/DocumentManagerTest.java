@@ -4,10 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 
+import com.example.docsmanager.TestObjectFactory;
+import com.example.docsmanager.domain.entity.Document;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-
 import org.elasticsearch.common.collect.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,53 +17,56 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.docsmanager.TestObjectFactory;
-import com.example.docsmanager.domain.entity.Document;
-
 @ExtendWith(MockitoExtension.class)
 public class DocumentManagerTest extends TestObjectFactory {
-	
-	@InjectMocks
-	private DocumentManager documentManager;
-	
-	@Mock
-	private DocumentManagementRepository docsManagementRepo;
-	
-	
-	@Test
-	void uploadDocumentsTest() {
-		Document document = buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT, SAMPLE_USER_ID);
-		Mockito.when(docsManagementRepo.uploadDocuments(Mockito.anyList())).thenReturn(Arrays.asList(document));
-		
-		List<Document> output = documentManager.uploadDocuments(Arrays.asList(document));
-		
-		assertNotNull(output);
-		assertEquals(document, output.stream().findAny().get());
-		
-		Mockito.verify(docsManagementRepo, times(1)).uploadDocuments(Mockito.anyList());
-		Mockito.verifyNoMoreInteractions(docsManagementRepo);
-	}
-	
-	@Test
-	void deleteDocumentsTest() {
-		documentManager.deleteDocuments(Set.of(DOCUMENT_ID));
-		
-		Mockito.verify(docsManagementRepo, times(1)).deleteDocuments(Mockito.anySet());
-		Mockito.verifyNoMoreInteractions(docsManagementRepo);
-		
-	}
-	
-	@Test
-	void getDocumentContentTest() {
-		Mockito.when(docsManagementRepo.getDocumentContent(DOCUMENT_ID)).thenReturn(BYTE_CONTENT);
-		
-		byte[] documentContent = documentManager.getDocumentContent(DOCUMENT_ID);
-		
-		assertNotNull(documentContent);
-		assertEquals(BYTE_CONTENT, documentContent);
-		
-		Mockito.verify(docsManagementRepo, times(1)).getDocumentContent(DOCUMENT_ID);
-		Mockito.verifyNoMoreInteractions(docsManagementRepo);
-	}
 
+  @InjectMocks
+  private DocumentManager documentManager;
+
+  @Mock
+  private DocumentManagementRepository docsManagementRepo;
+
+  @Test
+  void uploadDocumentsTest() {
+    Document document = buildDocumentInstance(
+      DOCUMENT_ID,
+      LocalDateTime.now(),
+      BYTE_CONTENT,
+      SAMPLE_USER_ID
+    );
+    Mockito
+      .when(docsManagementRepo.uploadDocuments(Mockito.anyList()))
+      .thenReturn(Arrays.asList(document));
+
+    List<Document> output = documentManager.uploadDocuments(Arrays.asList(document));
+
+    assertNotNull(output);
+    assertEquals(document, output.stream().findAny().get());
+
+    Mockito.verify(docsManagementRepo, times(1)).uploadDocuments(Mockito.anyList());
+    Mockito.verifyNoMoreInteractions(docsManagementRepo);
+  }
+
+  @Test
+  void deleteDocumentsTest() {
+    documentManager.deleteDocuments(Set.of(DOCUMENT_ID));
+
+    Mockito.verify(docsManagementRepo, times(1)).deleteDocuments(Mockito.anySet());
+    Mockito.verifyNoMoreInteractions(docsManagementRepo);
+  }
+
+  @Test
+  void getDocumentContentTest() {
+    Mockito
+      .when(docsManagementRepo.getDocumentContent(DOCUMENT_ID))
+      .thenReturn(BYTE_CONTENT);
+
+    byte[] documentContent = documentManager.getDocumentContent(DOCUMENT_ID);
+
+    assertNotNull(documentContent);
+    assertEquals(BYTE_CONTENT, documentContent);
+
+    Mockito.verify(docsManagementRepo, times(1)).getDocumentContent(DOCUMENT_ID);
+    Mockito.verifyNoMoreInteractions(docsManagementRepo);
+  }
 }

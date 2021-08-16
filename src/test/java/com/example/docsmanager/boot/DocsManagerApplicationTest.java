@@ -5,10 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class DocsManagerApplicationTest {
-	
-	@Test
-	void contextLoad() {
-		
-	}
 
+  @Test
+  void contextLoad() {}
 }

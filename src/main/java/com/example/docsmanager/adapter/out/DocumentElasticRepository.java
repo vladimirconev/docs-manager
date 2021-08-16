@@ -1,9 +1,7 @@
 package com.example.docsmanager.adapter.out;
 
+import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
-
-public interface DocumentElasticRepository extends ElasticsearchRepository<DocumentElasticDto, String> {
-
-}
+public interface DocumentElasticRepository
+  extends ElasticsearchRepository<DocumentElasticDto, String> {}
