@@ -46,3 +46,4 @@ Happy Coding!!!
 - Caching mechanism to improve performance on serving docs content
 - API versioning
 - Integration tests using Test Containers
+- Dockerized app
