@@ -131,7 +131,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
       RequestOptions.DEFAULT
     );
     boolean succeeded = clearScrollResponse.isSucceeded();
-    log.debug("Is scroll cleared out:{}.", succeeded);
+    log.debug("Is scroll cleared out: {}.", succeeded);
     return documents;
   }
 
