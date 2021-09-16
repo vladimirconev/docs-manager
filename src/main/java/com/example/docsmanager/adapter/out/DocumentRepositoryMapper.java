@@ -5,7 +5,6 @@ import com.example.docsmanager.domain.entity.Document;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DocumentRepositoryMapper {
 
