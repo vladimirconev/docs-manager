@@ -56,11 +56,11 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
     var uploadedDocument = elasticDocumentManagerRepo.uploadDocument(document);
 
     assertNotNull(uploadedDocument);
-    assertEquals(documentElasticDto.getId(), uploadedDocument.getId());
-    assertEquals(documentElasticDto.getUserId(), uploadedDocument.getUserId());
-    assertEquals(documentElasticDto.getContent(), uploadedDocument.getContent());
-    assertEquals(documentElasticDto.getFileName(), uploadedDocument.getFileName());
-    assertEquals(documentElasticDto.getExtension(), uploadedDocument.getExtension());
+    assertEquals(documentElasticDto.getId(), uploadedDocument.id());
+    assertEquals(documentElasticDto.getUserId(), uploadedDocument.userId());
+    assertEquals(documentElasticDto.getContent(), uploadedDocument.content());
+    assertEquals(documentElasticDto.getFileName(), uploadedDocument.fileName());
+    assertEquals(documentElasticDto.getExtension(), uploadedDocument.extension());
 
     Mockito
       .verify(documentElasticRepository, times(1))

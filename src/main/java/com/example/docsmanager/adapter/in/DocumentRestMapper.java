@@ -24,11 +24,11 @@ public class DocumentRestMapper {
     final Document document
   ) {
     return new DocumentMetadataResponseDto(
-      document.getId(),
-      document.getFileName(),
-      document.getExtension(),
-      document.getUserId(),
-      document.getCreationDate().format(DateTimeFormatter.ISO_DATE_TIME)
+      document.id(),
+      document.fileName(),
+      document.extension(),
+      document.userId(),
+      document.creationDate().format(DateTimeFormatter.ISO_DATE_TIME)
     );
   }
 

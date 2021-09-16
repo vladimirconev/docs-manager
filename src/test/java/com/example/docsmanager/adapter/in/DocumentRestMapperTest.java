@@ -26,14 +26,14 @@ public class DocumentRestMapperTest extends TestObjectFactory {
     );
 
     assertNotNull(dto);
-    assertEquals(document.getId(), dto.id());
-    assertEquals(document.getExtension(), dto.extension());
-    assertEquals(document.getFileName(), dto.fileName());
+    assertEquals(document.id(), dto.id());
+    assertEquals(document.extension(), dto.extension());
+    assertEquals(document.fileName(), dto.fileName());
     assertEquals(
-      document.getCreationDate(),
+      document.creationDate(),
       LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME)
     );
-    assertEquals(document.getUserId(), dto.userId());
+    assertEquals(document.userId(), dto.userId());
   }
 
   @Test
@@ -44,9 +44,9 @@ public class DocumentRestMapperTest extends TestObjectFactory {
     );
 
     assertNotNull(document);
-    assertNotNull(document.getId());
-    assertNotNull(document.getCreationDate());
-    assertEquals(SAMPLE_USER_ID, document.getUserId());
+    assertNotNull(document.id());
+    assertNotNull(document.creationDate());
+    assertEquals(SAMPLE_USER_ID, document.userId());
   }
 
   @Test
@@ -57,8 +57,8 @@ public class DocumentRestMapperTest extends TestObjectFactory {
     );
 
     assertNotNull(document);
-    assertNotNull(document.getId());
-    assertNotNull(document.getCreationDate());
-    assertEquals(SAMPLE_USER_ID, document.getUserId());
+    assertNotNull(document.id());
+    assertNotNull(document.creationDate());
+    assertEquals(SAMPLE_USER_ID, document.userId());
   }
 }

@@ -15,14 +15,12 @@ public class DocumentRepositoryMapper {
     final Document document
   ) {
     var dto = new DocumentElasticDto();
-    dto.setContent(document.getContent());
-    dto.setCreationDate(
-      document.getCreationDate().format(DateTimeFormatter.ISO_DATE_TIME)
-    );
-    dto.setExtension(document.getExtension());
-    dto.setFileName(document.getFileName());
-    dto.setId(document.getId());
-    dto.setUserId(document.getUserId());
+    dto.setContent(document.content());
+    dto.setCreationDate(document.creationDate().format(DateTimeFormatter.ISO_DATE_TIME));
+    dto.setExtension(document.extension());
+    dto.setFileName(document.fileName());
+    dto.setId(document.id());
+    dto.setUserId(document.userId());
     return dto;
   }
 

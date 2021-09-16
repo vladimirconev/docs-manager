@@ -78,13 +78,11 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     assertNotNull(uploadedDocument);
     assertEquals(sampleDocument, uploadedDocument);
 
-    byte[] documentContent = esDocsManagerRepo.getDocumentContent(
-      uploadedDocument.getId()
-    );
+    byte[] documentContent = esDocsManagerRepo.getDocumentContent(uploadedDocument.id());
 
     assertNotNull(documentContent);
 
-    assertTrue(Arrays.equals(uploadedDocument.getContent(), documentContent));
+    assertTrue(Arrays.equals(uploadedDocument.content(), documentContent));
   }
 
   @Test
@@ -100,13 +98,11 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     assertNotNull(uploadedDocument);
     assertEquals(sampleDocument, uploadedDocument);
 
-    byte[] documentContent = esDocsManagerRepo.getDocumentContent(
-      uploadedDocument.getId()
-    );
+    byte[] documentContent = esDocsManagerRepo.getDocumentContent(uploadedDocument.id());
 
     assertNotNull(documentContent);
 
-    assertTrue(Arrays.equals(uploadedDocument.getContent(), documentContent));
+    assertTrue(Arrays.equals(uploadedDocument.content(), documentContent));
   }
 
   @Test
@@ -128,7 +124,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
 
     Set<String> documentIds = uploadDocuments
       .stream()
-      .map(Document::getId)
+      .map(Document::id)
       .collect(Collectors.toSet());
 
     esDocsManagerRepo.deleteDocuments(documentIds);
@@ -162,7 +158,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
 
     Set<String> documentIds = uploadDocuments
       .stream()
-      .map(Document::getId)
+      .map(Document::id)
       .collect(Collectors.toSet());
 
     documentIds.forEach(
