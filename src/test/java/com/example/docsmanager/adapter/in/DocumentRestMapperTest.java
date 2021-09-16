@@ -26,14 +26,14 @@ public class DocumentRestMapperTest extends TestObjectFactory {
     );
 
     assertNotNull(dto);
-    assertEquals(document.getId(), dto.getId());
-    assertEquals(document.getExtension(), dto.getExtension());
-    assertEquals(document.getFileName(), dto.getFileName());
+    assertEquals(document.getId(), dto.id());
+    assertEquals(document.getExtension(), dto.extension());
+    assertEquals(document.getFileName(), dto.fileName());
     assertEquals(
       document.getCreationDate(),
-      LocalDateTime.parse(dto.getCreationDate(), DateTimeFormatter.ISO_DATE_TIME)
+      LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME)
     );
-    assertEquals(document.getUserId(), dto.getUserId());
+    assertEquals(document.getUserId(), dto.userId());
   }
 
   @Test

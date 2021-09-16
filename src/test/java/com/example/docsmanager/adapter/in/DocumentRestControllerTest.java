@@ -80,11 +80,11 @@ public class DocumentRestControllerTest extends TestObjectFactory {
       .findFirst()
       .get();
 
-    assertEquals(PNG_EXTENSION, documentMetadataResponseDto.getExtension());
-    assertEquals(FILE_NAME, documentMetadataResponseDto.getFileName());
-    assertEquals(SAMPLE_USER_ID, documentMetadataResponseDto.getUserId());
-    assertNotNull(documentMetadataResponseDto.getCreationDate());
-    assertNotNull(sampleDocument.getId(), documentMetadataResponseDto.getId());
+    assertEquals(PNG_EXTENSION, documentMetadataResponseDto.extension());
+    assertEquals(FILE_NAME, documentMetadataResponseDto.fileName());
+    assertEquals(SAMPLE_USER_ID, documentMetadataResponseDto.userId());
+    assertNotNull(documentMetadataResponseDto.creationDate());
+    assertNotNull(sampleDocument.getId(), documentMetadataResponseDto.id());
 
     Mockito.verify(documentManager, times(1)).uploadDocuments(Mockito.anyList());
     Mockito.verifyNoMoreInteractions(documentManager);

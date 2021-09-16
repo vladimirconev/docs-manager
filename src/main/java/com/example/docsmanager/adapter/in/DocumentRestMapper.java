@@ -23,15 +23,13 @@ public class DocumentRestMapper {
   public static DocumentMetadataResponseDto mapDocumentToDocumentMetadataResponseDto(
     final Document document
   ) {
-    var documentMetadataResponseDto = new DocumentMetadataResponseDto();
-    documentMetadataResponseDto.setId(document.getId());
-    documentMetadataResponseDto.setExtension(document.getExtension());
-    documentMetadataResponseDto.setFileName(document.getFileName());
-    documentMetadataResponseDto.setUserId(document.getUserId());
-    documentMetadataResponseDto.setCreationDate(
+    return new DocumentMetadataResponseDto(
+      document.getId(),
+      document.getFileName(),
+      document.getExtension(),
+      document.getUserId(),
       document.getCreationDate().format(DateTimeFormatter.ISO_DATE_TIME)
     );
-    return documentMetadataResponseDto;
   }
 
   public static Document mapMultipartFileToDocument(
