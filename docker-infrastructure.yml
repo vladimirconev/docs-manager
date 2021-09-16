@@ -1,5 +1,5 @@
 elasticsearch:
-  image: elasticsearch:7.13.4
+  image: elasticsearch:7.14.1
   container_name: elasticsearch
   ports:
     - "9300:9300"

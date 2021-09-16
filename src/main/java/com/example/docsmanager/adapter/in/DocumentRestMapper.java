@@ -80,7 +80,7 @@ public class DocumentRestMapper {
     return multipartFiles
       .parallelStream()
       .map(multipartFile -> mapMultipartFileToDocument(multipartFile, userId))
-      .collect(Collectors.toList());
+      .toList();
   }
 
   public static List<DocumentMetadataResponseDto> mapDocumentsToDocumentMetadataResponseDtos(
@@ -89,6 +89,6 @@ public class DocumentRestMapper {
     return documents
       .parallelStream()
       .map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto)
-      .collect(Collectors.toList());
+      .toList();
   }
 }
