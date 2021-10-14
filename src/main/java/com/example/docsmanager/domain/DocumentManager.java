@@ -6,7 +6,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class DocumentManager implements DocumentManagement {
+public non-sealed class DocumentManager implements DocumentManagement {
 
   private final DocumentManagementRepository docManagerRepository;
 
