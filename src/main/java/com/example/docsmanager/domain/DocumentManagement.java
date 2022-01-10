@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Vladimir.Conev
  *
  */
-public sealed  interface DocumentManagement permits DocumentManager {
+public sealed interface DocumentManagement permits DocumentManager {
   List<Document> uploadDocuments(final List<Document> documents);
 
   void deleteDocuments(final Set<String> documentIds);
