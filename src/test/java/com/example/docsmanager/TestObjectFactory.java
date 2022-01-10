@@ -22,12 +22,13 @@ public class TestObjectFactory {
     final byte[] content,
     final String user
   ) {
-    return new Document(id, FILE_NAME, PNG_EXTENSION, LocalDateTime.now(), content, user);
+    return new Document(id, FILE_NAME, PNG_EXTENSION, creationDate, content, user);
   }
 
   protected DocumentElasticDto buildDocumentElasticDto(
     final String id,
-    final byte[] content
+    final byte[] content,
+    final LocalDateTime when
   ) {
     var documentElasticDto = new DocumentElasticDto();
     documentElasticDto.setContent(content);
@@ -35,9 +36,7 @@ public class TestObjectFactory {
     documentElasticDto.setFileName(FILE_NAME);
     documentElasticDto.setUserId(SAMPLE_USER_ID);
     documentElasticDto.setId(id);
-    documentElasticDto.setCreationDate(
-      LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
-    );
+    documentElasticDto.setCreationDate(when.format(DateTimeFormatter.ISO_DATE_TIME));
     return documentElasticDto;
   }
 
