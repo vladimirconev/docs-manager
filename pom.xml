@@ -25,7 +25,7 @@
 		<bean-matchers.version>0.13</bean-matchers.version>
 		<reflections.version>0.9.12</reflections.version>
 		<testcontainers-elasticsearch.version>1.15.3</testcontainers-elasticsearch.version>
-		<plugin.prettier.goal>write</plugin.prettier.goal>
+		<plugin.prettier.goal>check</plugin.prettier.goal>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -184,7 +184,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M3</version>
 				<configuration>
 					<skipTests>false</skipTests>
 					<rerunFailingTestsCount>3</rerunFailingTestsCount>
