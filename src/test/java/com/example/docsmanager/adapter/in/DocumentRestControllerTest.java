@@ -1,5 +1,6 @@
 package com.example.docsmanager.adapter.in;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -72,19 +73,16 @@ public class DocumentRestControllerTest extends TestObjectFactory {
 
     assertNotNull(responseEntity);
     assertNotNull(responseEntity.getBody());
-    assertEquals(responseEntity.getBody().size(), 1);
 
-    DocumentMetadataResponseDto documentMetadataResponseDto = responseEntity
-      .getBody()
-      .stream()
-      .findFirst()
-      .get();
-
-    assertEquals(PNG_EXTENSION, documentMetadataResponseDto.extension());
-    assertEquals(FILE_NAME, documentMetadataResponseDto.fileName());
-    assertEquals(SAMPLE_USER_ID, documentMetadataResponseDto.userId());
-    assertNotNull(documentMetadataResponseDto.creationDate());
-    assertNotNull(sampleDocument.id(), documentMetadataResponseDto.id());
+    assertThat(responseEntity.getBody())
+      .filteredOn(
+        meta ->
+          meta.id().equals(sampleDocument.id()) &&
+          meta.fileName().equals(FILE_NAME) &&
+          meta.userId().equals(SAMPLE_USER_ID) &&
+          meta.creationDate() != null
+      )
+      .hasSize(1);
 
     Mockito.verify(documentManager, times(1)).uploadDocuments(Mockito.anyList());
     Mockito.verifyNoMoreInteractions(documentManager);
