@@ -9,7 +9,7 @@ import com.example.docsmanager.domain.entity.Document;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import org.elasticsearch.common.collect.Set;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
