@@ -7,6 +7,7 @@ Documents manager that allows Upload and deleting of files. It is basically a pl
 - Elasticsearch v7.14.1 (https://www.elastic.co/downloads/past-releases#elasticsearch)
 - Postman (Optional as Swagger is Enabled)
 - Docker
+- ArchUnit 
 
 # Running local
  - Please make sure that your Elastic Instance is Up and running (**if you don't want to use docker-compose**).
