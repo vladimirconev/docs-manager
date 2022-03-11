@@ -4,12 +4,7 @@ import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import com.example.docsmanager.domain.DocumentManagementRepository;
 import com.example.docsmanager.domain.entity.Document;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +59,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
     DocumentElasticDto documentElasticDto = documentElasticRepository
       .findById(id)
       .orElseThrow(NoSuchElementException::new);
-    return documentElasticDto.getContent();
+    return Base64.getDecoder().decode(documentElasticDto.content());
   }
 
   @Override

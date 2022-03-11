@@ -23,7 +23,7 @@
 		<hamcrest.version>2.2</hamcrest.version>
 		<assertj-core.version>3.22.0</assertj-core.version>
 		<bean-matchers.version>0.13</bean-matchers.version>
-		<reflections.version>0.9.12</reflections.version>
+		<equalsverifier.version>3.9</equalsverifier.version>
 		<testcontainers-elasticsearch.version>1.15.3</testcontainers-elasticsearch.version>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
 	</properties>
@@ -120,22 +120,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-    		<groupId>org.hamcrest</groupId>
-    		<artifactId>hamcrest</artifactId>
-    		<scope>test</scope>
+			<groupId>nl.jqno.equalsverifier</groupId>
+			<artifactId>equalsverifier</artifactId>
+			<version>${equalsverifier.version}</version>
+			<scope>test</scope>
 		</dependency>
-		<dependency>
-  			<groupId>com.google.code.bean-matchers</groupId>
-   			<artifactId>bean-matchers</artifactId>
-   			<version>${bean-matchers.version}</version>
-   			<scope>test</scope>
-		</dependency>
-		<dependency>
-    		<groupId>org.reflections</groupId>
-    		<artifactId>reflections</artifactId> 
-    		<version>${reflections.version}</version>
-    		<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>testcontainers</artifactId>

@@ -2,9 +2,12 @@ package com.example.docsmanager.adapter.out;
 
 import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import com.example.docsmanager.domain.entity.Document;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 public class DocumentRepositoryMapper {
 
@@ -13,24 +16,26 @@ public class DocumentRepositoryMapper {
   public static DocumentElasticDto mapDocumentToDocumentElasticDto(
     final Document document
   ) {
-    var dto = new DocumentElasticDto();
-    dto.setContent(document.content());
-    dto.setCreationDate(document.creationDate().format(DateTimeFormatter.ISO_DATE_TIME));
-    dto.setExtension(document.extension());
-    dto.setFileName(document.fileName());
-    dto.setId(document.id());
-    dto.setUserId(document.userId());
-    return dto;
+    return new DocumentElasticDto(
+      document.id(),
+      document.extension(),
+      document.fileName(),
+      document.creationDate().format(DateTimeFormatter.ISO_DATE_TIME),
+      new String(document.content(), StandardCharsets.UTF_8),
+      document.userId()
+    );
   }
 
   public static Document mapDocumentElasticDtoToDocument(final DocumentElasticDto dto) {
     return new Document(
-      dto.getId(),
-      dto.getFileName(),
-      dto.getExtension(),
-      LocalDateTime.parse(dto.getCreationDate(), DateTimeFormatter.ISO_DATE_TIME),
-      dto.getContent(),
-      dto.getUserId()
+      dto.id(),
+      dto.fileName(),
+      dto.extension(),
+      LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME),
+      StringUtils.isNotBlank(dto.content())
+        ? Base64.getDecoder().decode(dto.content())
+        : new byte[0],
+      dto.userId()
     );
   }
 

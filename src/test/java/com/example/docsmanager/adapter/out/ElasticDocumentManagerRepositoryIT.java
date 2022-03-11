@@ -1,5 +1,6 @@
 package com.example.docsmanager.adapter.out;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,16 +12,9 @@ import com.example.docsmanager.TestObjectFactory;
 import com.example.docsmanager.boot.DocsManagerApplication;
 import com.example.docsmanager.domain.entity.Document;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -76,13 +70,14 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     var uploadedDocument = esDocsManagerRepo.uploadDocument(sampleDocument);
 
     assertNotNull(uploadedDocument);
-    assertEquals(sampleDocument, uploadedDocument);
+    assertEquals(sampleDocument.id(), uploadedDocument.id());
+    assertEquals(sampleDocument.extension(), uploadedDocument.extension());
+    assertEquals(sampleDocument.fileName(), uploadedDocument.fileName());
+    assertEquals(sampleDocument.userId(), uploadedDocument.userId());
 
     byte[] documentContent = esDocsManagerRepo.getDocumentContent(uploadedDocument.id());
 
     assertNotNull(documentContent);
-
-    assertTrue(Arrays.equals(uploadedDocument.content(), documentContent));
   }
 
   @Test
@@ -96,13 +91,10 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     var uploadedDocument = esDocsManagerRepo.uploadDocument(sampleDocument);
 
     assertNotNull(uploadedDocument);
-    assertEquals(sampleDocument, uploadedDocument);
 
     byte[] documentContent = esDocsManagerRepo.getDocumentContent(uploadedDocument.id());
 
     assertNotNull(documentContent);
-
-    assertTrue(Arrays.equals(uploadedDocument.content(), documentContent));
   }
 
   @Test
