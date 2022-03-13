@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "http://localhost:8080/api/v1/documents",
+			"name": "http://localhost:8080/api/v2/documents",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -26,7 +26,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/documents",
+					"raw": "http://localhost:8080/api/v2/documents",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -42,12 +42,12 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/api/v1/documents/54959511-255e-40c8-b550-713e2ad470ab",
+			"name": "http://localhost:8080/api/v2/documents/54959511-255e-40c8-b550-713e2ad470ab",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/documents/54959511-255e-40c8-b550-713e2ad470ab",
+					"raw": "http://localhost:8080/api/v2/documents/54959511-255e-40c8-b550-713e2ad470ab",
 					"protocol": "http",
 					"host": [
 						"localhost"

@@ -78,6 +78,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     byte[] documentContent = esDocsManagerRepo.getDocumentContent(uploadedDocument.id());
 
     assertNotNull(documentContent);
+    assertArrayEquals(BYTE_CONTENT, documentContent);
   }
 
   @Test
@@ -95,6 +96,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     byte[] documentContent = esDocsManagerRepo.getDocumentContent(uploadedDocument.id());
 
     assertNotNull(documentContent);
+    assertArrayEquals(BYTE_CONTENT, documentContent);
   }
 
   @Test

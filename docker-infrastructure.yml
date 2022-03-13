@@ -1,8 +1,11 @@
-elasticsearch:
-  image: elasticsearch:7.14.1
-  container_name: elasticsearch
-  ports:
-    - "9300:9300"
-    - "9200:9200"
-  environment:
-    - discovery.type=single-node
+version: "3.9"
+
+services:
+  elasticsearch:
+    image: elasticsearch:7.14.1
+    container_name: elasticsearch
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node

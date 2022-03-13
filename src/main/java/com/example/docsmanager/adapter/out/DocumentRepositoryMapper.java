@@ -21,20 +21,22 @@ public class DocumentRepositoryMapper {
       document.extension(),
       document.fileName(),
       document.creationDate().format(DateTimeFormatter.ISO_DATE_TIME),
-      new String(document.content(), StandardCharsets.UTF_8),
+      Base64.getEncoder().encodeToString(document.content()),
       document.userId()
     );
   }
 
   public static Document mapDocumentElasticDtoToDocument(final DocumentElasticDto dto) {
+    byte[] decodedContent = new byte[0];
+    if (StringUtils.isNotBlank(dto.content())) {
+      decodedContent = Base64.getDecoder().decode(dto.content());
+    }
     return new Document(
       dto.id(),
       dto.fileName(),
       dto.extension(),
       LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME),
-      StringUtils.isNotBlank(dto.content())
-        ? Base64.getDecoder().decode(dto.content())
-        : new byte[0],
+      decodedContent,
       dto.userId()
     );
   }
