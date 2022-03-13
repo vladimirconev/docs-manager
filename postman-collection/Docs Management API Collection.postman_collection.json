@@ -34,7 +34,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"documents"
 					]
 				}
@@ -55,7 +55,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"documents",
 						"54959511-255e-40c8-b550-713e2ad470ab"
 					]
