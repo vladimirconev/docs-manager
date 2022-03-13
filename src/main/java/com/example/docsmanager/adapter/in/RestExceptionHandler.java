@@ -138,10 +138,7 @@ public class RestExceptionHandler {
       ex,
       HttpStatus.NOT_ACCEPTABLE,
       request,
-      String.format(
-        "Use acceptable media types %s.",
-        ex.getSupportedMediaTypes().toString()
-      )
+      String.format("Use acceptable media types %s.", ex.getSupportedMediaTypes())
     );
   }
 

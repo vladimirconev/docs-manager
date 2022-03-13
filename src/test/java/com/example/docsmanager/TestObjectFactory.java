@@ -11,11 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class TestObjectFactory {
 
-  protected byte[] BYTE_CONTENT = new String("TEST").getBytes(StandardCharsets.UTF_8);
-  protected String PNG_EXTENSION = "png";
-  protected String FILE_NAME = "test_file";
-  protected String SAMPLE_USER_ID = "foo";
-  protected String DOCUMENT_ID = UUID.randomUUID().toString();
+  protected final byte[] BYTE_CONTENT = "TEST".getBytes(StandardCharsets.UTF_8);
+  protected final String PNG_EXTENSION = "png";
+  protected final String FILE_NAME = "test_file";
+  protected final String SAMPLE_USER_ID = "foo";
+  protected final String DOCUMENT_ID = UUID.randomUUID().toString();
 
   protected Document buildDocumentInstance(
     final String id,

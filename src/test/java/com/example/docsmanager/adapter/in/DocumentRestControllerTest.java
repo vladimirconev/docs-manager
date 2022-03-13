@@ -64,7 +64,7 @@ public class DocumentRestControllerTest extends TestObjectFactory {
     );
     Mockito
       .when(documentManager.uploadDocuments(Mockito.anyList()))
-      .thenReturn(Arrays.asList(sampleDocument));
+      .thenReturn(List.of(sampleDocument));
 
     ResponseEntity<List<DocumentMetadataResponseDto>> responseEntity = documentRestController.uploadDocuments(
       multipartFiles,

@@ -8,6 +8,7 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -21,7 +22,7 @@ public class DocumentManagerStartupListener
   private final String explicitIndexMappings;
 
   @Override
-  public void onApplicationEvent(final ContextRefreshedEvent event) {
+  public void onApplicationEvent(final @NotNull ContextRefreshedEvent event) {
     createIndex();
   }
 

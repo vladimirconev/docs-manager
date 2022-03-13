@@ -2,7 +2,6 @@ package com.example.docsmanager.adapter.out;
 
 import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import com.example.docsmanager.domain.entity.Document;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;

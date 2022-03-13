@@ -36,9 +36,9 @@ public class DocumentManagerTest extends TestObjectFactory {
     );
     Mockito
       .when(docsManagementRepo.uploadDocuments(Mockito.anyList()))
-      .thenReturn(Arrays.asList(document));
+      .thenReturn(List.of(document));
 
-    List<Document> output = documentManager.uploadDocuments(Arrays.asList(document));
+    List<Document> output = documentManager.uploadDocuments(List.of(document));
 
     assertNotNull(output);
     assertEquals(document, output.stream().findAny().get());
