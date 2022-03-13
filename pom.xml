@@ -20,9 +20,7 @@
 		<mockito-core.version>3.11.0</mockito-core.version>
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
 		<archunit.version>0.19.0</archunit.version>
-		<hamcrest.version>2.2</hamcrest.version>
 		<assertj-core.version>3.22.0</assertj-core.version>
-		<bean-matchers.version>0.13</bean-matchers.version>
 		<equalsverifier.version>3.9</equalsverifier.version>
 		<testcontainers-elasticsearch.version>1.15.3</testcontainers-elasticsearch.version>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
