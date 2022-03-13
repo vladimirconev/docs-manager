@@ -1,11 +1,6 @@
 package com.example.docsmanager.adapter.out;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.docsmanager.DocsElasticsearchContainer;
 import com.example.docsmanager.TestObjectFactory;
@@ -36,7 +31,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
 
   @Container
-  private static ElasticsearchContainer elasticsearchContainer = new DocsElasticsearchContainer();
+  private static final ElasticsearchContainer elasticsearchContainer = new DocsElasticsearchContainer();
 
   private static final String IT_DEMO_USER = "integration_test_demo_user";
 
@@ -124,12 +119,11 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     esDocsManagerRepo.deleteDocuments(documentIds);
 
     documentIds.forEach(
-      documentId -> {
+      documentId ->
         assertThrows(
           NoSuchElementException.class,
           () -> esDocsManagerRepo.getDocumentContent(documentId)
-        );
-      }
+        )
     );
   }
 
@@ -156,9 +150,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
       .collect(Collectors.toSet());
 
     documentIds.forEach(
-      documentId -> {
-        assertNotNull(esDocsManagerRepo.getDocumentContent(documentId));
-      }
+      documentId -> assertNotNull(esDocsManagerRepo.getDocumentContent(documentId))
     );
   }
 
@@ -200,8 +192,9 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     );
 
     assertNotNull(allDocumentsByUserId);
-    assertTrue(
-      allDocumentsByUserIdWithPNGExtension.size() == allDocumentsByUserId.size()
+    assertEquals(
+      allDocumentsByUserIdWithPNGExtension.size(),
+      allDocumentsByUserId.size()
     );
   }
 
