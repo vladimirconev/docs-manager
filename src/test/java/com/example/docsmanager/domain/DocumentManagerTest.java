@@ -40,7 +40,11 @@ public class DocumentManagerTest extends TestObjectFactory {
     List<Document> output = documentManager.uploadDocuments(List.of(document));
 
     assertNotNull(output);
-    assertEquals(document, output.stream().findAny().get());
+
+    if(output.stream().findAny().isPresent()){
+     var actual =  output.stream().findAny().get();
+      assertEquals(document, actual);
+    }
 
     Mockito.verify(docsManagementRepo, times(1)).uploadDocuments(Mockito.anyList());
     Mockito.verifyNoMoreInteractions(docsManagementRepo);
