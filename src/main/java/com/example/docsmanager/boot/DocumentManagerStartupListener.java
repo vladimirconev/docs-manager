@@ -27,7 +27,7 @@ public class DocumentManagerStartupListener
   }
 
   /**
-   * Creates an index If does not exists and applies Explicit mappings.
+   * Creates an index if not exist and applies Explicit mappings.
    */
   private void createIndex() {
     try {

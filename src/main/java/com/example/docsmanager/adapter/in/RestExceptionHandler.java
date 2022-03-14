@@ -4,11 +4,7 @@ import com.example.docsmanager.adapter.in.dto.ErrorResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -74,6 +70,9 @@ public class RestExceptionHandler {
     HttpServletRequest request = servletRequest.getNativeRequest(
       HttpServletRequest.class
     );
+
+    Objects.requireNonNull(request, "Http servlet request should not be null.");
+
     Map<String, Object> errors = errorAttributes.getErrorAttributes(
       webRequest,
       ErrorAttributeOptions.defaults()
