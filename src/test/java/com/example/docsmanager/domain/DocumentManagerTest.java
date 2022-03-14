@@ -41,8 +41,8 @@ public class DocumentManagerTest extends TestObjectFactory {
 
     assertNotNull(output);
 
-    if(output.stream().findAny().isPresent()){
-     var actual =  output.stream().findAny().get();
+    if (output.stream().findAny().isPresent()) {
+      var actual = output.stream().findAny().get();
       assertEquals(document, actual);
     }
 
