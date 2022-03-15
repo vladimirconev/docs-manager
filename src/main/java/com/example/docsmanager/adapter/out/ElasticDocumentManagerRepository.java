@@ -90,7 +90,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
     searchSourceBuilder.fetchSource(INCLUDED_SOURCE_FIELDS, EXCLUDED_SOURCE_FIELDS);
     searchRequest.source(searchSourceBuilder);
 
-    ObjectMapper objectMapper= new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper();
 
     SearchResponse searchResponse = restHighLevelClient.search(
       searchRequest,
@@ -105,7 +105,10 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
         .parallelStream()
         .filter(Objects::nonNull)
         .map(SearchHit::getSourceAsMap)
-        .map((var sourceMap) -> objectMapper.convertValue(sourceMap, DocumentElasticDto.class))
+        .map(
+          (var sourceMap) ->
+            objectMapper.convertValue(sourceMap, DocumentElasticDto.class)
+        )
         .map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument)
         .collect(Collectors.toSet());
       if (!docs.isEmpty()) {
