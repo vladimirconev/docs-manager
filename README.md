@@ -36,7 +36,7 @@ To Run:
 mvn spring-boot:run
 ````
 
-Check up swagger UI on: `http://localhost:8080/swagger-ui.html` or Import Postman API collection available under `postman-collection` folder.
+Check up swagger UI on: `http://localhost:8080/swagger-ui/` or Import Postman API collection available under `postman-collection` folder.
 
 Happy Coding!!!
 

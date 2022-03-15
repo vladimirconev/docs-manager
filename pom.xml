@@ -18,7 +18,7 @@
 		<apache-tika.core.version>2.3.0</apache-tika.core.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<mockito-core.version>3.11.0</mockito-core.version>
-		<springfox-swagger.version>2.9.2</springfox-swagger.version>
+ 		<springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
 		<archunit.version>0.23.1</archunit.version>
 		<assertj-core.version>3.22.0</assertj-core.version>
 		<equalsverifier.version>3.9</equalsverifier.version>
@@ -73,15 +73,11 @@
 			<optional>true</optional>
 		</dependency>
 		
+		<!-- Springfox boot starter -->
 		<dependency>
-   			<groupId>io.springfox</groupId>
-   			<artifactId>springfox-swagger2</artifactId>
-   			<version>${springfox-swagger.version}</version>
-		</dependency>
-		<dependency>
-   			<groupId>io.springfox</groupId>
-   			<artifactId>springfox-swagger-ui</artifactId>
-   			<version>${springfox-swagger.version}</version>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>${springfox-boot-starter.version}</version>
 		</dependency>
 		
 		<!-- Testing -->

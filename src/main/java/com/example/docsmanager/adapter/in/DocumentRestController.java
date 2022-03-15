@@ -64,12 +64,7 @@ public class DocumentRestController {
     return new ResponseEntity<>(content, HttpStatus.OK);
   }
 
-  /**
-   * Swagger UI v2.9.2 does not Support an array of {@link MultipartFile}. <br/>
-   * Expected fix should be delivered under v3.x.x per https://github.com/OAI/OpenAPI-Specification/issues/254 <br/>
-   *
-   * You can try it out via Postman: HTTP POST -> api/vX/documents and under Body tab select 'form-data' to add files and user id.
-   */
+
   @ApiOperation(value = "Upload documents", tags = { "Documents" })
   @ApiResponses(
     value = {
