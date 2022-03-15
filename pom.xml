@@ -18,7 +18,7 @@
 		<apache-tika.core.version>2.3.0</apache-tika.core.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<mockito-core.version>3.11.0</mockito-core.version>
-		<springfox-swagger.version>3.0.0</springfox-swagger.version>
+		<springfox-swagger.version>2.9.2</springfox-swagger.version>
 		<archunit.version>0.23.1</archunit.version>
 		<assertj-core.version>3.22.0</assertj-core.version>
 		<equalsverifier.version>3.9</equalsverifier.version>

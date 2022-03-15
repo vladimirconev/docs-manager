@@ -104,11 +104,8 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
         .asList(searchHits)
         .parallelStream()
         .filter(Objects::nonNull)
-        .map(
-          searchHit ->
-            objectMapper
-              .convertValue(searchHit.getSourceAsMap(), DocumentElasticDto.class)
-        )
+        .map(SearchHit::getSourceAsMap)
+        .map((var sourceMap) -> objectMapper.convertValue(sourceMap, DocumentElasticDto.class))
         .map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument)
         .collect(Collectors.toSet());
       if (!docs.isEmpty()) {
