@@ -34,11 +34,13 @@ public class DocumentRestControllerConfig {
   @Bean
   public Docket docket() {
     return new Docket(DocumentationType.OAS_30)
-            .apiInfo(new ApiInfoBuilder()
-                    .title("Documents Manager API")
-                    .description("A CRUD API to demonstrate capabilities of Elasticsearch")
-                    .version("2.0.0-SNAPSHOT")
-                    .build())
+      .apiInfo(
+        new ApiInfoBuilder()
+          .title("Documents Manager API")
+          .description("A CRUD API to demonstrate capabilities of Elasticsearch")
+          .version("2.0.0-SNAPSHOT")
+          .build()
+      )
       .select()
       .apis(RequestHandlerSelectors.basePackage(IN_ADAPTER_BASE_PKG))
       .build();

@@ -64,7 +64,6 @@ public class DocumentRestController {
     return new ResponseEntity<>(content, HttpStatus.OK);
   }
 
-
   @ApiOperation(value = "Upload documents", tags = { "Documents" })
   @ApiResponses(
     value = {
