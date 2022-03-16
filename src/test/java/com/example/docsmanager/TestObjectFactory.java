@@ -16,6 +16,8 @@ public class TestObjectFactory {
   protected final String FILE_NAME = "test_file";
   protected final String SAMPLE_USER_ID = "foo";
   protected final String DOCUMENT_ID = UUID.randomUUID().toString();
+  protected final String SAMPLE_DOCUMENT_ID = UUID.randomUUID().toString();
+  protected final String PDF_CONTENT_TYPE = "pdf";
 
   protected Document buildDocumentInstance(
     final String id,
@@ -54,7 +56,7 @@ public class TestObjectFactory {
     return new MockMultipartFile(
       FILE_NAME,
       FILE_NAME.concat(".").concat(PNG_EXTENSION),
-      "pdf",
+      PDF_CONTENT_TYPE,
       BYTE_CONTENT
     );
   }
