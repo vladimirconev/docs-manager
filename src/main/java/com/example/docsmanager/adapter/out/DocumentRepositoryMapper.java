@@ -44,7 +44,7 @@ public class DocumentRepositoryMapper {
     final List<Document> documents
   ) {
     return documents
-      .parallelStream()
+      .stream()
       .map(DocumentRepositoryMapper::mapDocumentToDocumentElasticDto)
       .toList();
   }

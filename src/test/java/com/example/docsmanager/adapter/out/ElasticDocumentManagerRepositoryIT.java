@@ -81,12 +81,21 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     }
     // Load sample data
     List<Document> uploadDocuments = uploadDocuments(
-      buildDocumentInstance(DOCUMENT_ID, LocalDateTime.now(), BYTE_CONTENT, IT_DEMO_USER),
+      buildDocumentInstance(
+        DOCUMENT_ID,
+        LocalDateTime.now(),
+        BYTE_CONTENT,
+        IT_DEMO_USER,
+        FILE_NAME,
+        PNG_EXTENSION
+      ),
       buildDocumentInstance(
         SAMPLE_DOCUMENT_ID,
         LocalDateTime.now(),
         BYTE_CONTENT,
-        IT_DEMO_USER
+        IT_DEMO_USER,
+        FILE_NAME,
+        PNG_EXTENSION
       )
     );
 
@@ -120,7 +129,9 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
       id,
       LocalDateTime.now(),
       BYTE_CONTENT,
-      IT_DEMO_USER
+      IT_DEMO_USER,
+      FILE_NAME,
+      PNG_EXTENSION
     );
     var uploadedDocument = esDocsManagerRepo.uploadDocument(sampleDocument);
 

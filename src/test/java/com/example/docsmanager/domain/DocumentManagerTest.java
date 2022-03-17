@@ -31,7 +31,9 @@ public class DocumentManagerTest extends TestObjectFactory {
       DOCUMENT_ID,
       LocalDateTime.now(),
       BYTE_CONTENT,
-      SAMPLE_USER_ID
+      SAMPLE_USER_ID,
+      FILE_NAME,
+      PNG_EXTENSION
     );
     Mockito
       .when(docsManagementRepo.uploadDocuments(Mockito.anyList()))

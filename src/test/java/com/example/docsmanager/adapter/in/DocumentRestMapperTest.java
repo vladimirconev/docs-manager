@@ -18,7 +18,9 @@ public class DocumentRestMapperTest extends TestObjectFactory {
       DOCUMENT_ID,
       LocalDateTime.now(),
       BYTE_CONTENT,
-      SAMPLE_USER_ID
+      SAMPLE_USER_ID,
+      FILE_NAME,
+      PNG_EXTENSION
     );
 
     DocumentMetadataResponseDto dto = DocumentRestMapper.mapDocumentToDocumentMetadataResponseDto(
@@ -39,7 +41,7 @@ public class DocumentRestMapperTest extends TestObjectFactory {
   @Test
   void mapMultipartFileToDocumentTest() {
     Document document = DocumentRestMapper.mapMultipartFileToDocument(
-      buildMockMultipartFile(),
+      buildMockMultipartFile(IMAGE_PNG_CONTENT_TYPE),
       SAMPLE_USER_ID
     );
 
@@ -52,7 +54,7 @@ public class DocumentRestMapperTest extends TestObjectFactory {
   @Test
   void mapMultipartFileToDocumentWhenPassingOnFaultyContentType() {
     Document document = DocumentRestMapper.mapMultipartFileToDocument(
-      buildMockMultiplepartFileWithFaultyContentType(),
+      buildMockMultipartFile(PDF_CONTENT_TYPE),
       SAMPLE_USER_ID
     );
 

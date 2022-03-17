@@ -53,13 +53,15 @@ public class DocumentRestControllerTest extends TestObjectFactory {
 
   @Test
   void uploadDocumentTest() {
-    MultipartFile multipartFile = buildMockMultipartFile();
+    MultipartFile multipartFile = buildMockMultipartFile(IMAGE_PNG_CONTENT_TYPE);
     MultipartFile[] multipartFiles = { multipartFile };
     Document sampleDocument = buildDocumentInstance(
       DOCUMENT_ID,
       LocalDateTime.now(),
       BYTE_CONTENT,
-      SAMPLE_USER_ID
+      SAMPLE_USER_ID,
+      FILE_NAME,
+      PNG_EXTENSION
     );
     Mockito
       .when(documentManager.uploadDocuments(Mockito.anyList()))

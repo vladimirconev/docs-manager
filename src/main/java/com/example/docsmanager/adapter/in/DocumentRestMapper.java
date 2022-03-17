@@ -58,7 +58,10 @@ public class DocumentRestMapper {
     try {
       content = IOUtils.toByteArray(multipartFile.getInputStream());
     } catch (IOException ioException) {
-      throw new IllegalStateException("Error while extracting byte array content.");
+      throw new IllegalStateException(
+        "Error while extracting byte array content.",
+        ioException
+      );
     }
     return new Document(
       documentId,
@@ -75,7 +78,7 @@ public class DocumentRestMapper {
     final String userId
   ) {
     return multipartFiles
-      .parallelStream()
+      .stream()
       .map(multipartFile -> mapMultipartFileToDocument(multipartFile, userId))
       .toList();
   }
@@ -84,7 +87,7 @@ public class DocumentRestMapper {
     final List<Document> documents
   ) {
     return documents
-      .parallelStream()
+      .stream()
       .map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto)
       .toList();
   }

@@ -100,9 +100,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
     SearchHit[] searchHits = searchResponse.getHits().getHits();
 
     while (searchHits != null && searchHits.length > 0) {
-      Set<Document> docs = Arrays
-        .asList(searchHits)
-        .parallelStream()
+      Set<Document> docs = Arrays.stream(searchHits)
         .filter(Objects::nonNull)
         .map(SearchHit::getSourceAsMap)
         .map(

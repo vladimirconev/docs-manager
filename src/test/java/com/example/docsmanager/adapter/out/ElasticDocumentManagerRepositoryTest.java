@@ -41,7 +41,10 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
     var documentElasticDto = buildDocumentElasticDto(
       DOCUMENT_ID,
       BYTE_CONTENT,
-      LocalDateTime.now()
+      LocalDateTime.now(),
+      PNG_EXTENSION,
+      FILE_NAME,
+      SAMPLE_USER_ID
     );
     Mockito
       .when(documentElasticRepository.save(Mockito.any(DocumentElasticDto.class)))
@@ -50,7 +53,9 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
       DOCUMENT_ID,
       LocalDateTime.now(),
       BYTE_CONTENT,
-      SAMPLE_USER_ID
+      SAMPLE_USER_ID,
+      FILE_NAME,
+      PNG_EXTENSION
     );
     var uploadedDocument = elasticDocumentManagerRepo.uploadDocument(document);
 
@@ -75,7 +80,10 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
     var documentElasticDto = buildDocumentElasticDto(
       DOCUMENT_ID,
       BYTE_CONTENT,
-      LocalDateTime.now()
+      LocalDateTime.now(),
+      PNG_EXTENSION,
+      FILE_NAME,
+      SAMPLE_USER_ID
     );
 
     Mockito
