@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * Facilitate creation of dummy test objects.
  */
+@SuppressWarnings("SameParameterValue")
 public class TestObjectFactory {
 
   /**
