@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -85,13 +84,14 @@ public class DocumentRestController {
     produces = MediaType.APPLICATION_JSON_VALUE,
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
+  @SuppressWarnings("SameParameterValue")
   ResponseEntity<List<DocumentMetadataResponseDto>> uploadDocuments(
     final @RequestPart("files") MultipartFile[] files,
     final @RequestParam("userId") String userId
   ) {
     log.info("Start of Uploading documents for user: {}.", userId);
     List<Document> documents = DocumentRestMapper.mapMultipartFilesToDocuments(
-      Arrays.asList(files),
+      List.of(files),
       userId
     );
     List<Document> uploadedDocuments = documentManagement.uploadDocuments(documents);

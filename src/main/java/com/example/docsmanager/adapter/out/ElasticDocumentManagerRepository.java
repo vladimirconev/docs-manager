@@ -56,7 +56,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
   @Cacheable(cacheNames = "docs_byte_content")
   @Override
   public byte[] getDocumentContent(final String id) {
-    DocumentElasticDto documentElasticDto = documentElasticRepository
+    var documentElasticDto = documentElasticRepository
       .findById(id)
       .orElseThrow(NoSuchElementException::new);
     return Base64.getDecoder().decode(documentElasticDto.content());
@@ -100,7 +100,8 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
     SearchHit[] searchHits = searchResponse.getHits().getHits();
 
     while (searchHits != null && searchHits.length > 0) {
-      Set<Document> docs = Arrays.stream(searchHits)
+      Set<Document> docs = Arrays
+        .stream(searchHits)
         .filter(Objects::nonNull)
         .map(SearchHit::getSourceAsMap)
         .map(
