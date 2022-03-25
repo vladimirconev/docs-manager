@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8888:8888"
+      - "8080:8080"
     depends_on:
        elasticsearch:
          condition: service_healthy
