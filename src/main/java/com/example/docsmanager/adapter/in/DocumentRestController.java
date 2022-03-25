@@ -4,10 +4,13 @@ import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
 import com.example.docsmanager.adapter.in.dto.ErrorResponseDto;
 import com.example.docsmanager.domain.DocumentManagement;
 import com.example.docsmanager.domain.entity.Document;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Api(tags = { "Documents" }, value = "/")
+@Tag(name = "Documents")
 @RequestMapping(
   value = {
     "#{'${enable.api.versioning:true}' ? '/api/v' + '${application.version}'.split('\\.')[0]:'' }",
@@ -39,16 +42,20 @@ public class DocumentRestController {
 
   private final DocumentManagement documentManagement;
 
-  @ApiOperation(value = "Retrieve a document by ID", tags = { "Documents" })
+  @Operation(summary = "Retrieve a document by ID", tags = { "Documents" })
   @ApiResponses(
     value = {
-      @ApiResponse(code = 200, message = "OK", response = byte[].class),
+      @ApiResponse(responseCode = "200", description = "OK"/*, response = byte[].class*/),
       @ApiResponse(
-        code = 503,
-        message = "Service temporally unavailable",
-        response = ErrorResponseDto.class
+        responseCode = "503",
+        description = "Service temporally unavailable",
+        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
       ),
-      @ApiResponse(code = 404, message = "Not Found", response = ErrorResponseDto.class),
+      @ApiResponse(
+        responseCode = "404",
+        description = "Not Found",
+        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+      ),
     }
   )
   @GetMapping(
@@ -63,19 +70,22 @@ public class DocumentRestController {
     return new ResponseEntity<>(content, HttpStatus.OK);
   }
 
-  @ApiOperation(value = "Upload documents", tags = { "Documents" })
+  @Operation(summary = "Upload documents", tags = { "Documents" })
   @ApiResponses(
     value = {
       @ApiResponse(
-        code = 201,
-        message = "CREATED",
-        responseContainer = "List",
-        response = DocumentMetadataResponseDto.class
+        responseCode = "201",
+        description = "CREATED",
+        content = @Content(
+          array = @ArraySchema(
+            schema = @Schema(implementation = DocumentMetadataResponseDto.class)
+          )
+        )
       ),
       @ApiResponse(
-        code = 503,
-        message = "Service temporally unavailable",
-        response = ErrorResponseDto.class
+        responseCode = "503",
+        description = "Service temporally unavailable",
+        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
       ),
     }
   )
@@ -101,14 +111,14 @@ public class DocumentRestController {
     );
   }
 
-  @ApiOperation(value = "Delete a document by ID", tags = { "Documents" })
+  @Operation(description = "Delete a document by ID", tags = { "Documents" })
   @ApiResponses(
     value = {
-      @ApiResponse(code = 204, message = "NO_CONTENT"),
+      @ApiResponse(responseCode = "204", description = "NO_CONTENT"),
       @ApiResponse(
-        code = 503,
-        message = "Service temporally unavailable",
-        response = ErrorResponseDto.class
+        responseCode = "503",
+        description = "Service temporally unavailable",
+        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
       ),
     }
   )
@@ -121,22 +131,25 @@ public class DocumentRestController {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-  @ApiOperation(
-    value = "Retrieve a document by user id and extension",
+  @Operation(
+    description = "Retrieve a document by user id and extension",
     tags = { "Documents" }
   )
   @ApiResponses(
     value = {
       @ApiResponse(
-        code = 200,
-        message = "OK",
-        responseContainer = "Set",
-        response = DocumentMetadataResponseDto.class
+        responseCode = "200",
+        description = "OK",
+        content = @Content(
+          array = @ArraySchema(
+            schema = @Schema(implementation = DocumentMetadataResponseDto.class)
+          )
+        )
       ),
       @ApiResponse(
-        code = 503,
-        message = "Service temporally unavailable",
-        response = ErrorResponseDto.class
+        responseCode = "503",
+        description = "Service temporally unavailable",
+        content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))
       ),
     }
   )
