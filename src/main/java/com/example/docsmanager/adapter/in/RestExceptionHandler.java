@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpHeaders;
@@ -25,8 +23,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice(basePackageClasses = DocumentRestController.class)
-@Slf4j
-@RequiredArgsConstructor
 public class RestExceptionHandler {
 
   private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:SS.ssZ";
@@ -35,6 +31,14 @@ public class RestExceptionHandler {
 
   private final DefaultErrorAttributes errorAttributes;
   private final ObjectMapper objectMapper;
+
+  public RestExceptionHandler(
+    final DefaultErrorAttributes errorAttributes,
+    final ObjectMapper objectMapper
+  ) {
+    this.errorAttributes = errorAttributes;
+    this.objectMapper = objectMapper;
+  }
 
   protected ResponseEntity<String> handleException(
     final Exception exception,
@@ -52,11 +56,6 @@ public class RestExceptionHandler {
         status
       );
     } catch (JsonProcessingException jpe) {
-      log.error(
-        "Exception on creating JSON response due to: '{}'.",
-        jpe.getMessage(),
-        jpe
-      );
       return new ResponseEntity<>(exception.getMessage(), httpHeaders, status);
     }
   }

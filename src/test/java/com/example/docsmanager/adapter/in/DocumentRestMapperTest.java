@@ -1,7 +1,6 @@
 package com.example.docsmanager.adapter.in;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.docsmanager.TestObjectFactory;
 import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
@@ -53,14 +52,13 @@ public class DocumentRestMapperTest extends TestObjectFactory {
 
   @Test
   void mapMultipartFileToDocumentWhenPassingOnFaultyContentType() {
-    Document document = DocumentRestMapper.mapMultipartFileToDocument(
-      buildMockMultipartFile(PDF_CONTENT_TYPE),
-      SAMPLE_USER_ID
+    assertThrows(
+      IllegalStateException.class,
+      () ->
+        DocumentRestMapper.mapMultipartFileToDocument(
+          buildMockMultipartFile(PDF_CONTENT_TYPE),
+          SAMPLE_USER_ID
+        )
     );
-
-    assertNotNull(document);
-    assertNotNull(document.id());
-    assertNotNull(document.creationDate());
-    assertEquals(SAMPLE_USER_ID, document.userId());
   }
 }

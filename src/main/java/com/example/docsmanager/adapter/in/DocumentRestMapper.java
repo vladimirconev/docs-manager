@@ -7,14 +7,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.mime.MimeTypeException;
 import org.springframework.web.multipart.MultipartFile;
 
-@Slf4j
 public class DocumentRestMapper {
 
   private DocumentRestMapper() {}
@@ -49,10 +47,7 @@ public class DocumentRestMapper {
         .getExtension();
       fileExtension = StringUtils.substringAfterLast(extension, ".");
     } catch (MimeTypeException ex) {
-      log.error(
-        "Exception while extracting extension for file:{}.",
-        multipartFile.getOriginalFilename()
-      );
+      throw new IllegalStateException("Media Type name is Invalid", ex);
     }
     byte[] content;
     try {

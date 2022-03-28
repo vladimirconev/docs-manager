@@ -1,25 +1,35 @@
 package com.example.docsmanager.boot;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.constraints.NotNull;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-@Slf4j
-@RequiredArgsConstructor
 public class DocumentManagerStartupListener
   implements ApplicationListener<ContextRefreshedEvent> {
+
+  Logger logger = LoggerFactory.getLogger(DocumentManagerStartupListener.class);
 
   private final RestHighLevelClient restHighLevelClient;
   private final String indexName;
   private final String explicitIndexMappings;
+
+  public DocumentManagerStartupListener(
+    RestHighLevelClient restHighLevelClient,
+    String indexName,
+    String explicitIndexMappings
+  ) {
+    this.restHighLevelClient = restHighLevelClient;
+    this.indexName = indexName;
+    this.explicitIndexMappings = explicitIndexMappings;
+  }
 
   @Override
   public void onApplicationEvent(final @NotNull ContextRefreshedEvent event) {
@@ -40,14 +50,14 @@ public class DocumentManagerStartupListener
         CreateIndexResponse createIndexResponse = restHighLevelClient
           .indices()
           .create(createIndexRequest, RequestOptions.DEFAULT);
-        log.info(
+        logger.info(
           "Creation of Index {} is acknowledged:{}",
           indexName,
           createIndexResponse.isAcknowledged()
         );
       }
     } catch (Exception exception) {
-      log.error(
+      logger.error(
         "Error on creating index and apply Explicit mappings due to:{}.",
         exception.getMessage()
       );

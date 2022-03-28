@@ -4,12 +4,10 @@ import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import com.example.docsmanager.domain.DocumentManagementRepository;
 import com.example.docsmanager.domain.entity.Document;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.ClearScrollRequest;
 import org.elasticsearch.action.search.ClearScrollResponse;
@@ -24,11 +22,13 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 
-@Slf4j
-@RequiredArgsConstructor
 public class ElasticDocumentManagerRepository implements DocumentManagementRepository {
+
+  Logger logger = LoggerFactory.getLogger(ElasticDocumentManagerRepository.class);
 
   private static final String USER_ID = "userId";
   private static final String EXTENSION = "extension";
@@ -44,6 +44,16 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
   private final DocumentElasticRepository documentElasticRepository;
   private final RestHighLevelClient restHighLevelClient;
   private final String documentIndexName;
+
+  public ElasticDocumentManagerRepository(
+    final DocumentElasticRepository documentElasticRepository,
+    final RestHighLevelClient restHighLevelClient,
+    final String index
+  ) {
+    this.documentElasticRepository = documentElasticRepository;
+    this.restHighLevelClient = restHighLevelClient;
+    this.documentIndexName = index;
+  }
 
   @Override
   public Document uploadDocument(final Document document) {
@@ -67,7 +77,6 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
     documentElasticRepository.deleteAllById(documentIds);
   }
 
-  @SneakyThrows
   @Override
   public Set<Document> getAllDocumentsByUserId(
     final String userId,
@@ -92,42 +101,54 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    SearchResponse searchResponse = restHighLevelClient.search(
-      searchRequest,
-      RequestOptions.DEFAULT
-    );
-    String scrollId = searchResponse.getScrollId();
-    SearchHit[] searchHits = searchResponse.getHits().getHits();
+    try {
+      SearchResponse searchResponse = restHighLevelClient.search(
+        searchRequest,
+        RequestOptions.DEFAULT
+      );
+      String scrollId = searchResponse.getScrollId();
+      SearchHit[] searchHits = searchResponse.getHits().getHits();
 
-    while (searchHits != null && searchHits.length > 0) {
-      Set<Document> docs = Arrays
-        .stream(searchHits)
-        .filter(Objects::nonNull)
-        .map(SearchHit::getSourceAsMap)
-        .map(
-          (var sourceMap) ->
-            objectMapper.convertValue(sourceMap, DocumentElasticDto.class)
-        )
-        .map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument)
-        .collect(Collectors.toSet());
-      if (!docs.isEmpty()) {
-        documents.addAll(docs);
+      while (searchHits != null && searchHits.length > 0) {
+        Set<Document> docs = Arrays
+          .stream(searchHits)
+          .filter(Objects::nonNull)
+          .map(SearchHit::getSourceAsMap)
+          .map(
+            (var sourceMap) ->
+              objectMapper.convertValue(sourceMap, DocumentElasticDto.class)
+          )
+          .map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument)
+          .collect(Collectors.toSet());
+        if (!docs.isEmpty()) {
+          documents.addAll(docs);
+        }
+        SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
+        scrollRequest.scroll(scroll);
+        searchResponse =
+          restHighLevelClient.scroll(scrollRequest, RequestOptions.DEFAULT);
+        scrollId = searchResponse.getScrollId();
+        searchHits = searchResponse.getHits().getHits();
       }
-      SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
-      scrollRequest.scroll(scroll);
-      searchResponse = restHighLevelClient.scroll(scrollRequest, RequestOptions.DEFAULT);
-      scrollId = searchResponse.getScrollId();
-      searchHits = searchResponse.getHits().getHits();
-    }
 
-    ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
-    clearScrollRequest.addScrollId(scrollId);
-    ClearScrollResponse clearScrollResponse = restHighLevelClient.clearScroll(
-      clearScrollRequest,
-      RequestOptions.DEFAULT
-    );
-    boolean succeeded = clearScrollResponse.isSucceeded();
-    log.debug("Is scroll cleared out: {}.", succeeded);
+      ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
+      clearScrollRequest.addScrollId(scrollId);
+      ClearScrollResponse clearScrollResponse = restHighLevelClient.clearScroll(
+        clearScrollRequest,
+        RequestOptions.DEFAULT
+      );
+      boolean succeeded = clearScrollResponse.isSucceeded();
+      logger.debug("Is scroll cleared out: {}.", succeeded);
+    } catch (IOException ioException) {
+      logger.error(
+        String.format(
+          "Error on fetching all documents by user id %s and extension %s.",
+          userId,
+          extension
+        ),
+        ioException
+      );
+    }
     return documents;
   }
 

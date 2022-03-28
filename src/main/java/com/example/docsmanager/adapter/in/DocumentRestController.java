@@ -14,8 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +29,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Slf4j
 @RestController
-@RequiredArgsConstructor
 @Tag(name = "Documents")
 @RequestMapping(
   value = {
@@ -40,7 +38,13 @@ import org.springframework.web.multipart.MultipartFile;
 )
 public class DocumentRestController {
 
+  Logger logger = LoggerFactory.getLogger(DocumentRestController.class);
+
   private final DocumentManagement documentManagement;
+
+  public DocumentRestController(final DocumentManagement documentManagement) {
+    this.documentManagement = documentManagement;
+  }
 
   @Operation(summary = "Retrieve a document by ID", tags = { "Documents" })
   @ApiResponses(
@@ -65,7 +69,7 @@ public class DocumentRestController {
   ResponseEntity<byte[]> getDocumentContent(
     final @PathVariable("documentId") String documentId
   ) {
-    log.info("Fetching Document Data content with id:{}.", documentId);
+    logger.info("Fetching Document Data content with id:{}.", documentId);
     byte[] content = documentManagement.getDocumentContent(documentId);
     return new ResponseEntity<>(content, HttpStatus.OK);
   }
@@ -99,7 +103,7 @@ public class DocumentRestController {
     final @RequestPart("files") MultipartFile[] files,
     final @RequestParam("userId") String userId
   ) {
-    log.info("Start of Uploading documents for user: {}.", userId);
+    logger.info("Start of Uploading documents for user: {}.", userId);
     List<Document> documents = DocumentRestMapper.mapMultipartFilesToDocuments(
       List.of(files),
       userId
@@ -126,7 +130,7 @@ public class DocumentRestController {
   ResponseEntity<Void> deleteDocuments(
     final @RequestParam("documentIds") Set<String> documentIds
   ) {
-    log.info("Deleting documents with following IDs:{}.", documentIds);
+    logger.info("Deleting documents with following IDs:{}.", documentIds);
     documentManagement.deleteDocuments(documentIds);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
@@ -158,7 +162,7 @@ public class DocumentRestController {
     final @RequestParam("userId") String userId,
     final @RequestParam(name = "extension", required = false) String extension
   ) {
-    log.info(
+    logger.info(
       "Fetch documents metadata bu user:{} and by extension (optionally):{}.",
       userId,
       extension

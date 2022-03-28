@@ -3,12 +3,14 @@ package com.example.docsmanager.domain;
 import com.example.docsmanager.domain.entity.Document;
 import java.util.List;
 import java.util.Set;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public non-sealed class DocumentManager implements DocumentManagement {
 
   private final DocumentManagementRepository docManagerRepository;
+
+  public DocumentManager(DocumentManagementRepository docManagerRepository) {
+    this.docManagerRepository = docManagerRepository;
+  }
 
   @Override
   public List<Document> uploadDocuments(final List<Document> documents) {

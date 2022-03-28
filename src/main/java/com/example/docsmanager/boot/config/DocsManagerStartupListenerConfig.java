@@ -1,8 +1,8 @@
 package com.example.docsmanager.boot.config;
 
 import com.example.docsmanager.boot.DocumentManagerStartupListener;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ public class DocsManagerStartupListenerConfig {
     return documentIndexName;
   }
 
-  @SneakyThrows
   @Bean
-  public DocumentManagerStartupListener documentManagerStartupListener() {
+  public DocumentManagerStartupListener documentManagerStartupListener()
+    throws IOException {
     return new DocumentManagerStartupListener(
       restHighLevelClient,
       documentIndexName,
