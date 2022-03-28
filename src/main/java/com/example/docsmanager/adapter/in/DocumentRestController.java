@@ -38,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 )
 public class DocumentRestController {
 
-  Logger logger = LoggerFactory.getLogger(DocumentRestController.class);
+  final Logger logger = LoggerFactory.getLogger(DocumentRestController.class);
 
   private final DocumentManagement documentManagement;
 

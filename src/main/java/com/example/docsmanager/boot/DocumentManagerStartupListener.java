@@ -1,6 +1,5 @@
 package com.example.docsmanager.boot;
 
-import javax.validation.constraints.NotNull;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
@@ -15,7 +14,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 public class DocumentManagerStartupListener
   implements ApplicationListener<ContextRefreshedEvent> {
 
-  Logger logger = LoggerFactory.getLogger(DocumentManagerStartupListener.class);
+  final Logger logger = LoggerFactory.getLogger(DocumentManagerStartupListener.class);
 
   private final RestHighLevelClient restHighLevelClient;
   private final String indexName;
@@ -32,7 +31,7 @@ public class DocumentManagerStartupListener
   }
 
   @Override
-  public void onApplicationEvent(final @NotNull ContextRefreshedEvent event) {
+  public void onApplicationEvent(final ContextRefreshedEvent event) {
     createIndex();
   }
 

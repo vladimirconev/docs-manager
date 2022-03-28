@@ -28,7 +28,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 public class ElasticDocumentManagerRepository implements DocumentManagementRepository {
 
-  Logger logger = LoggerFactory.getLogger(ElasticDocumentManagerRepository.class);
+  final Logger logger = LoggerFactory.getLogger(ElasticDocumentManagerRepository.class);
 
   private static final String USER_ID = "userId";
   private static final String EXTENSION = "extension";
