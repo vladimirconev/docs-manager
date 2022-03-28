@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.1</version>
+		<version>2.6.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -21,7 +21,7 @@
  		<sprindoc-openapi-ui.version>1.6.6</sprindoc-openapi-ui.version>
 		<archunit.version>0.23.1</archunit.version>
 		<assertj-core.version>3.22.0</assertj-core.version>
-		<equalsverifier.version>3.9</equalsverifier.version>
+		<equalsverifier.version>3.10</equalsverifier.version>
 		<testcontainers-elasticsearch.version>1.16.3</testcontainers-elasticsearch.version>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
 	</properties>
