@@ -9,6 +9,8 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
     networks:
       - elastic
     healthcheck:
@@ -35,3 +37,5 @@ services:
 networks:
   elastic:
     driver: bridge
+volumes:
+  esdata:
