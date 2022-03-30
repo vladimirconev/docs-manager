@@ -2,17 +2,18 @@ version: "3.9"
 
 services:
   elasticsearch:
-    image: elasticsearch:7.17.0
+    image: elasticsearch:8.1.1
     container_name: elasticsearch
     ports:
       - "9300:9300"
       - "9200:9200"
     environment:
       - discovery.type=single-node
+      - xpack.security.enabled=false
     volumes:
       - esdata:/usr/share/elasticsearch/data
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://elasticsearch:9200/_cluster/health?wait_for_status=yellow" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:9200/_cluster/health?wait_for_status=yellow" ]
       interval: 30s
       timeout: 10s
       retries: 5
