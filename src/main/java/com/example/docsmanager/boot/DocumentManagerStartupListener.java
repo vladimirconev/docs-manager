@@ -1,5 +1,6 @@
 package com.example.docsmanager.boot;
 
+import java.io.IOException;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
@@ -32,33 +33,31 @@ public class DocumentManagerStartupListener
 
   @Override
   public void onApplicationEvent(final ContextRefreshedEvent event) {
-    createIndex();
+    try {
+      createIndex();
+    } catch (IOException e) {
+      throw new IllegalStateException(e);
+    }
   }
 
   /**
    * Creates an index if not exist and applies Explicit mappings.
+   *
    */
-  private void createIndex() {
-    try {
-      boolean indexExists = restHighLevelClient
+  private void createIndex() throws IOException {
+    boolean indexExists = restHighLevelClient
+      .indices()
+      .exists(new GetIndexRequest(indexName), RequestOptions.DEFAULT);
+    if (!indexExists) {
+      CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
+      createIndexRequest.mapping(explicitIndexMappings, XContentType.JSON);
+      CreateIndexResponse createIndexResponse = restHighLevelClient
         .indices()
-        .exists(new GetIndexRequest(indexName), RequestOptions.DEFAULT);
-      if (!indexExists) {
-        CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
-        createIndexRequest.mapping(explicitIndexMappings, XContentType.JSON);
-        CreateIndexResponse createIndexResponse = restHighLevelClient
-          .indices()
-          .create(createIndexRequest, RequestOptions.DEFAULT);
-        logger.info(
-          "Creation of Index {} is acknowledged:{}",
-          indexName,
-          createIndexResponse.isAcknowledged()
-        );
-      }
-    } catch (Exception exception) {
-      logger.error(
-        "Error on creating index and apply Explicit mappings due to:{}.",
-        exception.getMessage()
+        .create(createIndexRequest, RequestOptions.DEFAULT);
+      logger.info(
+        "Creation of Index {} is acknowledged:{}",
+        indexName,
+        createIndexResponse.isAcknowledged()
       );
     }
   }
