@@ -31,6 +31,7 @@ public class DocumentManagerStartupListener
     this.explicitIndexMappings = explicitIndexMappings;
   }
 
+  @SuppressWarnings("NullableProblems")
   @Override
   public void onApplicationEvent(final ContextRefreshedEvent event) {
     try {
