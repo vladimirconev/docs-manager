@@ -5,8 +5,7 @@
 			"index": false
 		},
 		"creationDate": {
-			"type": "date",
-			"index": false
+			"type": "date"
 		},
 		"extension": {
 			"type": "keyword"

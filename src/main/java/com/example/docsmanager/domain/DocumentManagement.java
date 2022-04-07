@@ -1,6 +1,7 @@
 package com.example.docsmanager.domain;
 
 import com.example.docsmanager.domain.entity.Document;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -17,5 +18,10 @@ public sealed interface DocumentManagement permits DocumentManager {
 
   byte[] getDocumentContent(final String id);
 
-  Set<Document> getDocumentsByUserId(final String userId, final String extension);
+  Set<Document> getDocumentsByUserId(
+    final String userId,
+    final String extension,
+    final LocalDateTime from,
+    final LocalDateTime to
+  );
 }

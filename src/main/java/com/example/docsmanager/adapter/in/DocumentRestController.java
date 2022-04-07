@@ -11,11 +11,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +51,7 @@ public class DocumentRestController {
   @Operation(summary = "Retrieve a document by ID", tags = { "Documents" })
   @ApiResponses(
     value = {
-      @ApiResponse(responseCode = "200", description = "OK"/*, response = byte[].class*/),
+      @ApiResponse(responseCode = "200", description = "OK"),
       @ApiResponse(
         responseCode = "503",
         description = "Service temporally unavailable",
@@ -136,7 +138,7 @@ public class DocumentRestController {
   }
 
   @Operation(
-    description = "Retrieve a document by user id and extension",
+    description = "Retrieve a document by user id. Optionally filtered by extension and/or creation date range.",
     tags = { "Documents" }
   )
   @ApiResponses(
@@ -160,16 +162,26 @@ public class DocumentRestController {
   @GetMapping(path = "/documents", produces = MediaType.APPLICATION_JSON_VALUE)
   ResponseEntity<Set<DocumentMetadataResponseDto>> getDocumentsByUserId(
     final @RequestParam("userId") String userId,
-    final @RequestParam(name = "extension", required = false) String extension
+    final @RequestParam(name = "extension", required = false) String extension,
+    final @RequestParam(name = "from", required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE_TIME
+    ) LocalDateTime from,
+    final @RequestParam(name = "to", required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE_TIME
+    ) LocalDateTime to
   ) {
     logger.info(
-      "Fetch documents metadata bu user:{} and by extension (optionally):{}.",
+      "Fetch documents metadata bu user:{} and by extension (optionally):{} using date range starting from:{} to:{}.",
       userId,
-      extension
+      extension,
+      from,
+      to
     );
     Set<Document> documentsByUserId = documentManagement.getDocumentsByUserId(
       userId,
-      extension
+      extension,
+      from,
+      to
     );
     Set<DocumentMetadataResponseDto> documentMetadataDtos = documentsByUserId
       .stream()

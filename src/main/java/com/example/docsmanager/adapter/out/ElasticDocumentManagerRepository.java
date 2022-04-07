@@ -5,6 +5,7 @@ import com.example.docsmanager.domain.DocumentManagementRepository;
 import com.example.docsmanager.domain.entity.Document;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -19,6 +20,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.core.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -32,8 +34,9 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 
   private static final String USER_ID = "userId";
   private static final String EXTENSION = "extension";
+  private static final String CREATION_DATE = "creationDate";
   private static final String[] INCLUDED_SOURCE_FIELDS = {
-    "creationDate",
+    CREATION_DATE,
     EXTENSION,
     USER_ID,
     "id",
@@ -80,7 +83,9 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
   @Override
   public Set<Document> getAllDocumentsByUserId(
     final String userId,
-    final String extension
+    final String extension,
+    final LocalDateTime from,
+    final LocalDateTime to
   ) {
     Set<Document> documents = new HashSet<>();
     BoolQueryBuilder boolQueryBuilder = QueryBuilders
@@ -91,6 +96,17 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
         QueryBuilders.boolQuery().filter(QueryBuilders.termQuery(EXTENSION, extension))
       );
     }
+    if (from != null || to != null) {
+      RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(CREATION_DATE);
+      if (from != null) {
+        rangeQueryBuilder.from(from, true);
+      }
+      if (to != null) {
+        rangeQueryBuilder.to(to, true);
+      }
+      boolQueryBuilder.must(rangeQueryBuilder);
+    }
+
     final Scroll scroll = new Scroll(TimeValue.timeValueMinutes(1L));
     SearchRequest searchRequest = new SearchRequest(documentIndexName);
     searchRequest.scroll(scroll);

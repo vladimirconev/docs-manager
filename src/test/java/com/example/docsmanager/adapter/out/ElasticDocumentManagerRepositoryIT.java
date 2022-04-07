@@ -182,7 +182,9 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
   void getAllDocumentsByUserIdTest() {
     Set<Document> allDocumentsByUserIdWithPNGExtension = esDocsManagerRepo.getAllDocumentsByUserId(
       IT_DEMO_USER,
-      PNG_EXTENSION
+      PNG_EXTENSION,
+      null,
+      null
     );
 
     assertNotNull(allDocumentsByUserIdWithPNGExtension);
@@ -190,7 +192,9 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
 
     Set<Document> allDocumentsByUserIdWithPDFExtension = esDocsManagerRepo.getAllDocumentsByUserId(
       IT_DEMO_USER,
-      PDF_CONTENT_TYPE
+      PDF_CONTENT_TYPE,
+      null,
+      null
     );
 
     assertNotNull(allDocumentsByUserIdWithPDFExtension);
@@ -198,6 +202,8 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
 
     Set<Document> allDocumentsByUserId = esDocsManagerRepo.getAllDocumentsByUserId(
       IT_DEMO_USER,
+      null,
+      null,
       null
     );
 

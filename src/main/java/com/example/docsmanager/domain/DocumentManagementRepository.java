@@ -1,6 +1,7 @@
 package com.example.docsmanager.domain;
 
 import com.example.docsmanager.domain.entity.Document;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -13,5 +14,10 @@ public interface DocumentManagementRepository {
 
   void deleteDocuments(final Set<String> documentIds);
 
-  Set<Document> getAllDocumentsByUserId(final String userId, final String extension);
+  Set<Document> getAllDocumentsByUserId(
+    final String userId,
+    final String extension,
+    final LocalDateTime from,
+    final LocalDateTime to
+  );
 }
