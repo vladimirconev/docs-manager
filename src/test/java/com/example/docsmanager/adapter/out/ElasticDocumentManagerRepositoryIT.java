@@ -170,7 +170,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
   }
 
   @Test
-  void uploadMultipleDocumentsTest() {
+  void getContentOfUploadedDocumentsTest() {
     Set<String> documentIds = Set.of(DOCUMENT_ID, SAMPLE_DOCUMENT_ID);
 
     documentIds.forEach(
@@ -183,8 +183,8 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     Set<Document> allDocumentsByUserIdWithPNGExtension = esDocsManagerRepo.getAllDocumentsByUserId(
       IT_DEMO_USER,
       PNG_EXTENSION,
-      null,
-      null
+      LocalDateTime.now().minusDays(1L),
+      LocalDateTime.now()
     );
 
     assertNotNull(allDocumentsByUserIdWithPNGExtension);
@@ -193,8 +193,8 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     Set<Document> allDocumentsByUserIdWithPDFExtension = esDocsManagerRepo.getAllDocumentsByUserId(
       IT_DEMO_USER,
       PDF_CONTENT_TYPE,
-      null,
-      null
+      LocalDateTime.now().minusDays(1L),
+      LocalDateTime.now()
     );
 
     assertNotNull(allDocumentsByUserIdWithPDFExtension);
@@ -203,8 +203,8 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     Set<Document> allDocumentsByUserId = esDocsManagerRepo.getAllDocumentsByUserId(
       IT_DEMO_USER,
       null,
-      null,
-      null
+      LocalDateTime.now().minusDays(1L),
+      LocalDateTime.now()
     );
 
     assertNotNull(allDocumentsByUserId);
