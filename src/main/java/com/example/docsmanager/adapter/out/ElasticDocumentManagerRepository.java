@@ -58,14 +58,6 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
     this.documentIndexName = index;
   }
 
-  @Override
-  public Document uploadDocument(final Document document) {
-    var dto = documentElasticRepository.save(
-      DocumentRepositoryMapper.mapDocumentToDocumentElasticDto(document)
-    );
-    return DocumentRepositoryMapper.mapDocumentElasticDtoToDocument(dto);
-  }
-
   @Cacheable(cacheNames = "docs_byte_content")
   @Override
   public byte[] getDocumentContent(final String id) {

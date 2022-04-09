@@ -1,5 +1,6 @@
 package com.example.docsmanager.adapter.out;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 
@@ -37,7 +38,7 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
   }
 
   @Test
-  void uploadDocumentTest() {
+  void uploadDocumentsTest() {
     var documentElasticDto = buildDocumentElasticDto(
       DOCUMENT_ID,
       BYTE_CONTENT,
@@ -47,8 +48,8 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
       SAMPLE_USER_ID
     );
     Mockito
-      .when(documentElasticRepository.save(Mockito.any(DocumentElasticDto.class)))
-      .thenReturn(documentElasticDto);
+      .when(documentElasticRepository.saveAll(Mockito.anyList()))
+      .thenReturn(Set.of(documentElasticDto));
     var document = buildDocumentInstance(
       DOCUMENT_ID,
       LocalDateTime.now(),
@@ -57,21 +58,24 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
       FILE_NAME,
       PNG_EXTENSION
     );
-    var uploadedDocument = elasticDocumentManagerRepo.uploadDocument(document);
+    var uploadedDocuments = elasticDocumentManagerRepo.uploadDocuments(List.of(document));
 
-    assertNotNull(uploadedDocument);
-    assertEquals(documentElasticDto.id(), uploadedDocument.id());
-    assertEquals(documentElasticDto.userId(), uploadedDocument.userId());
-    assertEquals(
-      documentElasticDto.content(),
-      Base64.getEncoder().encodeToString(uploadedDocument.content())
-    );
-    assertEquals(documentElasticDto.fileName(), uploadedDocument.fileName());
-    assertEquals(documentElasticDto.extension(), uploadedDocument.extension());
+    assertNotNull(uploadedDocuments);
+    assertThat(uploadedDocuments)
+      .filteredOn(
+        doc ->
+          doc.id().equalsIgnoreCase(documentElasticDto.id()) &&
+          doc.userId().equalsIgnoreCase(documentElasticDto.userId()) &&
+          Base64
+            .getEncoder()
+            .encodeToString(doc.content())
+            .equalsIgnoreCase(documentElasticDto.content()) &&
+          doc.fileName().equalsIgnoreCase(documentElasticDto.fileName()) &&
+          doc.extension().equalsIgnoreCase(documentElasticDto.extension())
+      )
+      .hasSize(1);
 
-    Mockito
-      .verify(documentElasticRepository, times(1))
-      .save(Mockito.any(DocumentElasticDto.class));
+    Mockito.verify(documentElasticRepository, times(1)).saveAll(Mockito.anyList());
     Mockito.verifyNoMoreInteractions(documentElasticRepository);
   }
 

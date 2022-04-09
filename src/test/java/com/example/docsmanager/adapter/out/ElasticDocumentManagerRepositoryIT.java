@@ -1,5 +1,6 @@
 package com.example.docsmanager.adapter.out;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.docsmanager.DocsElasticsearchContainer;
@@ -123,7 +124,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
   }
 
   @Test
-  void uploadDocumentTest() {
+  void uploadDocumentsTest() {
     String id = UUID.randomUUID().toString();
     var sampleDocument = buildDocumentInstance(
       id,
@@ -133,15 +134,21 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
       FILE_NAME,
       PNG_EXTENSION
     );
-    var uploadedDocument = esDocsManagerRepo.uploadDocument(sampleDocument);
+    var uploadedDocuments = esDocsManagerRepo.uploadDocuments(List.of(sampleDocument));
 
-    assertNotNull(uploadedDocument);
-    assertEquals(sampleDocument.id(), uploadedDocument.id());
-    assertEquals(sampleDocument.extension(), uploadedDocument.extension());
-    assertEquals(sampleDocument.fileName(), uploadedDocument.fileName());
-    assertEquals(sampleDocument.userId(), uploadedDocument.userId());
+    assertNotNull(uploadedDocuments);
 
-    byte[] documentContent = esDocsManagerRepo.getDocumentContent(uploadedDocument.id());
+    assertThat(uploadedDocuments)
+      .filteredOn(
+        doc ->
+          doc.id().equalsIgnoreCase(sampleDocument.id()) &&
+          doc.userId().equalsIgnoreCase(sampleDocument.userId()) &&
+          doc.fileName().equalsIgnoreCase(sampleDocument.fileName()) &&
+          doc.extension().equalsIgnoreCase(sampleDocument.extension())
+      )
+      .hasSize(1);
+
+    byte[] documentContent = esDocsManagerRepo.getDocumentContent(id);
 
     assertNotNull(documentContent);
     assertArrayEquals(BYTE_CONTENT, documentContent);

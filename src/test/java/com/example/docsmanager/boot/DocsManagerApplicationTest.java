@@ -66,9 +66,10 @@ public class DocsManagerApplicationTest {
   }
 
   @Test
-  void noContentOnDeleteDocuments(){
-    var responseEntity = documentRestController.deleteDocuments(Set.of(UUID.randomUUID().toString()));
+  void noContentOnDeleteDocuments() {
+    var responseEntity = documentRestController.deleteDocuments(
+      Set.of(UUID.randomUUID().toString())
+    );
     assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
   }
-
 }

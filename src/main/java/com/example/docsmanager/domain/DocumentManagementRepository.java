@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface DocumentManagementRepository {
-  Document uploadDocument(final Document document);
-
   List<Document> uploadDocuments(final List<Document> documents);
 
   byte[] getDocumentContent(final String id);
