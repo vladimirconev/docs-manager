@@ -32,7 +32,7 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
       new ElasticDocumentManagerRepository(
         documentElasticRepository,
         restHighLevelClient,
-        "test-drive"
+        TEST_INDEX_NAME
       );
   }
 

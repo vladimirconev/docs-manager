@@ -68,7 +68,7 @@ public class DocumentRestController {
     path = "/documents/{documentId}",
     produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
   )
-  ResponseEntity<byte[]> getDocumentContent(
+  public ResponseEntity<byte[]> getDocumentContent(
     final @PathVariable("documentId") String documentId
   ) {
     logger.info("Fetching Document Data content with id:{}.", documentId);
@@ -101,7 +101,7 @@ public class DocumentRestController {
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
   @SuppressWarnings("SameParameterValue")
-  ResponseEntity<List<DocumentMetadataResponseDto>> uploadDocuments(
+  public  ResponseEntity<List<DocumentMetadataResponseDto>> uploadDocuments(
     final @RequestPart("files") MultipartFile[] files,
     final @RequestParam("userId") String userId
   ) {
@@ -129,7 +129,7 @@ public class DocumentRestController {
     }
   )
   @DeleteMapping(path = "/documents")
-  ResponseEntity<Void> deleteDocuments(
+  public ResponseEntity<Void> deleteDocuments(
     final @RequestParam("documentIds") Set<String> documentIds
   ) {
     logger.info("Deleting documents with following IDs:{}.", documentIds);
@@ -160,7 +160,7 @@ public class DocumentRestController {
     }
   )
   @GetMapping(path = "/documents", produces = MediaType.APPLICATION_JSON_VALUE)
-  ResponseEntity<Set<DocumentMetadataResponseDto>> getDocumentsByUserId(
+  public ResponseEntity<Set<DocumentMetadataResponseDto>> getDocumentsByUserId(
     final @RequestParam("userId") String userId,
     final @RequestParam(name = "extension", required = false) String extension,
     final @RequestParam(name = "from", required = false) @DateTimeFormat(

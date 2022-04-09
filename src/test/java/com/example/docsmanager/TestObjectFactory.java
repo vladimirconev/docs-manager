@@ -27,6 +27,7 @@ public class TestObjectFactory {
   protected final String SAMPLE_DOCUMENT_ID = UUID.randomUUID().toString();
   protected final String PDF_CONTENT_TYPE = "pdf";
   protected final String IMAGE_PNG_CONTENT_TYPE = "image/png";
+  protected final String TEST_INDEX_NAME = "test-drive";
 
   protected Document buildDocumentInstance(
     final String id,
