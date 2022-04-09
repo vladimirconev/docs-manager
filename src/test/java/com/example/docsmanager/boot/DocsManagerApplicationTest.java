@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.docsmanager.DocsElasticsearchContainer;
 import com.example.docsmanager.adapter.in.DocumentRestController;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import java.util.NoSuchElementException;
-import java.util.UUID;
 
 @SpringBootTest
 @Testcontainers
@@ -44,15 +43,24 @@ public class DocsManagerApplicationTest {
   }
 
   @Test
-  void noSuchElementExceptionOnGetDocumentContent(){
-    assertThrows(NoSuchElementException.class, () -> documentRestController.getDocumentContent(UUID.randomUUID().toString()));
+  void noSuchElementExceptionOnGetDocumentContent() {
+    assertThrows(
+      NoSuchElementException.class,
+      () -> documentRestController.getDocumentContent(UUID.randomUUID().toString())
+    );
   }
+
   @Test
-  void emptySetOnGetDocumentsByUserId(){
-    var output = documentRestController.getDocumentsByUserId("USER__TEST",null,null,null);
+  void emptySetOnGetDocumentsByUserId() {
+    var output = documentRestController.getDocumentsByUserId(
+      "USER__TEST",
+      null,
+      null,
+      null
+    );
     assertNotNull(output);
     assertNotNull(output.getBody());
     assertTrue(output.getBody().isEmpty());
-    assertEquals(HttpStatus.OK,output.getStatusCode());
+    assertEquals(HttpStatus.OK, output.getStatusCode());
   }
 }

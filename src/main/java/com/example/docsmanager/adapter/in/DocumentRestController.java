@@ -101,7 +101,7 @@ public class DocumentRestController {
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
   @SuppressWarnings("SameParameterValue")
-  public  ResponseEntity<List<DocumentMetadataResponseDto>> uploadDocuments(
+  public ResponseEntity<List<DocumentMetadataResponseDto>> uploadDocuments(
     final @RequestPart("files") MultipartFile[] files,
     final @RequestParam("userId") String userId
   ) {
