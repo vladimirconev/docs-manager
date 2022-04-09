@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.example.docsmanager.DocsElasticsearchContainer;
 import com.example.docsmanager.adapter.in.DocumentRestController;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,16 +52,23 @@ public class DocsManagerApplicationTest {
   }
 
   @Test
-  void emptySetOnGetDocumentsByUserId() {
-    var output = documentRestController.getDocumentsByUserId(
+  void emptySetOnGetDocumentsByNonExistingUserId() {
+    var responseEntity = documentRestController.getDocumentsByUserId(
       "USER__TEST",
       null,
       null,
       null
     );
-    assertNotNull(output);
-    assertNotNull(output.getBody());
-    assertTrue(output.getBody().isEmpty());
-    assertEquals(HttpStatus.OK, output.getStatusCode());
+    assertNotNull(responseEntity);
+    assertNotNull(responseEntity.getBody());
+    assertTrue(responseEntity.getBody().isEmpty());
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
   }
+
+  @Test
+  void noContentOnDeleteDocuments(){
+    var responseEntity = documentRestController.deleteDocuments(Set.of(UUID.randomUUID().toString()));
+    assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+  }
+
 }
