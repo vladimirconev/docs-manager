@@ -26,6 +26,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 public class ElasticDocumentManagerRepository implements DocumentManagementRepository {
@@ -68,6 +69,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
   }
 
   @Override
+  @CacheEvict(cacheNames = "docs_byte_content", allEntries = true)
   public void deleteDocuments(final Set<String> documentIds) {
     documentElasticRepository.deleteAllById(documentIds);
   }

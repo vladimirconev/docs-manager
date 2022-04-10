@@ -30,7 +30,7 @@ services:
          condition: service_healthy
     restart: on-failure
     environment:
-      - SPRING_ELASTICSEARCH_REST_URIS=http://elasticsearch:9200
+      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     networks:
       - elastic
 
