@@ -4,6 +4,7 @@ import com.example.docsmanager.adapter.in.dto.ErrorResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -104,7 +105,7 @@ public class RestExceptionHandler {
       path,
       request.getMethod(),
       exception,
-      new SimpleDateFormat(DATE_TIME_FORMAT).format(new Date())
+      new SimpleDateFormat(DATE_TIME_FORMAT).format(Instant.now())
     );
   }
 
