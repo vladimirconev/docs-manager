@@ -83,12 +83,13 @@ public class RestExceptionHandler {
       .ofNullable(webRequestThrowable.getCause())
       .map(cause -> cause.getClass().getSimpleName())
       .orElse(webRequestThrowable.getClass().getSimpleName());
-    String status = httpStatus == HttpStatus.INTERNAL_SERVER_ERROR
-      ? HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()
-      : httpStatus.getReasonPhrase();
-    String code = httpStatus == HttpStatus.INTERNAL_SERVER_ERROR
-      ? String.valueOf(HttpStatus.SERVICE_UNAVAILABLE)
-      : String.valueOf(httpStatus.value());
+    String status = httpStatus.getReasonPhrase();
+    String code = String.valueOf(httpStatus.value());
+    if (httpStatus == HttpStatus.INTERNAL_SERVER_ERROR) {
+      status = HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase();
+      code = String.valueOf(HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     String message = Optional
       .ofNullable(messageDetails)
       .orElse(
