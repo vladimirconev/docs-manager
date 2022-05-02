@@ -106,7 +106,7 @@ public class RestExceptionHandler {
       path,
       request.getMethod(),
       exception,
-      new SimpleDateFormat(DATE_TIME_FORMAT).format(Instant.now())
+      new SimpleDateFormat(DATE_TIME_FORMAT).format(Date.from(Instant.now()))
     );
   }
 

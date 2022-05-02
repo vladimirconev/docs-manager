@@ -23,6 +23,7 @@
 		<assertj-core.version>3.22.0</assertj-core.version>
 		<equalsverifier.version>3.10</equalsverifier.version>
 		<testcontainers-elasticsearch.version>1.16.3</testcontainers-elasticsearch.version>
+		<rest-assured.version>5.0.1</rest-assured.version>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
 	</properties>
 	<dependencies>
@@ -74,6 +75,12 @@
 		</dependency>
 		
 		<!-- Testing -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
     		<groupId>com.tngtech.archunit</groupId>
     		<artifactId>archunit</artifactId>
