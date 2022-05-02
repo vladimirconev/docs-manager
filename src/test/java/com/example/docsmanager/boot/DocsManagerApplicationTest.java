@@ -8,7 +8,6 @@ import static org.hamcrest.core.Is.is;
 import com.example.docsmanager.DocsElasticsearchContainer;
 import com.example.docsmanager.adapter.in.DocumentRestController;
 import java.util.NoSuchElementException;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
