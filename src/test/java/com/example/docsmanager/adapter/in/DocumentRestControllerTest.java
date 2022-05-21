@@ -53,7 +53,12 @@ public class DocumentRestControllerTest extends TestObjectFactory {
 
   @Test
   void uploadDocumentTest() {
-    MultipartFile multipartFile = buildMockMultipartFile(IMAGE_PNG_CONTENT_TYPE);
+    MultipartFile multipartFile = buildMockMultipartFile(
+      IMAGE_PNG_CONTENT_TYPE,
+      FILE_NAME,
+      PNG_EXTENSION,
+      BYTE_CONTENT
+    );
     MultipartFile[] multipartFiles = { multipartFile };
     Document sampleDocument = buildDocumentInstance(
       DOCUMENT_ID,

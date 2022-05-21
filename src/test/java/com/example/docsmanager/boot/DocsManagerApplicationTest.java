@@ -1,16 +1,15 @@
 package com.example.docsmanager.boot;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.docsmanager.DocsElasticsearchContainer;
 import com.example.docsmanager.adapter.in.DocumentRestController;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,28 +51,36 @@ public class DocsManagerApplicationTest {
   }
 
   @Test
-  void getDocumentContentShouldReturnNotFoundForNonExistingId(){
-    given().when().
-            port(this.port).
-            get(String.format("api/v2/documents/%s", UUID.randomUUID())).
-            then().assertThat().
-            statusCode(is(HttpStatus.NOT_FOUND.value()));
+  void getDocumentContentShouldReturnNotFoundForNonExistingId() {
+    given()
+      .when()
+      .port(this.port)
+      .get(String.format("api/v2/documents/%s", UUID.randomUUID()))
+      .then()
+      .assertThat()
+      .statusCode(is(HttpStatus.NOT_FOUND.value()));
   }
+
   @Test
-  void deleteDocumentsShouldReturnNoContent(){
-    given().when().
-            port(this.port).
-            delete(String.format("api/v2/documents?documentIds=%s", UUID.randomUUID())).
-            then().assertThat().
-            statusCode(is(HttpStatus.NO_CONTENT.value()));
+  void deleteDocumentsShouldReturnNoContent() {
+    given()
+      .when()
+      .port(this.port)
+      .delete(String.format("api/v2/documents?documentIds=%s", UUID.randomUUID()))
+      .then()
+      .assertThat()
+      .statusCode(is(HttpStatus.NO_CONTENT.value()));
   }
+
   @Test
-  void getDocumentsByUserIdShouldReturnOKWhenNoDocumentsFoundForUserId(){
-    given().when().
-            port(this.port).
-            get(String.format("api/v2/documents?userId=%s", RandomStringUtils.random(5))).
-            then().assertThat().
-            statusCode(is(HttpStatus.OK.value()));
+  void getDocumentsByUserIdShouldReturnOKWhenNoDocumentsFoundForUserId() {
+    given()
+      .when()
+      .port(this.port)
+      .get(String.format("api/v2/documents?userId=%s", RandomStringUtils.random(5)))
+      .then()
+      .assertThat()
+      .statusCode(is(HttpStatus.OK.value()));
   }
 
   @Test

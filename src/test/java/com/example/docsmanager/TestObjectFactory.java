@@ -58,12 +58,17 @@ public class TestObjectFactory {
     );
   }
 
-  protected MultipartFile buildMockMultipartFile(final String contentType) {
+  protected MultipartFile buildMockMultipartFile(
+    final String contentType,
+    final String fileName,
+    final String extension,
+    final byte[] content
+  ) {
     return new MockMultipartFile(
-      FILE_NAME,
-      FILE_NAME.concat(".").concat(PNG_EXTENSION),
+      fileName,
+      String.format("%s.%s", fileName, extension),
       contentType,
-      BYTE_CONTENT
+      content
     );
   }
 }

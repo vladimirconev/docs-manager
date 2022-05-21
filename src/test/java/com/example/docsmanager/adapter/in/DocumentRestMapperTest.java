@@ -40,7 +40,12 @@ public class DocumentRestMapperTest extends TestObjectFactory {
   @Test
   void mapMultipartFileToDocumentTest() {
     Document document = DocumentRestMapper.mapMultipartFileToDocument(
-      buildMockMultipartFile(IMAGE_PNG_CONTENT_TYPE),
+      buildMockMultipartFile(
+        IMAGE_PNG_CONTENT_TYPE,
+        FILE_NAME,
+        PNG_EXTENSION,
+        BYTE_CONTENT
+      ),
       SAMPLE_USER_ID
     );
 
@@ -56,7 +61,12 @@ public class DocumentRestMapperTest extends TestObjectFactory {
       IllegalStateException.class,
       () ->
         DocumentRestMapper.mapMultipartFileToDocument(
-          buildMockMultipartFile(PDF_CONTENT_TYPE),
+          buildMockMultipartFile(
+            PDF_CONTENT_TYPE,
+            FILE_NAME,
+            PNG_EXTENSION,
+            BYTE_CONTENT
+          ),
           SAMPLE_USER_ID
         )
     );
