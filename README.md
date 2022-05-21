@@ -47,3 +47,4 @@ Happy Coding!!!
 - API versioning
 - Integration tests using Test Containers
 - Dockerized app
+- Error prone to detect code issues on compile time (https://errorprone.info/index)
