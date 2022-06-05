@@ -24,7 +24,7 @@
 		<equalsverifier.version>3.10</equalsverifier.version>
 		<error-prone-core.version>2.14.0</error-prone-core.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-		<testcontainers-elasticsearch.version>1.17.1</testcontainers-elasticsearch.version>
+		<testcontainers-elasticsearch.version>1.17.2</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.0.1</rest-assured.version>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
 		<prettier-maven-plugin.version>0.17</prettier-maven-plugin.version>

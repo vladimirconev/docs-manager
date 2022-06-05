@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   elasticsearch:
-    image: elasticsearch:7.17.0
+    image: elasticsearch:7.17.4
     container_name: elasticsearch
     ports:
       - "9300:9300"
