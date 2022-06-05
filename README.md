@@ -2,9 +2,9 @@
 Documents manager that allows Upload and deleting of files. It is basically a playground to check up Elasticsearch capabilities as underlying storage Unit.
 
 # Setup
-- JDK 17 +
-- Maven v3.6.3 +  
-- Elasticsearch v7.14.1 + (https://www.elastic.co/downloads/past-releases#elasticsearch)
+- JDK 18
+- Maven v3.6.5  
+- Elasticsearch v7.17.4 + (https://www.elastic.co/downloads/past-releases#elasticsearch)
 - Postman (Optional as Swagger is Enabled)
 - Docker
 
