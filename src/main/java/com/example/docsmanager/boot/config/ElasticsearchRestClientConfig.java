@@ -42,8 +42,8 @@ public class ElasticsearchRestClientConfig extends AbstractElasticsearchConfigur
       return new RestHighLevelClient(
         RestClient
           .builder(new HttpHost(hostname, port, scheme))
-          .setHttpClientConfigCallback(
-            hcb -> hcb.setDefaultCredentialsProvider(credentialsProvider)
+          .setHttpClientConfigCallback(hcb ->
+            hcb.setDefaultCredentialsProvider(credentialsProvider)
           )
       );
     } catch (URISyntaxException ex) {

@@ -7,5 +7,10 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Document(indexName = "#{@documentIndexName}", createIndex = false)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record DocumentElasticDto(
-  @Id String id, String extension, String fileName, String creationDate, String content, String userId
+  @Id String id,
+  String extension,
+  String fileName,
+  String creationDate,
+  String content,
+  String userId
 ) {}

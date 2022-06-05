@@ -19,7 +19,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
-import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.xcontent.XContentType;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,12 +139,11 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     assertNotNull(uploadedDocuments);
 
     assertThat(uploadedDocuments)
-      .filteredOn(
-        doc ->
-          doc.id().equalsIgnoreCase(sampleDocument.id()) &&
-          doc.userId().equalsIgnoreCase(sampleDocument.userId()) &&
-          doc.fileName().equalsIgnoreCase(sampleDocument.fileName()) &&
-          doc.extension().equalsIgnoreCase(sampleDocument.extension())
+      .filteredOn(doc ->
+        doc.id().equalsIgnoreCase(sampleDocument.id()) &&
+        doc.userId().equalsIgnoreCase(sampleDocument.userId()) &&
+        doc.fileName().equalsIgnoreCase(sampleDocument.fileName()) &&
+        doc.extension().equalsIgnoreCase(sampleDocument.extension())
       )
       .hasSize(1);
 
@@ -167,12 +166,11 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     var documentIds = Set.of(DOCUMENT_ID, SAMPLE_DOCUMENT_ID);
     esDocsManagerRepo.deleteDocuments(documentIds);
 
-    documentIds.forEach(
-      documentId ->
-        assertThrows(
-          NoSuchElementException.class,
-          () -> esDocsManagerRepo.getDocumentContent(documentId)
-        )
+    documentIds.forEach(documentId ->
+      assertThrows(
+        NoSuchElementException.class,
+        () -> esDocsManagerRepo.getDocumentContent(documentId)
+      )
     );
   }
 
@@ -180,8 +178,8 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
   void getContentOfUploadedDocumentsTest() {
     Set<String> documentIds = Set.of(DOCUMENT_ID, SAMPLE_DOCUMENT_ID);
 
-    documentIds.forEach(
-      documentId -> assertNotNull(esDocsManagerRepo.getDocumentContent(documentId))
+    documentIds.forEach(documentId ->
+      assertNotNull(esDocsManagerRepo.getDocumentContent(documentId))
     );
   }
 

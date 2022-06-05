@@ -62,16 +62,15 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
 
     assertNotNull(uploadedDocuments);
     assertThat(uploadedDocuments)
-      .filteredOn(
-        doc ->
-          doc.id().equalsIgnoreCase(documentElasticDto.id()) &&
-          doc.userId().equalsIgnoreCase(documentElasticDto.userId()) &&
-          Base64
-            .getEncoder()
-            .encodeToString(doc.content())
-            .equalsIgnoreCase(documentElasticDto.content()) &&
-          doc.fileName().equalsIgnoreCase(documentElasticDto.fileName()) &&
-          doc.extension().equalsIgnoreCase(documentElasticDto.extension())
+      .filteredOn(doc ->
+        doc.id().equalsIgnoreCase(documentElasticDto.id()) &&
+        doc.userId().equalsIgnoreCase(documentElasticDto.userId()) &&
+        Base64
+          .getEncoder()
+          .encodeToString(doc.content())
+          .equalsIgnoreCase(documentElasticDto.content()) &&
+        doc.fileName().equalsIgnoreCase(documentElasticDto.fileName()) &&
+        doc.extension().equalsIgnoreCase(documentElasticDto.extension())
       )
       .hasSize(1);
 

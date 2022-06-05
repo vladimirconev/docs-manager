@@ -81,12 +81,11 @@ public class DocumentRestControllerTest extends TestObjectFactory {
     assertNotNull(responseEntity.getBody());
 
     assertThat(responseEntity.getBody())
-      .filteredOn(
-        meta ->
-          meta.id().equals(sampleDocument.id()) &&
-          meta.fileName().equals(FILE_NAME) &&
-          meta.userId().equals(SAMPLE_USER_ID) &&
-          meta.creationDate() != null
+      .filteredOn(meta ->
+        meta.id().equals(sampleDocument.id()) &&
+        meta.fileName().equals(FILE_NAME) &&
+        meta.userId().equals(SAMPLE_USER_ID) &&
+        meta.creationDate() != null
       )
       .hasSize(1);
 
