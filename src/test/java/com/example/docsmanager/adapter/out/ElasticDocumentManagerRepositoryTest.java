@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.example.docsmanager.TestObjectFactory;
-import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import java.time.LocalDateTime;
 import java.util.*;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -27,13 +27,17 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
   @Mock
   private RestHighLevelClient restHighLevelClient;
 
+  @Mock
+  private ElasticsearchClient esClient;
+
   @BeforeEach
   void setup() {
     elasticDocumentManagerRepo =
       new ElasticDocumentManagerRepository(
         documentElasticRepository,
         restHighLevelClient,
-        TEST_INDEX_NAME
+        TEST_INDEX_NAME,
+        esClient
       );
   }
 

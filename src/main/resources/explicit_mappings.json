@@ -1,8 +1,7 @@
 {
 	"properties": {
 		"content": {
-			"type": "binary",
-			"index": false
+			"type": "binary"
 		},
 		"creationDate": {
 			"type": "date"

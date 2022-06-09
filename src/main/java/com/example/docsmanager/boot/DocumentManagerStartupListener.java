@@ -1,12 +1,8 @@
 package com.example.docsmanager.boot;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.transport.endpoints.BooleanResponse;
 import java.io.IOException;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.indices.CreateIndexRequest;
-import org.elasticsearch.client.indices.CreateIndexResponse;
-import org.elasticsearch.client.indices.GetIndexRequest;
-import org.elasticsearch.xcontent.XContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
@@ -15,20 +11,16 @@ import org.springframework.context.event.ContextRefreshedEvent;
 public class DocumentManagerStartupListener
   implements ApplicationListener<ContextRefreshedEvent> {
 
+  private static final String EXPLICIT_MAPPINGS_JSON_PATH = "/explicit_mappings.json";
+
   final Logger logger = LoggerFactory.getLogger(DocumentManagerStartupListener.class);
 
-  private final RestHighLevelClient restHighLevelClient;
+  private final ElasticsearchClient esClient;
   private final String indexName;
-  private final String explicitIndexMappings;
 
-  public DocumentManagerStartupListener(
-    RestHighLevelClient restHighLevelClient,
-    String indexName,
-    String explicitIndexMappings
-  ) {
-    this.restHighLevelClient = restHighLevelClient;
+  public DocumentManagerStartupListener(ElasticsearchClient esClient, String indexName) {
+    this.esClient = esClient;
     this.indexName = indexName;
-    this.explicitIndexMappings = explicitIndexMappings;
   }
 
   @SuppressWarnings("NullableProblems")
@@ -46,19 +38,16 @@ public class DocumentManagerStartupListener
    *
    */
   private void createIndex() throws IOException {
-    boolean indexExists = restHighLevelClient
-      .indices()
-      .exists(new GetIndexRequest(indexName), RequestOptions.DEFAULT);
-    if (!indexExists) {
-      CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
-      createIndexRequest.mapping(explicitIndexMappings, XContentType.JSON);
-      CreateIndexResponse createIndexResponse = restHighLevelClient
+    BooleanResponse booleanResponse = esClient.indices().exists(e -> e.index(indexName));
+    if (!booleanResponse.value()) {
+      var inputStream = this.getClass().getResourceAsStream(EXPLICIT_MAPPINGS_JSON_PATH);
+      var createIndexResponse = esClient
         .indices()
-        .create(createIndexRequest, RequestOptions.DEFAULT);
+        .create(c -> c.index(indexName).mappings(m -> m.withJson(inputStream)));
       logger.info(
         "Creation of Index {} is acknowledged:{}",
         indexName,
-        createIndexResponse.isAcknowledged()
+        createIndexResponse.acknowledged()
       );
     }
   }

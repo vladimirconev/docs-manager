@@ -1,5 +1,6 @@
 package com.example.docsmanager.adapter.out;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import com.example.docsmanager.domain.DocumentManagementRepository;
 import com.example.docsmanager.domain.entity.Document;
@@ -48,15 +49,18 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
   private final DocumentElasticRepository documentElasticRepository;
   private final RestHighLevelClient restHighLevelClient;
   private final String documentIndexName;
+  private final ElasticsearchClient esClient;
 
   public ElasticDocumentManagerRepository(
     final DocumentElasticRepository documentElasticRepository,
     final RestHighLevelClient restHighLevelClient,
-    final String index
+    final String index,
+    final ElasticsearchClient esClient
   ) {
     this.documentElasticRepository = documentElasticRepository;
     this.restHighLevelClient = restHighLevelClient;
     this.documentIndexName = index;
+    this.esClient = esClient;
   }
 
   @Cacheable(cacheNames = "docs_byte_content")

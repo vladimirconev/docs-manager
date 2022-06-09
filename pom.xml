@@ -29,6 +29,7 @@
 		<plugin.prettier.goal>write</plugin.prettier.goal>
 		<prettier-maven-plugin.version>0.17</prettier-maven-plugin.version>
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+		<jakarta-json-api.version>2.0.1</jakarta-json-api.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -76,6 +77,11 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>${sprindoc-openapi-ui.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.json</groupId>
+			<artifactId>jakarta.json-api</artifactId>
+			<version>${jakarta-json-api.version}</version>
 		</dependency>
 		
 		<!-- Testing -->

@@ -1,5 +1,6 @@
 package com.example.docsmanager.boot.config;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.example.docsmanager.adapter.out.DocumentElasticRepository;
 import com.example.docsmanager.adapter.out.ElasticDocumentManagerRepository;
 import com.example.docsmanager.domain.DocumentManagementRepository;
@@ -17,6 +18,9 @@ public class DocumentManagementRepositoryConfig {
   @Autowired
   private RestHighLevelClient restHighLevelClient;
 
+  @Autowired
+  private ElasticsearchClient esClient;
+
   @Value("${custom.document.index.name}")
   private String documentIndexName;
 
@@ -27,7 +31,8 @@ public class DocumentManagementRepositoryConfig {
     return new ElasticDocumentManagerRepository(
       documentElasticRepo,
       restHighLevelClient,
-      documentIndexName
+      documentIndexName,
+      esClient
     );
   }
 }
