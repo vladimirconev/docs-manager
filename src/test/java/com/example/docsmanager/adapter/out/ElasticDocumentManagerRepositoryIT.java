@@ -3,23 +3,17 @@ package com.example.docsmanager.adapter.out;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
+import co.elastic.clients.transport.endpoints.BooleanResponse;
 import com.example.docsmanager.DocsElasticsearchContainer;
 import com.example.docsmanager.TestObjectFactory;
 import com.example.docsmanager.boot.DocsManagerApplication;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.apache.commons.io.IOUtils;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.indices.CreateIndexRequest;
-import org.elasticsearch.client.indices.CreateIndexResponse;
-import org.elasticsearch.client.indices.GetIndexRequest;
-import org.elasticsearch.xcontent.XContentType;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +45,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
   private ElasticDocumentManagerRepository esDocsManagerRepo;
 
   @Autowired
-  private RestHighLevelClient restHighLevelClient;
+  private ElasticsearchClient esClient;
 
   @Autowired
   private String documentIndexName;
@@ -65,20 +59,16 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
   void testIsContainerRunning() throws IOException {
     assertTrue(elasticsearchContainer.isRunning());
     // Create Index + Mappings
-    boolean indexExists = restHighLevelClient
+    BooleanResponse booleanResponse = esClient
       .indices()
-      .exists(new GetIndexRequest(documentIndexName), RequestOptions.DEFAULT);
-    if (!indexExists) {
-      CreateIndexRequest createIndexRequest = new CreateIndexRequest(documentIndexName);
-      String mappings = IOUtils.resourceToString(
-        EXPLICIT_MAPPINGS_JSON_PATH,
-        StandardCharsets.UTF_8
-      );
-      createIndexRequest.mapping(mappings, XContentType.JSON);
-      CreateIndexResponse createIndexResponse = restHighLevelClient
+      .exists(e -> e.index(documentIndexName));
+    if (!booleanResponse.value()) {
+      var inputStream = this.getClass().getResourceAsStream(EXPLICIT_MAPPINGS_JSON_PATH);
+      var createIndexResponse = esClient
         .indices()
-        .create(createIndexRequest, RequestOptions.DEFAULT);
-      assertTrue(createIndexResponse.isAcknowledged());
+        .create(c -> c.index(documentIndexName).mappings(m -> m.withJson(inputStream)));
+      assertNotNull(createIndexResponse);
+      assertTrue(createIndexResponse.acknowledged());
     }
     // Load sample data
     List<Document> uploadDocuments = uploadDocuments(
@@ -110,12 +100,11 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
   @AfterEach
   void cleanUp() throws IOException {
     //Delete Data
-    var deleteIndexRequest = new DeleteIndexRequest().indices(documentIndexName);
-    var deleteResponse = restHighLevelClient
-      .indices()
-      .delete(deleteIndexRequest, RequestOptions.DEFAULT);
-
-    assertTrue(deleteResponse.isAcknowledged());
+    var deleteIndexRequest = new DeleteIndexRequest.Builder()
+      .index(documentIndexName)
+      .build();
+    var deleteIndexResponse = esClient.indices().delete(deleteIndexRequest);
+    assertTrue(deleteIndexResponse.acknowledged());
   }
 
   @AfterAll

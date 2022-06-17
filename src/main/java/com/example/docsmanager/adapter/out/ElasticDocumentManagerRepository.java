@@ -1,12 +1,20 @@
 package com.example.docsmanager.adapter.out;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.Time;
+import co.elastic.clients.elasticsearch._types.query_dsl.*;
+import co.elastic.clients.elasticsearch.core.ScrollRequest;
+import co.elastic.clients.elasticsearch.core.ScrollResponse;
+import co.elastic.clients.elasticsearch.core.search.Hit;
+import co.elastic.clients.json.JsonData;
 import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
 import com.example.docsmanager.domain.DocumentManagementRepository;
 import com.example.docsmanager.domain.entity.Document;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -37,28 +45,21 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
   private static final String USER_ID = "userId";
   private static final String EXTENSION = "extension";
   private static final String CREATION_DATE = "creationDate";
-  private static final String[] INCLUDED_SOURCE_FIELDS = {
-    CREATION_DATE,
-    EXTENSION,
-    USER_ID,
-    "id",
-    "fileName",
-  };
-  private static final String[] EXCLUDED_SOURCE_FIELDS = { "content" };
+  private static final String ID = "id";
+  private static final String FILE_NAME = "fileName";
+  private static final String CONTENT = "content";
+  private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:SS.ssZ";
 
   private final DocumentElasticRepository documentElasticRepository;
-  private final RestHighLevelClient restHighLevelClient;
   private final String documentIndexName;
   private final ElasticsearchClient esClient;
 
   public ElasticDocumentManagerRepository(
     final DocumentElasticRepository documentElasticRepository,
-    final RestHighLevelClient restHighLevelClient,
     final String index,
     final ElasticsearchClient esClient
   ) {
     this.documentElasticRepository = documentElasticRepository;
-    this.restHighLevelClient = restHighLevelClient;
     this.documentIndexName = index;
     this.esClient = esClient;
   }
@@ -86,72 +87,75 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
     final LocalDateTime to
   ) {
     Set<Document> documents = new HashSet<>();
-    BoolQueryBuilder boolQueryBuilder = QueryBuilders
-      .boolQuery()
-      .filter(QueryBuilders.termQuery(USER_ID, userId));
+    Query byUserId = TermQuery.of(t -> t.field(USER_ID).value(userId))._toQuery();
+    BoolQuery.Builder boolQueryBuilder = new BoolQuery.Builder().filter(byUserId);
     if (StringUtils.isNotBlank(extension)) {
       boolQueryBuilder.must(
-        QueryBuilders.boolQuery().filter(QueryBuilders.termQuery(EXTENSION, extension))
+        TermQuery.of(t -> t.field(EXTENSION).value(extension))._toQuery()
       );
     }
     if (from != null || to != null) {
-      RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(CREATION_DATE);
+      RangeQuery.Builder rangeQueryBuilder = new RangeQuery.Builder()
+        .field(CREATION_DATE);
       if (from != null) {
-        rangeQueryBuilder.from(from, true);
+        rangeQueryBuilder.from(from.format(DateTimeFormatter.ISO_DATE_TIME));
       }
       if (to != null) {
-        rangeQueryBuilder.to(to, true);
+        rangeQueryBuilder.to(to.format(DateTimeFormatter.ISO_DATE_TIME));
       }
-      boolQueryBuilder.must(rangeQueryBuilder);
+      boolQueryBuilder.must(rangeQueryBuilder.build()._toQuery());
     }
 
-    final Scroll scroll = new Scroll(TimeValue.timeValueMinutes(1L));
-    SearchRequest searchRequest = new SearchRequest(documentIndexName);
-    searchRequest.scroll(scroll);
-    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-    searchSourceBuilder.query(boolQueryBuilder);
-    searchSourceBuilder.fetchSource(INCLUDED_SOURCE_FIELDS, EXCLUDED_SOURCE_FIELDS);
-    searchRequest.source(searchSourceBuilder);
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
     try {
-      SearchResponse searchResponse = restHighLevelClient.search(
-        searchRequest,
-        RequestOptions.DEFAULT
-      );
-      String scrollId = searchResponse.getScrollId();
-      SearchHit[] searchHits = searchResponse.getHits().getHits();
-
-      while (searchHits != null && searchHits.length > 0) {
-        Set<Document> docs = Arrays
-          .stream(searchHits)
-          .filter(Objects::nonNull)
-          .map(SearchHit::getSourceAsMap)
-          .map((var sourceMap) ->
-            objectMapper.convertValue(sourceMap, DocumentElasticDto.class)
+      var time = new Time.Builder().time("1m").build();
+      var request = co.elastic.clients.elasticsearch.core.SearchRequest.of(s ->
+        s
+          .index(documentIndexName)
+          .source(src ->
+            src.filter(x ->
+              x
+                .excludes(List.of(CONTENT))
+                .includes(List.of(CREATION_DATE, EXTENSION, USER_ID, ID, FILE_NAME))
+            )
           )
-          .map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument)
-          .collect(Collectors.toSet());
+          .query(boolQueryBuilder.build()._toQuery())
+          .scroll(time)
+      );
+      co.elastic.clients.elasticsearch.core.SearchResponse<DocumentElasticDto> searchResponse = esClient.search(
+        request,
+        DocumentElasticDto.class
+      );
+      var scrollId = searchResponse.scrollId();
+      List<Hit<DocumentElasticDto>> hits = searchResponse.hits().hits();
+      while (hits != null && !hits.isEmpty()) {
+        Set<Document> docs = hits
+                .stream()
+                .map(Hit::source)
+                .filter(Objects::nonNull)
+                .map(DocumentRepositoryMapper::mapDocumentElasticDtoToDocument)
+                .collect(Collectors.toSet());
         if (!docs.isEmpty()) {
           documents.addAll(docs);
         }
-        SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
-        scrollRequest.scroll(scroll);
-        searchResponse =
-          restHighLevelClient.scroll(scrollRequest, RequestOptions.DEFAULT);
-        scrollId = searchResponse.getScrollId();
-        searchHits = searchResponse.getHits().getHits();
+        ScrollRequest scrollRequest = new ScrollRequest.Builder()
+          .scrollId(scrollId)
+          .scroll(time)
+          .build();
+        ScrollResponse<DocumentElasticDto> scrollResponse = esClient.scroll(
+          scrollRequest,
+          DocumentElasticDto.class
+        );
+        scrollId = scrollResponse.scrollId();
+        hits = scrollResponse.hits().hits();
       }
-
-      ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
-      clearScrollRequest.addScrollId(scrollId);
-      ClearScrollResponse clearScrollResponse = restHighLevelClient.clearScroll(
-        clearScrollRequest,
-        RequestOptions.DEFAULT
+      co.elastic.clients.elasticsearch.core.ClearScrollRequest clearScrollRequest = new co.elastic.clients.elasticsearch.core.ClearScrollRequest.Builder()
+        .scrollId(List.of(scrollId))
+        .build();
+      co.elastic.clients.elasticsearch.core.ClearScrollResponse clear_scroll_response = esClient.clearScroll(
+        clearScrollRequest
       );
-      boolean succeeded = clearScrollResponse.isSucceeded();
-      logger.debug("Is scroll cleared out: {}.", succeeded);
+
+      logger.debug("Is scroll cleared out: {}.", clear_scroll_response.succeeded());
     } catch (IOException ioException) {
       logger.error(
         String.format(

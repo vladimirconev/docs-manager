@@ -25,9 +25,6 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
   private DocumentElasticRepository documentElasticRepository;
 
   @Mock
-  private RestHighLevelClient restHighLevelClient;
-
-  @Mock
   private ElasticsearchClient esClient;
 
   @BeforeEach
@@ -35,7 +32,6 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
     elasticDocumentManagerRepo =
       new ElasticDocumentManagerRepository(
         documentElasticRepository,
-        restHighLevelClient,
         TEST_INDEX_NAME,
         esClient
       );

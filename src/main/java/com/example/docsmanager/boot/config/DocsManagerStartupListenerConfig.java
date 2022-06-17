@@ -2,7 +2,6 @@ package com.example.docsmanager.boot.config;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.example.docsmanager.boot.DocumentManagerStartupListener;
-import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

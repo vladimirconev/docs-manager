@@ -4,7 +4,6 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.example.docsmanager.adapter.out.DocumentElasticRepository;
 import com.example.docsmanager.adapter.out.ElasticDocumentManagerRepository;
 import com.example.docsmanager.domain.DocumentManagementRepository;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,9 +13,6 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @Configuration
 @EnableElasticsearchRepositories(basePackageClasses = DocumentElasticRepository.class)
 public class DocumentManagementRepositoryConfig {
-
-  @Autowired
-  private RestHighLevelClient restHighLevelClient;
 
   @Autowired
   private ElasticsearchClient esClient;
@@ -30,7 +26,6 @@ public class DocumentManagementRepositoryConfig {
   ) {
     return new ElasticDocumentManagerRepository(
       documentElasticRepo,
-      restHighLevelClient,
       documentIndexName,
       esClient
     );
