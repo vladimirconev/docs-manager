@@ -25,11 +25,11 @@ To Build:
 mvn clean verify
 ````
 
-Prettier check (optional as on running Build command by default plugin prettier goal is `write`):
+To format code:
 ````
-mvn prettier:check 
+mvn com.spotify.fmt:fmt-maven-plugin:format
 ````
-Details can be found on https://github.com/HubSpot/prettier-maven-plugin in ReadMe section.
+Details can be found on https://github.com/spotify/fmt-maven-plugin.
 
 To Run:
 ````
