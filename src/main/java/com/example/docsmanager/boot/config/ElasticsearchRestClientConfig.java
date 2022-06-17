@@ -12,15 +12,12 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.RestHighLevelClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 
 @Configuration
-public class ElasticsearchRestClientConfig extends AbstractElasticsearchConfiguration {
+public class ElasticsearchRestClientConfig {
 
   @Value("${spring.elasticsearch.uris:http://localhost:9200}")
   private String host;
@@ -32,54 +29,22 @@ public class ElasticsearchRestClientConfig extends AbstractElasticsearchConfigur
   private String password;
 
   @Bean
-  @Override
-  public RestHighLevelClient elasticsearchClient() {
-    final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-    credentialsProvider.setCredentials(
-      AuthScope.ANY,
-      new UsernamePasswordCredentials(username, password)
-    );
-    try {
-      var uri = new URI(host);
-      var hostname = uri.getHost();
-      var port = uri.getPort();
-      var scheme = uri.getScheme();
-      RestClient httpClient = RestClient
-        .builder(new HttpHost(hostname, port, scheme))
-        .setHttpClientConfigCallback(hcb ->
-          hcb.setDefaultCredentialsProvider(credentialsProvider)
-        )
-        .build();
-      return new RestHighLevelClientBuilder(httpClient)
-        .setApiCompatibilityMode(true)
-        .build();
-    } catch (URISyntaxException ex) {
-      throw new RuntimeException(ex);
-    }
-  }
-
-  @Bean
   public ElasticsearchClient esClient() {
     final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
     credentialsProvider.setCredentials(
-      AuthScope.ANY,
-      new UsernamePasswordCredentials(username, password)
-    );
+        AuthScope.ANY, new UsernamePasswordCredentials(username, password));
     try {
       var uri = new URI(host);
       var hostname = uri.getHost();
       var port = uri.getPort();
       var scheme = uri.getScheme();
-      RestClient httpClient = RestClient
-        .builder(new HttpHost(hostname, port, scheme))
-        .setHttpClientConfigCallback(hcb ->
-          hcb.setDefaultCredentialsProvider(credentialsProvider)
-        )
-        .build();
-      ElasticsearchTransport transport = new RestClientTransport(
-        httpClient,
-        new JacksonJsonpMapper()
-      );
+      RestClient httpClient =
+          RestClient.builder(new HttpHost(hostname, port, scheme))
+              .setHttpClientConfigCallback(
+                  hcb -> hcb.setDefaultCredentialsProvider(credentialsProvider))
+              .build();
+      ElasticsearchTransport transport =
+          new RestClientTransport(httpClient, new JacksonJsonpMapper());
 
       return new ElasticsearchClient(transport);
     } catch (URISyntaxException ex) {

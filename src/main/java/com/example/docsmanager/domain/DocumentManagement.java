@@ -9,7 +9,6 @@ import java.util.Set;
  * Document Management domain service.
  *
  * @author Vladimir.Conev
- *
  */
 public sealed interface DocumentManagement permits DocumentManager {
   List<Document> uploadDocuments(final List<Document> documents);
@@ -19,9 +18,8 @@ public sealed interface DocumentManagement permits DocumentManager {
   byte[] getDocumentContent(final String id);
 
   Set<Document> getDocumentsByUserId(
-    final String userId,
-    final String extension,
-    final LocalDateTime from,
-    final LocalDateTime to
-  );
+      final String userId,
+      final String extension,
+      final LocalDateTime from,
+      final LocalDateTime to);
 }

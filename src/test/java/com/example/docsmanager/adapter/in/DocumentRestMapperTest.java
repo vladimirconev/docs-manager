@@ -13,41 +13,34 @@ public class DocumentRestMapperTest extends TestObjectFactory {
 
   @Test
   void mapDocumentToDocumentMetadataResponseDtoTest() {
-    Document document = buildDocumentInstance(
-      DOCUMENT_ID,
-      LocalDateTime.now(),
-      BYTE_CONTENT,
-      SAMPLE_USER_ID,
-      FILE_NAME,
-      PNG_EXTENSION
-    );
+    Document document =
+        buildDocumentInstance(
+            DOCUMENT_ID,
+            LocalDateTime.now(),
+            BYTE_CONTENT,
+            SAMPLE_USER_ID,
+            FILE_NAME,
+            PNG_EXTENSION);
 
-    DocumentMetadataResponseDto dto = DocumentRestMapper.mapDocumentToDocumentMetadataResponseDto(
-      document
-    );
+    DocumentMetadataResponseDto dto =
+        DocumentRestMapper.mapDocumentToDocumentMetadataResponseDto(document);
 
     assertNotNull(dto);
     assertEquals(document.id(), dto.id());
     assertEquals(document.extension(), dto.extension());
     assertEquals(document.fileName(), dto.fileName());
     assertEquals(
-      document.creationDate(),
-      LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME)
-    );
+        document.creationDate(),
+        LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME));
     assertEquals(document.userId(), dto.userId());
   }
 
   @Test
   void mapMultipartFileToDocumentTest() {
-    Document document = DocumentRestMapper.mapMultipartFileToDocument(
-      buildMockMultipartFile(
-        IMAGE_PNG_CONTENT_TYPE,
-        FILE_NAME,
-        PNG_EXTENSION,
-        BYTE_CONTENT
-      ),
-      SAMPLE_USER_ID
-    );
+    Document document =
+        DocumentRestMapper.mapMultipartFileToDocument(
+            buildMockMultipartFile(IMAGE_PNG_CONTENT_TYPE, FILE_NAME, PNG_EXTENSION, BYTE_CONTENT),
+            SAMPLE_USER_ID);
 
     assertNotNull(document);
     assertNotNull(document.id());
@@ -58,17 +51,10 @@ public class DocumentRestMapperTest extends TestObjectFactory {
   @Test
   void mapMultipartFileToDocumentWhenPassingOnFaultyContentType() {
     assertThrows(
-      IllegalStateException.class,
-      () ->
-        DocumentRestMapper.mapMultipartFileToDocument(
-          buildMockMultipartFile(
-            PDF_CONTENT_TYPE,
-            FILE_NAME,
-            PNG_EXTENSION,
-            BYTE_CONTENT
-          ),
-          SAMPLE_USER_ID
-        )
-    );
+        IllegalStateException.class,
+        () ->
+            DocumentRestMapper.mapMultipartFileToDocument(
+                buildMockMultipartFile(PDF_CONTENT_TYPE, FILE_NAME, PNG_EXTENSION, BYTE_CONTENT),
+                SAMPLE_USER_ID));
   }
 }

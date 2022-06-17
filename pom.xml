@@ -26,10 +26,10 @@
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<testcontainers-elasticsearch.version>1.17.2</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.0.1</rest-assured.version>
-		<plugin.prettier.goal>write</plugin.prettier.goal>
-		<prettier-maven-plugin.version>0.17</prettier-maven-plugin.version>
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 		<jakarta-json-api.version>2.0.1</jakarta-json-api.version>
+		<fmt-maven-plugin.goal>check</fmt-maven-plugin.goal>
+		<fmt-maven-plugin.version>2.18</fmt-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -198,28 +198,23 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.hubspot.maven.plugins</groupId>
-				<artifactId>prettier-maven-plugin</artifactId>
-				<version>${prettier-maven-plugin.version}</version>
+				<groupId>com.spotify.fmt</groupId>
+				<artifactId>fmt-maven-plugin</artifactId>
+				<version>${fmt-maven-plugin.version}</version>
 				<configuration>
-					<prettierJavaVersion>1.6.1</prettierJavaVersion>
-					<printWidth>90</printWidth>
-					<tabWidth>2</tabWidth>
-					<useTabs>false</useTabs>
-					<ignoreConfigFile>true</ignoreConfigFile>
-					<ignoreEditorConfig>true</ignoreEditorConfig>
-					<!-- Use <inputGlobs> to override the default input patterns -->
-					<inputGlobs>
-						<!-- These are the default patterns, you can omit <inputGlobs> entirely unless you want to override them -->
-						<inputGlob>src/main/java/**/*.java</inputGlob>
-						<inputGlob>src/test/java/**/*.java</inputGlob>
-					</inputGlobs>
+					<sourceDirectory>src/main/java</sourceDirectory>
+					<testSourceDirectory>src/test/java</testSourceDirectory>
+					<verbose>true</verbose>
+					<filesNamePattern>.*\.java</filesNamePattern>
+					<skip>false</skip>
+					<skipSortingImports>false</skipSortingImports>
+					<style>google</style>
 				</configuration>
 				<executions>
 					<execution>
 						<phase>validate</phase>
 						<goals>
-							<goal>${plugin.prettier.goal}</goal>
+							<goal>${fmt-maven-plugin.goal}</goal>
 						</goals>
 					</execution>
 				</executions>

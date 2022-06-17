@@ -12,8 +12,7 @@ public class RestExceptionHandlerConfig {
 
   @Bean
   public RestExceptionHandler restExceptionHandler(
-    @Autowired DefaultErrorAttributes defaultErrorAttributes
-  ) {
+      @Autowired DefaultErrorAttributes defaultErrorAttributes) {
     return new RestExceptionHandler(defaultErrorAttributes, new ObjectMapper());
   }
 }

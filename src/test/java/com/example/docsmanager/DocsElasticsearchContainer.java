@@ -6,7 +6,7 @@ import org.testcontainers.utility.DockerImageName;
 public class DocsElasticsearchContainer extends ElasticsearchContainer {
 
   private static final String DOCKER_IMAGE_FULL_NAME_ELASTICSEARCH =
-    "docker.elastic.co/elasticsearch/elasticsearch:7.17.4";
+      "docker.elastic.co/elasticsearch/elasticsearch:7.17.4";
 
   public DocsElasticsearchContainer() {
     super(DockerImageName.parse(DOCKER_IMAGE_FULL_NAME_ELASTICSEARCH));

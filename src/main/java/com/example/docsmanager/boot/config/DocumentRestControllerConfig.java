@@ -11,27 +11,22 @@ import org.springframework.context.annotation.Configuration;
  * Configuration for {@link DocumentRestController}.
  *
  * @author Vladimir.Conev
- *
  */
-
 @Configuration
 public class DocumentRestControllerConfig {
 
   @Bean
-  public DocumentRestController documentRestController(
-    final DocumentManagement docsManagement
-  ) {
+  public DocumentRestController documentRestController(final DocumentManagement docsManagement) {
     return new DocumentRestController(docsManagement);
   }
 
   @Bean
   public OpenAPI documentsManagerOpenAPI() {
     return new OpenAPI()
-      .info(
-        new Info()
-          .title("Documents Manager API")
-          .description("A CRUD API to demonstrate capabilities of Elasticsearch")
-          .version("v2.0.5-SNAPSHOT")
-      );
+        .info(
+            new Info()
+                .title("Documents Manager API")
+                .description("A CRUD API to demonstrate capabilities of Elasticsearch")
+                .version("v2.0.5-SNAPSHOT"));
   }
 }

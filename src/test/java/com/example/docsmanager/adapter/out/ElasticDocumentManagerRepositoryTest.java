@@ -8,7 +8,6 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.example.docsmanager.TestObjectFactory;
 import java.time.LocalDateTime;
 import java.util.*;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,58 +20,50 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
 
   private ElasticDocumentManagerRepository elasticDocumentManagerRepo;
 
-  @Mock
-  private DocumentElasticRepository documentElasticRepository;
+  @Mock private DocumentElasticRepository documentElasticRepository;
 
-  @Mock
-  private ElasticsearchClient esClient;
+  @Mock private ElasticsearchClient esClient;
 
   @BeforeEach
   void setup() {
     elasticDocumentManagerRepo =
-      new ElasticDocumentManagerRepository(
-        documentElasticRepository,
-        TEST_INDEX_NAME,
-        esClient
-      );
+        new ElasticDocumentManagerRepository(documentElasticRepository, TEST_INDEX_NAME, esClient);
   }
 
   @Test
   void uploadDocumentsTest() {
-    var documentElasticDto = buildDocumentElasticDto(
-      DOCUMENT_ID,
-      BYTE_CONTENT,
-      LocalDateTime.now(),
-      PNG_EXTENSION,
-      FILE_NAME,
-      SAMPLE_USER_ID
-    );
-    Mockito
-      .when(documentElasticRepository.saveAll(Mockito.anyList()))
-      .thenReturn(Set.of(documentElasticDto));
-    var document = buildDocumentInstance(
-      DOCUMENT_ID,
-      LocalDateTime.now(),
-      BYTE_CONTENT,
-      SAMPLE_USER_ID,
-      FILE_NAME,
-      PNG_EXTENSION
-    );
+    var documentElasticDto =
+        buildDocumentElasticDto(
+            DOCUMENT_ID,
+            BYTE_CONTENT,
+            LocalDateTime.now(),
+            PNG_EXTENSION,
+            FILE_NAME,
+            SAMPLE_USER_ID);
+    Mockito.when(documentElasticRepository.saveAll(Mockito.anyList()))
+        .thenReturn(Set.of(documentElasticDto));
+    var document =
+        buildDocumentInstance(
+            DOCUMENT_ID,
+            LocalDateTime.now(),
+            BYTE_CONTENT,
+            SAMPLE_USER_ID,
+            FILE_NAME,
+            PNG_EXTENSION);
     var uploadedDocuments = elasticDocumentManagerRepo.uploadDocuments(List.of(document));
 
     assertNotNull(uploadedDocuments);
     assertThat(uploadedDocuments)
-      .filteredOn(doc ->
-        doc.id().equalsIgnoreCase(documentElasticDto.id()) &&
-        doc.userId().equalsIgnoreCase(documentElasticDto.userId()) &&
-        Base64
-          .getEncoder()
-          .encodeToString(doc.content())
-          .equalsIgnoreCase(documentElasticDto.content()) &&
-        doc.fileName().equalsIgnoreCase(documentElasticDto.fileName()) &&
-        doc.extension().equalsIgnoreCase(documentElasticDto.extension())
-      )
-      .hasSize(1);
+        .filteredOn(
+            doc ->
+                doc.id().equalsIgnoreCase(documentElasticDto.id())
+                    && doc.userId().equalsIgnoreCase(documentElasticDto.userId())
+                    && Base64.getEncoder()
+                        .encodeToString(doc.content())
+                        .equalsIgnoreCase(documentElasticDto.content())
+                    && doc.fileName().equalsIgnoreCase(documentElasticDto.fileName())
+                    && doc.extension().equalsIgnoreCase(documentElasticDto.extension()))
+        .hasSize(1);
 
     Mockito.verify(documentElasticRepository, times(1)).saveAll(Mockito.anyList());
     Mockito.verifyNoMoreInteractions(documentElasticRepository);
@@ -80,26 +71,22 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
 
   @Test
   void getDocumentContentTest() {
-    var documentElasticDto = buildDocumentElasticDto(
-      DOCUMENT_ID,
-      BYTE_CONTENT,
-      LocalDateTime.now(),
-      PNG_EXTENSION,
-      FILE_NAME,
-      SAMPLE_USER_ID
-    );
+    var documentElasticDto =
+        buildDocumentElasticDto(
+            DOCUMENT_ID,
+            BYTE_CONTENT,
+            LocalDateTime.now(),
+            PNG_EXTENSION,
+            FILE_NAME,
+            SAMPLE_USER_ID);
 
-    Mockito
-      .when(documentElasticRepository.findById(DOCUMENT_ID))
-      .thenReturn(Optional.of(documentElasticDto));
+    Mockito.when(documentElasticRepository.findById(DOCUMENT_ID))
+        .thenReturn(Optional.of(documentElasticDto));
 
     byte[] documentContent = elasticDocumentManagerRepo.getDocumentContent(DOCUMENT_ID);
 
     assertNotNull(documentContent);
-    assertArrayEquals(
-      Base64.getDecoder().decode(documentElasticDto.content()),
-      documentContent
-    );
+    assertArrayEquals(Base64.getDecoder().decode(documentElasticDto.content()), documentContent);
 
     Mockito.verify(documentElasticRepository, times(1)).findById(DOCUMENT_ID);
     Mockito.verifyNoMoreInteractions(documentElasticRepository);
@@ -107,21 +94,17 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
 
   @Test
   void getDocumentContentShouldThrowNoSuchElementExceptionWhenItemIsNotFound() {
-    Mockito
-      .when(documentElasticRepository.findById(Mockito.anyString()))
-      .thenThrow(new NoSuchElementException());
+    Mockito.when(documentElasticRepository.findById(Mockito.anyString()))
+        .thenThrow(new NoSuchElementException());
     assertThrows(
-      NoSuchElementException.class,
-      () -> elasticDocumentManagerRepo.getDocumentContent(UUID.randomUUID().toString())
-    );
+        NoSuchElementException.class,
+        () -> elasticDocumentManagerRepo.getDocumentContent(UUID.randomUUID().toString()));
   }
 
   @Test
   void deleteDocumentsTest() {
     elasticDocumentManagerRepo.deleteDocuments(Set.of(DOCUMENT_ID));
 
-    Mockito
-      .verify(documentElasticRepository, times(1))
-      .deleteAllById(Set.of(DOCUMENT_ID));
+    Mockito.verify(documentElasticRepository, times(1)).deleteAllById(Set.of(DOCUMENT_ID));
   }
 }

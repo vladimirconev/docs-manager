@@ -10,16 +10,13 @@ import java.util.UUID;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Facilitate creation of dummy test objects.
- */
+/** Facilitate creation of dummy test objects. */
 @SuppressWarnings("SameParameterValue")
 public class TestObjectFactory {
 
-  /**
-   * Constants
-   */
+  /** Constants */
   protected final byte[] BYTE_CONTENT = "TEST".getBytes(StandardCharsets.UTF_8);
+
   protected final String PNG_EXTENSION = "png";
   protected final String FILE_NAME = "test_file";
   protected final String SAMPLE_USER_ID = "foo";
@@ -30,45 +27,37 @@ public class TestObjectFactory {
   protected final String TEST_INDEX_NAME = "test-drive";
 
   protected Document buildDocumentInstance(
-    final String id,
-    final LocalDateTime creationDate,
-    final byte[] content,
-    final String user,
-    final String fileName,
-    final String extension
-  ) {
+      final String id,
+      final LocalDateTime creationDate,
+      final byte[] content,
+      final String user,
+      final String fileName,
+      final String extension) {
     return new Document(id, fileName, extension, creationDate, content, user);
   }
 
   protected DocumentElasticDto buildDocumentElasticDto(
-    final String id,
-    final byte[] content,
-    final LocalDateTime when,
-    final String extension,
-    final String fileName,
-    final String userId
-  ) {
+      final String id,
+      final byte[] content,
+      final LocalDateTime when,
+      final String extension,
+      final String fileName,
+      final String userId) {
     return new DocumentElasticDto(
-      id,
-      extension,
-      fileName,
-      when.format(DateTimeFormatter.ISO_DATE_TIME),
-      Base64.getEncoder().encodeToString(content),
-      userId
-    );
+        id,
+        extension,
+        fileName,
+        when.format(DateTimeFormatter.ISO_DATE_TIME),
+        Base64.getEncoder().encodeToString(content),
+        userId);
   }
 
   protected MultipartFile buildMockMultipartFile(
-    final String contentType,
-    final String fileName,
-    final String extension,
-    final byte[] content
-  ) {
+      final String contentType,
+      final String fileName,
+      final String extension,
+      final byte[] content) {
     return new MockMultipartFile(
-      fileName,
-      String.format("%s.%s", fileName, extension),
-      contentType,
-      content
-    );
+        fileName, String.format("%s.%s", fileName, extension), contentType, content);
   }
 }

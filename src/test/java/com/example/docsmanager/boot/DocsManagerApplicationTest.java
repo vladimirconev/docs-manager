@@ -27,13 +27,12 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public class DocsManagerApplicationTest {
 
   @Container
-  private static final ElasticsearchContainer elasticsearchContainer = new DocsElasticsearchContainer();
+  private static final ElasticsearchContainer elasticsearchContainer =
+      new DocsElasticsearchContainer();
 
-  @Autowired
-  private DocumentRestController documentRestController;
+  @Autowired private DocumentRestController documentRestController;
 
-  @LocalServerPort
-  protected int port;
+  @LocalServerPort protected int port;
 
   @BeforeAll
   static void setUp() {
@@ -53,52 +52,47 @@ public class DocsManagerApplicationTest {
   @Test
   void getDocumentContentShouldReturnNotFoundForNonExistingId() {
     given()
-      .when()
-      .port(this.port)
-      .get(String.format("api/v2/documents/%s", UUID.randomUUID()))
-      .then()
-      .assertThat()
-      .statusCode(is(HttpStatus.NOT_FOUND.value()));
+        .when()
+        .port(this.port)
+        .get(String.format("api/v2/documents/%s", UUID.randomUUID()))
+        .then()
+        .assertThat()
+        .statusCode(is(HttpStatus.NOT_FOUND.value()));
   }
 
   @Test
   void deleteDocumentsShouldReturnNoContent() {
     given()
-      .when()
-      .port(this.port)
-      .delete(String.format("api/v2/documents?documentIds=%s", UUID.randomUUID()))
-      .then()
-      .assertThat()
-      .statusCode(is(HttpStatus.NO_CONTENT.value()));
+        .when()
+        .port(this.port)
+        .delete(String.format("api/v2/documents?documentIds=%s", UUID.randomUUID()))
+        .then()
+        .assertThat()
+        .statusCode(is(HttpStatus.NO_CONTENT.value()));
   }
 
   @Test
   void getDocumentsByUserIdShouldReturnOKWhenNoDocumentsFoundForUserId() {
     given()
-      .when()
-      .port(this.port)
-      .get(String.format("api/v2/documents?userId=%s", RandomStringUtils.random(5)))
-      .then()
-      .assertThat()
-      .statusCode(is(HttpStatus.OK.value()));
+        .when()
+        .port(this.port)
+        .get(String.format("api/v2/documents?userId=%s", RandomStringUtils.random(5)))
+        .then()
+        .assertThat()
+        .statusCode(is(HttpStatus.OK.value()));
   }
 
   @Test
   void noSuchElementExceptionOnGetDocumentContent() {
     assertThrows(
-      NoSuchElementException.class,
-      () -> documentRestController.getDocumentContent(UUID.randomUUID().toString())
-    );
+        NoSuchElementException.class,
+        () -> documentRestController.getDocumentContent(UUID.randomUUID().toString()));
   }
 
   @Test
   void emptySetOnGetDocumentsByNonExistingUserId() {
-    var responseEntity = documentRestController.getDocumentsByUserId(
-      "USER__TEST",
-      null,
-      null,
-      null
-    );
+    var responseEntity =
+        documentRestController.getDocumentsByUserId("USER__TEST", null, null, null);
     assertNotNull(responseEntity);
     assertNotNull(responseEntity.getBody());
     assertTrue(responseEntity.getBody().isEmpty());
@@ -107,9 +101,8 @@ public class DocsManagerApplicationTest {
 
   @Test
   void noContentOnDeleteDocuments() {
-    var responseEntity = documentRestController.deleteDocuments(
-      Set.of(UUID.randomUUID().toString())
-    );
+    var responseEntity =
+        documentRestController.deleteDocuments(Set.of(UUID.randomUUID().toString()));
     assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
   }
 }

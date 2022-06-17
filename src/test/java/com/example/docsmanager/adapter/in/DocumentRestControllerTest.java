@@ -27,21 +27,17 @@ import org.springframework.web.multipart.MultipartFile;
 @ExtendWith(MockitoExtension.class)
 public class DocumentRestControllerTest extends TestObjectFactory {
 
-  @InjectMocks
-  private DocumentRestController documentRestController;
+  @InjectMocks private DocumentRestController documentRestController;
 
-  @Mock
-  private DocumentManager documentManager;
+  @Mock private DocumentManager documentManager;
 
   @Test
   void getDocumentContentTest() {
-    byte[] content = new byte[] { 1, 2, 3, 8 };
+    byte[] content = new byte[] {1, 2, 3, 8};
     String documentId = UUID.randomUUID().toString();
     Mockito.when(documentManager.getDocumentContent(documentId)).thenReturn(content);
 
-    ResponseEntity<byte[]> responseEntity = documentRestController.getDocumentContent(
-      documentId
-    );
+    ResponseEntity<byte[]> responseEntity = documentRestController.getDocumentContent(documentId);
 
     assertNotNull(responseEntity);
     assertNotNull(responseEntity.getBody());
@@ -53,41 +49,34 @@ public class DocumentRestControllerTest extends TestObjectFactory {
 
   @Test
   void uploadDocumentTest() {
-    MultipartFile multipartFile = buildMockMultipartFile(
-      IMAGE_PNG_CONTENT_TYPE,
-      FILE_NAME,
-      PNG_EXTENSION,
-      BYTE_CONTENT
-    );
-    MultipartFile[] multipartFiles = { multipartFile };
-    Document sampleDocument = buildDocumentInstance(
-      DOCUMENT_ID,
-      LocalDateTime.now(),
-      BYTE_CONTENT,
-      SAMPLE_USER_ID,
-      FILE_NAME,
-      PNG_EXTENSION
-    );
-    Mockito
-      .when(documentManager.uploadDocuments(Mockito.anyList()))
-      .thenReturn(List.of(sampleDocument));
+    MultipartFile multipartFile =
+        buildMockMultipartFile(IMAGE_PNG_CONTENT_TYPE, FILE_NAME, PNG_EXTENSION, BYTE_CONTENT);
+    MultipartFile[] multipartFiles = {multipartFile};
+    Document sampleDocument =
+        buildDocumentInstance(
+            DOCUMENT_ID,
+            LocalDateTime.now(),
+            BYTE_CONTENT,
+            SAMPLE_USER_ID,
+            FILE_NAME,
+            PNG_EXTENSION);
+    Mockito.when(documentManager.uploadDocuments(Mockito.anyList()))
+        .thenReturn(List.of(sampleDocument));
 
-    ResponseEntity<List<DocumentMetadataResponseDto>> responseEntity = documentRestController.uploadDocuments(
-      multipartFiles,
-      SAMPLE_USER_ID
-    );
+    ResponseEntity<List<DocumentMetadataResponseDto>> responseEntity =
+        documentRestController.uploadDocuments(multipartFiles, SAMPLE_USER_ID);
 
     assertNotNull(responseEntity);
     assertNotNull(responseEntity.getBody());
 
     assertThat(responseEntity.getBody())
-      .filteredOn(meta ->
-        meta.id().equals(sampleDocument.id()) &&
-        meta.fileName().equals(FILE_NAME) &&
-        meta.userId().equals(SAMPLE_USER_ID) &&
-        meta.creationDate() != null
-      )
-      .hasSize(1);
+        .filteredOn(
+            meta ->
+                meta.id().equals(sampleDocument.id())
+                    && meta.fileName().equals(FILE_NAME)
+                    && meta.userId().equals(SAMPLE_USER_ID)
+                    && meta.creationDate() != null)
+        .hasSize(1);
 
     Mockito.verify(documentManager, times(1)).uploadDocuments(Mockito.anyList());
     Mockito.verifyNoMoreInteractions(documentManager);
@@ -95,25 +84,22 @@ public class DocumentRestControllerTest extends TestObjectFactory {
 
   @Test
   void uploadDocumentShouldThrowIllegalStateExceptionWhenConversionToByteArrayFails()
-    throws IOException {
+      throws IOException {
     MultipartFile multipartFile = Mockito.mock(MultipartFile.class);
     Mockito.when(multipartFile.getContentType()).thenReturn("image/png");
-    Mockito
-      .when(multipartFile.getOriginalFilename())
-      .thenReturn(FILE_NAME.concat(".").concat(PNG_EXTENSION));
+    Mockito.when(multipartFile.getOriginalFilename())
+        .thenReturn(FILE_NAME.concat(".").concat(PNG_EXTENSION));
     Mockito.when(multipartFile.getInputStream()).thenThrow(IOException.class);
-    MultipartFile[] multipartFiles = { multipartFile };
+    MultipartFile[] multipartFiles = {multipartFile};
     assertThrows(
-      IllegalStateException.class,
-      () -> documentRestController.uploadDocuments(multipartFiles, SAMPLE_USER_ID)
-    );
+        IllegalStateException.class,
+        () -> documentRestController.uploadDocuments(multipartFiles, SAMPLE_USER_ID));
   }
 
   @Test
   void deleteDocumentByIdsTest() {
-    ResponseEntity<Void> responseEntity = documentRestController.deleteDocuments(
-      Set.of(DOCUMENT_ID)
-    );
+    ResponseEntity<Void> responseEntity =
+        documentRestController.deleteDocuments(Set.of(DOCUMENT_ID));
 
     assertNotNull(responseEntity);
 

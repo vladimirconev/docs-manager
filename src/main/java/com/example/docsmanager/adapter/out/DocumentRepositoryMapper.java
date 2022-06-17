@@ -12,17 +12,14 @@ public class DocumentRepositoryMapper {
 
   private DocumentRepositoryMapper() {}
 
-  public static DocumentElasticDto mapDocumentToDocumentElasticDto(
-    final Document document
-  ) {
+  public static DocumentElasticDto mapDocumentToDocumentElasticDto(final Document document) {
     return new DocumentElasticDto(
-      document.id(),
-      document.extension(),
-      document.fileName(),
-      document.creationDate().format(DateTimeFormatter.ISO_DATE_TIME),
-      Base64.getEncoder().encodeToString(document.content()),
-      document.userId()
-    );
+        document.id(),
+        document.extension(),
+        document.fileName(),
+        document.creationDate().format(DateTimeFormatter.ISO_DATE_TIME),
+        Base64.getEncoder().encodeToString(document.content()),
+        document.userId());
   }
 
   public static Document mapDocumentElasticDtoToDocument(final DocumentElasticDto dto) {
@@ -31,21 +28,18 @@ public class DocumentRepositoryMapper {
       decodedContent = Base64.getDecoder().decode(dto.content());
     }
     return new Document(
-      dto.id(),
-      dto.fileName(),
-      dto.extension(),
-      LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME),
-      decodedContent,
-      dto.userId()
-    );
+        dto.id(),
+        dto.fileName(),
+        dto.extension(),
+        LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME),
+        decodedContent,
+        dto.userId());
   }
 
   public static List<DocumentElasticDto> mapDocumentsToDocumentElasticDtos(
-    final List<Document> documents
-  ) {
-    return documents
-      .stream()
-      .map(DocumentRepositoryMapper::mapDocumentToDocumentElasticDto)
-      .toList();
+      final List<Document> documents) {
+    return documents.stream()
+        .map(DocumentRepositoryMapper::mapDocumentToDocumentElasticDto)
+        .toList();
   }
 }

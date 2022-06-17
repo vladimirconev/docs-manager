@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-public class DocumentManagerStartupListener
-  implements ApplicationListener<ContextRefreshedEvent> {
+public class DocumentManagerStartupListener implements ApplicationListener<ContextRefreshedEvent> {
 
   private static final String EXPLICIT_MAPPINGS_JSON_PATH = "/explicit_mappings.json";
 
@@ -33,22 +32,15 @@ public class DocumentManagerStartupListener
     }
   }
 
-  /**
-   * Creates an index if not exist and applies Explicit mappings.
-   *
-   */
+  /** Creates an index if not exist and applies Explicit mappings. */
   private void createIndex() throws IOException {
     BooleanResponse booleanResponse = esClient.indices().exists(e -> e.index(indexName));
     if (!booleanResponse.value()) {
       var inputStream = this.getClass().getResourceAsStream(EXPLICIT_MAPPINGS_JSON_PATH);
-      var createIndexResponse = esClient
-        .indices()
-        .create(c -> c.index(indexName).mappings(m -> m.withJson(inputStream)));
+      var createIndexResponse =
+          esClient.indices().create(c -> c.index(indexName).mappings(m -> m.withJson(inputStream)));
       logger.info(
-        "Creation of Index {} is acknowledged:{}",
-        indexName,
-        createIndexResponse.acknowledged()
-      );
+          "Creation of Index {} is acknowledged:{}", indexName, createIndexResponse.acknowledged());
     }
   }
 }

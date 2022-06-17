@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DocsManagerStartupListenerConfig {
 
-  @Autowired
-  private ElasticsearchClient esClient;
+  @Autowired private ElasticsearchClient esClient;
 
   @Value("${custom.document.index.name}")
   private String documentIndexName;

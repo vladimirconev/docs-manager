@@ -19,25 +19,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class DocumentManagerTest extends TestObjectFactory {
 
-  @InjectMocks
-  private DocumentManager documentManager;
+  @InjectMocks private DocumentManager documentManager;
 
-  @Mock
-  private DocumentManagementRepository docsManagementRepo;
+  @Mock private DocumentManagementRepository docsManagementRepo;
 
   @Test
   void uploadDocumentsTest() {
-    Document document = buildDocumentInstance(
-      DOCUMENT_ID,
-      LocalDateTime.now(),
-      BYTE_CONTENT,
-      SAMPLE_USER_ID,
-      FILE_NAME,
-      PNG_EXTENSION
-    );
-    Mockito
-      .when(docsManagementRepo.uploadDocuments(Mockito.anyList()))
-      .thenReturn(List.of(document));
+    Document document =
+        buildDocumentInstance(
+            DOCUMENT_ID,
+            LocalDateTime.now(),
+            BYTE_CONTENT,
+            SAMPLE_USER_ID,
+            FILE_NAME,
+            PNG_EXTENSION);
+    Mockito.when(docsManagementRepo.uploadDocuments(Mockito.anyList()))
+        .thenReturn(List.of(document));
 
     List<Document> output = documentManager.uploadDocuments(List.of(document));
 
@@ -62,9 +59,7 @@ public class DocumentManagerTest extends TestObjectFactory {
 
   @Test
   void getDocumentContentTest() {
-    Mockito
-      .when(docsManagementRepo.getDocumentContent(DOCUMENT_ID))
-      .thenReturn(BYTE_CONTENT);
+    Mockito.when(docsManagementRepo.getDocumentContent(DOCUMENT_ID)).thenReturn(BYTE_CONTENT);
 
     byte[] documentContent = documentManager.getDocumentContent(DOCUMENT_ID);
 

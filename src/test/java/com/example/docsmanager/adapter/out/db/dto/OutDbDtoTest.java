@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class OutDbDtoTest {
 
-  private static final String OUT_DB_DTO_PACKAGE =
-    "com.example.docsmanager.adapter.out.db.dto";
+  private static final String OUT_DB_DTO_PACKAGE = "com.example.docsmanager.adapter.out.db.dto";
 
   @Test
   void outDbDTOsTest() {

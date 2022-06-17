@@ -19,55 +19,55 @@ import org.springframework.web.bind.annotation.RestController;
 public class ModularArchitectureTest {
 
   @ArchTest
-  final ArchRule core_domain_classes_should_not_have_any_external_dependencies = ArchRuleDefinition
-    .noClasses()
-    .that()
-    .resideInAPackage("..domain..")
-    .should()
-    .dependOnClassesThat()
-    .resideInAnyPackage("..boot..", "..adapter..", "..org.springframework..");
+  final ArchRule core_domain_classes_should_not_have_any_external_dependencies =
+      ArchRuleDefinition.noClasses()
+          .that()
+          .resideInAPackage("..domain..")
+          .should()
+          .dependOnClassesThat()
+          .resideInAnyPackage("..boot..", "..adapter..", "..org.springframework..");
 
   @ArchTest
-  final ArchRule public_rest_controller_methods_should_be_annotated_with_respective_HTTP_mapping = ArchRuleDefinition
-    .methods()
-    .that()
-    .arePublic()
-    .and()
-    .areDeclaredInClassesThat()
-    .resideInAPackage("..adapters.in..")
-    .and()
-    .areDeclaredInClassesThat()
-    .haveSimpleNameEndingWith("Controller")
-    .and()
-    .areDeclaredInClassesThat()
-    .areAnnotatedWith(Controller.class)
-    .or()
-    .areDeclaredInClassesThat()
-    .areAnnotatedWith(RestController.class)
-    .should()
-    .beAnnotatedWith(RequestMapping.class)
-    .orShould()
-    .beAnnotatedWith(GetMapping.class)
-    .orShould()
-    .beAnnotatedWith(PostMapping.class)
-    .orShould()
-    .beAnnotatedWith(PatchMapping.class)
-    .orShould()
-    .beAnnotatedWith(PutMapping.class)
-    .orShould()
-    .beAnnotatedWith(DeleteMapping.class);
+  final ArchRule public_rest_controller_methods_should_be_annotated_with_respective_HTTP_mapping =
+      ArchRuleDefinition.methods()
+          .that()
+          .arePublic()
+          .and()
+          .areDeclaredInClassesThat()
+          .resideInAPackage("..adapters.in..")
+          .and()
+          .areDeclaredInClassesThat()
+          .haveSimpleNameEndingWith("Controller")
+          .and()
+          .areDeclaredInClassesThat()
+          .areAnnotatedWith(Controller.class)
+          .or()
+          .areDeclaredInClassesThat()
+          .areAnnotatedWith(RestController.class)
+          .should()
+          .beAnnotatedWith(RequestMapping.class)
+          .orShould()
+          .beAnnotatedWith(GetMapping.class)
+          .orShould()
+          .beAnnotatedWith(PostMapping.class)
+          .orShould()
+          .beAnnotatedWith(PatchMapping.class)
+          .orShould()
+          .beAnnotatedWith(PutMapping.class)
+          .orShould()
+          .beAnnotatedWith(DeleteMapping.class);
 
   @ArchTest
-  final SliceRule no_cyclic_dependencies_allowed = SlicesRuleDefinition
-    .slices()
-    .matching("com.example.docsmanager.domain.(*)..")
-    .should()
-    .beFreeOfCycles();
+  final SliceRule no_cyclic_dependencies_allowed =
+      SlicesRuleDefinition.slices()
+          .matching("com.example.docsmanager.domain.(*)..")
+          .should()
+          .beFreeOfCycles();
 
   @ArchTest
-  final SliceRule adapters_should_not_depend_on_each_other = SlicesRuleDefinition
-    .slices()
-    .matching("com.example.docsmanager.adapters.(**)..")
-    .should()
-    .notDependOnEachOther();
+  final SliceRule adapters_should_not_depend_on_each_other =
+      SlicesRuleDefinition.slices()
+          .matching("com.example.docsmanager.adapters.(**)..")
+          .should()
+          .notDependOnEachOther();
 }

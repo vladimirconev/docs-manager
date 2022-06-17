@@ -13,9 +13,8 @@ public interface DocumentManagementRepository {
   void deleteDocuments(final Set<String> documentIds);
 
   Set<Document> getAllDocumentsByUserId(
-    final String userId,
-    final String extension,
-    final LocalDateTime from,
-    final LocalDateTime to
-  );
+      final String userId,
+      final String extension,
+      final LocalDateTime from,
+      final LocalDateTime to);
 }

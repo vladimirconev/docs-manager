@@ -9,11 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Caching configuration using Caffeine. <br/>
+ * Caching configuration using Caffeine. <br>
+ *
  * @see <a href="https://github.com/ben-manes/caffeine">https://github.com/ben-manes/caffeine</a>
- *
  * @author Vladimir.Conev
- *
  */
 @Configuration
 @EnableCaching
@@ -21,10 +20,7 @@ public class CachingConfig {
 
   @Bean
   public Caffeine<Object, Object> caffeineConfig() {
-    return Caffeine
-      .newBuilder()
-      .expireAfterWrite(10, TimeUnit.MINUTES)
-      .initialCapacity(30);
+    return Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).initialCapacity(30);
   }
 
   @Bean

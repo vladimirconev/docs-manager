@@ -14,20 +14,14 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @EnableElasticsearchRepositories(basePackageClasses = DocumentElasticRepository.class)
 public class DocumentManagementRepositoryConfig {
 
-  @Autowired
-  private ElasticsearchClient esClient;
+  @Autowired private ElasticsearchClient esClient;
 
   @Value("${custom.document.index.name}")
   private String documentIndexName;
 
   @Bean
   public DocumentManagementRepository documentManagementRepository(
-    final DocumentElasticRepository documentElasticRepo
-  ) {
-    return new ElasticDocumentManagerRepository(
-      documentElasticRepo,
-      documentIndexName,
-      esClient
-    );
+      final DocumentElasticRepository documentElasticRepo) {
+    return new ElasticDocumentManagerRepository(documentElasticRepo, documentIndexName, esClient);
   }
 }
