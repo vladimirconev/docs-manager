@@ -4,6 +4,7 @@ import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
@@ -49,7 +50,13 @@ public class DocumentRestMapper {
     } catch (IOException ioException) {
       throw new IllegalStateException("Error while extracting byte array content.", ioException);
     }
-    return new Document(documentId, fileName, fileExtension, LocalDateTime.now(), content, userId);
+    return new Document(
+        documentId,
+        fileName,
+        fileExtension,
+        LocalDateTime.now(ZoneId.systemDefault()),
+        content,
+        userId);
   }
 
   public static List<Document> mapMultipartFilesToDocuments(
