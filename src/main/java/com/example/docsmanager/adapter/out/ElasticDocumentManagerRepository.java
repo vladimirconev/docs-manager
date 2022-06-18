@@ -109,9 +109,10 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
         scrollId = scrollResponse.scrollId();
         hits = scrollResponse.hits().hits();
       }
+
       co.elastic.clients.elasticsearch.core.ClearScrollRequest clearScrollRequest =
           new co.elastic.clients.elasticsearch.core.ClearScrollRequest.Builder()
-              .scrollId(List.of(scrollId))
+              .scrollId(List.of(Objects.requireNonNull(scrollId)))
               .build();
       co.elastic.clients.elasticsearch.core.ClearScrollResponse clear_scroll_response =
           esClient.clearScroll(clearScrollRequest);

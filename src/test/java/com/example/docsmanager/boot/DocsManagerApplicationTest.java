@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -32,7 +32,7 @@ public class DocsManagerApplicationTest {
 
   @Autowired private DocumentRestController documentRestController;
 
-  @LocalServerPort protected int port;
+  @Autowired private ServletWebServerApplicationContext webServerAppCtxt;
 
   @BeforeAll
   static void setUp() {
@@ -53,7 +53,7 @@ public class DocsManagerApplicationTest {
   void getDocumentContentShouldReturnNotFoundForNonExistingId() {
     given()
         .when()
-        .port(this.port)
+        .port(webServerAppCtxt.getWebServer().getPort())
         .get(String.format("api/v2/documents/%s", UUID.randomUUID()))
         .then()
         .assertThat()
@@ -64,7 +64,7 @@ public class DocsManagerApplicationTest {
   void deleteDocumentsShouldReturnNoContent() {
     given()
         .when()
-        .port(this.port)
+        .port(webServerAppCtxt.getWebServer().getPort())
         .delete(String.format("api/v2/documents?documentIds=%s", UUID.randomUUID()))
         .then()
         .assertThat()
@@ -75,7 +75,7 @@ public class DocsManagerApplicationTest {
   void getDocumentsByUserIdShouldReturnOKWhenNoDocumentsFoundForUserId() {
     given()
         .when()
-        .port(this.port)
+        .port(webServerAppCtxt.getWebServer().getPort())
         .get(String.format("api/v2/documents?userId=%s", RandomStringUtils.random(5)))
         .then()
         .assertThat()

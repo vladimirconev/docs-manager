@@ -63,7 +63,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
               .indices()
               .create(c -> c.index(documentIndexName).mappings(m -> m.withJson(inputStream)));
       assertNotNull(createIndexResponse);
-      assertTrue(createIndexResponse.acknowledged());
+      assertEquals(Boolean.TRUE, createIndexResponse.acknowledged());
     }
     // Load sample data
     List<Document> uploadDocuments =
