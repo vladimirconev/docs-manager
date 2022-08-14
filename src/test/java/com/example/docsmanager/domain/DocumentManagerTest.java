@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 
 import com.example.docsmanager.TestObjectFactory;
 import com.example.docsmanager.domain.entity.Document;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class DocumentManagerTest extends TestObjectFactory {
     Document document =
         buildDocumentInstance(
             DOCUMENT_ID,
-            LocalDateTime.now(),
+            LocalDateTime.now(Clock.systemUTC()),
             BYTE_CONTENT,
             SAMPLE_USER_ID,
             FILE_NAME,

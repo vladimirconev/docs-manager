@@ -4,6 +4,7 @@ import com.example.docsmanager.adapter.in.dto.ErrorResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.SimpleDateFormat;
+import java.time.Clock;
 import java.time.Instant;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
@@ -79,8 +80,7 @@ public class RestExceptionHandler {
 
     String message =
         Optional.ofNullable(messageDetails)
-            .orElse(
-                Optional.ofNullable(errors.get(MESSAGE_KEY)).map(Object::toString).orElse(null));
+            .orElse(Optional.ofNullable(errors.get(MESSAGE_KEY)).map(Object::toString).orElse(""));
     String path =
         Optional.ofNullable(errors.get(PATH_KEY))
             .map(Object::toString)
@@ -92,7 +92,7 @@ public class RestExceptionHandler {
         path,
         request.getMethod(),
         exception,
-        new SimpleDateFormat(DATE_TIME_FORMAT).format(Date.from(Instant.now())));
+        new SimpleDateFormat(DATE_TIME_FORMAT).format(Date.from(Instant.now(Clock.systemUTC()))));
   }
 
   @ResponseBody

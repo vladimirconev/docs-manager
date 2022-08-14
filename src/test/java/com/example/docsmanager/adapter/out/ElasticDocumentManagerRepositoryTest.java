@@ -6,8 +6,10 @@ import static org.mockito.Mockito.times;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.example.docsmanager.TestObjectFactory;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,13 +32,18 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
         new ElasticDocumentManagerRepository(documentElasticRepository, TEST_INDEX_NAME, esClient);
   }
 
+  @AfterEach
+  void tearDown() {
+    elasticDocumentManagerRepo = null;
+  }
+
   @Test
   void uploadDocumentsTest() {
     var documentElasticDto =
         buildDocumentElasticDto(
             DOCUMENT_ID,
             BYTE_CONTENT,
-            LocalDateTime.now(),
+            LocalDateTime.now(Clock.systemUTC()),
             PNG_EXTENSION,
             FILE_NAME,
             SAMPLE_USER_ID);
@@ -45,7 +52,7 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
     var document =
         buildDocumentInstance(
             DOCUMENT_ID,
-            LocalDateTime.now(),
+            LocalDateTime.now(Clock.systemUTC()),
             BYTE_CONTENT,
             SAMPLE_USER_ID,
             FILE_NAME,
@@ -75,7 +82,7 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
         buildDocumentElasticDto(
             DOCUMENT_ID,
             BYTE_CONTENT,
-            LocalDateTime.now(),
+            LocalDateTime.now(Clock.systemUTC()),
             PNG_EXTENSION,
             FILE_NAME,
             SAMPLE_USER_ID);

@@ -14,7 +14,7 @@ import org.apache.tika.config.TikaConfig;
 import org.apache.tika.mime.MimeTypeException;
 import org.springframework.web.multipart.MultipartFile;
 
-public class DocumentRestMapper {
+public final class DocumentRestMapper {
 
   private DocumentRestMapper() {}
 

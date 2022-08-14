@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.example.docsmanager.TestObjectFactory;
 import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
 import com.example.docsmanager.domain.entity.Document;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ public class DocumentRestMapperTest extends TestObjectFactory {
     Document document =
         buildDocumentInstance(
             DOCUMENT_ID,
-            LocalDateTime.now(),
+            LocalDateTime.now(Clock.systemUTC()),
             BYTE_CONTENT,
             SAMPLE_USER_ID,
             FILE_NAME,

@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.0</version>
+		<version>2.7.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>docs-manager</artifactId>
-	<version>2.0.5-SNAPSHOT</version>
+	<version>2.0.6-SNAPSHOT</version>
 	<name>docs-manager</name>
 	<description>Documents manager that enables Upload and download of data</description>
 	<properties>
@@ -22,7 +22,7 @@
 		<archunit.version>0.23.1</archunit.version>
 		<assertj-core.version>3.22.0</assertj-core.version>
 		<equalsverifier.version>3.10</equalsverifier.version>
-		<error-prone-core.version>2.14.0</error-prone-core.version>
+		<error-prone-core.version>2.15.0</error-prone-core.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<testcontainers-elasticsearch.version>1.17.2</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.0.1</rest-assured.version>

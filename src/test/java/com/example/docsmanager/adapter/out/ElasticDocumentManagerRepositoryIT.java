@@ -11,6 +11,7 @@ import com.example.docsmanager.TestObjectFactory;
 import com.example.docsmanager.boot.DocsManagerApplication;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
  *
  * @author Vladimir.Conev
  */
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {DocsManagerApplication.class})
 public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
@@ -70,14 +71,14 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
         uploadDocuments(
             buildDocumentInstance(
                 DOCUMENT_ID,
-                LocalDateTime.now(),
+                LocalDateTime.now(Clock.systemUTC()),
                 BYTE_CONTENT,
                 IT_DEMO_USER,
                 FILE_NAME,
                 PNG_EXTENSION),
             buildDocumentInstance(
                 SAMPLE_DOCUMENT_ID,
-                LocalDateTime.now(),
+                LocalDateTime.now(Clock.systemUTC()),
                 BYTE_CONTENT,
                 IT_DEMO_USER,
                 FILE_NAME,
@@ -106,7 +107,12 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     String id = UUID.randomUUID().toString();
     var sampleDocument =
         buildDocumentInstance(
-            id, LocalDateTime.now(), BYTE_CONTENT, IT_DEMO_USER, FILE_NAME, PNG_EXTENSION);
+            id,
+            LocalDateTime.now(Clock.systemUTC()),
+            BYTE_CONTENT,
+            IT_DEMO_USER,
+            FILE_NAME,
+            PNG_EXTENSION);
     var uploadedDocuments = esDocsManagerRepo.uploadDocuments(List.of(sampleDocument));
 
     assertNotNull(uploadedDocuments);
@@ -158,21 +164,30 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
   void getAllDocumentsByUserIdTest() {
     Set<Document> allDocumentsByUserIdWithPNGExtension =
         esDocsManagerRepo.getAllDocumentsByUserId(
-            IT_DEMO_USER, PNG_EXTENSION, LocalDateTime.now().minusDays(1L), LocalDateTime.now());
+            IT_DEMO_USER,
+            PNG_EXTENSION,
+            LocalDateTime.now(Clock.systemUTC()).minusDays(1L),
+            LocalDateTime.now(Clock.systemUTC()));
 
     assertNotNull(allDocumentsByUserIdWithPNGExtension);
     assertFalse(allDocumentsByUserIdWithPNGExtension.isEmpty());
 
     Set<Document> allDocumentsByUserIdWithPDFExtension =
         esDocsManagerRepo.getAllDocumentsByUserId(
-            IT_DEMO_USER, PDF_CONTENT_TYPE, LocalDateTime.now().minusDays(1L), LocalDateTime.now());
+            IT_DEMO_USER,
+            PDF_CONTENT_TYPE,
+            LocalDateTime.now(Clock.systemUTC()).minusDays(1L),
+            LocalDateTime.now(Clock.systemUTC()));
 
     assertNotNull(allDocumentsByUserIdWithPDFExtension);
     assertTrue(allDocumentsByUserIdWithPDFExtension.isEmpty());
 
     Set<Document> allDocumentsByUserId =
         esDocsManagerRepo.getAllDocumentsByUserId(
-            IT_DEMO_USER, null, LocalDateTime.now().minusDays(1L), LocalDateTime.now());
+            IT_DEMO_USER,
+            null,
+            LocalDateTime.now(Clock.systemUTC()).minusDays(1L),
+            LocalDateTime.now(Clock.systemUTC()));
 
     assertNotNull(allDocumentsByUserId);
     assertEquals(allDocumentsByUserIdWithPNGExtension.size(), allDocumentsByUserId.size());

@@ -11,6 +11,7 @@ import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
 import com.example.docsmanager.domain.DocumentManager;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +56,7 @@ public class DocumentRestControllerTest extends TestObjectFactory {
     Document sampleDocument =
         buildDocumentInstance(
             DOCUMENT_ID,
-            LocalDateTime.now(),
+            LocalDateTime.now(Clock.systemUTC()),
             BYTE_CONTENT,
             SAMPLE_USER_ID,
             FILE_NAME,
