@@ -15,7 +15,7 @@
 	<description>Documents manager that enables Upload and download of data</description>
 	<properties>
 		<java.version>18</java.version>
-		<apache-tika.core.version>2.3.0</apache-tika.core.version>
+		<apache-tika.core.version>2.4.1</apache-tika.core.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<mockito-core.version>3.11.0</mockito-core.version>
  		<sprindoc-openapi-ui.version>1.6.8</sprindoc-openapi-ui.version>
