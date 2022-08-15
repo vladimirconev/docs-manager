@@ -27,6 +27,6 @@ public class DocumentRestControllerConfig {
             new Info()
                 .title("Documents Manager API")
                 .description("A CRUD API to demonstrate capabilities of Elasticsearch")
-                .version("v2.0.5-SNAPSHOT"));
+                .version("v2.0.6-SNAPSHOT"));
   }
 }
