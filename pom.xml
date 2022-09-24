@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.3</version>
+		<version>2.7.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -18,9 +18,9 @@
 		<apache-tika.core.version>2.4.1</apache-tika.core.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<mockito-core.version>3.11.0</mockito-core.version>
- 		<sprindoc-openapi-ui.version>1.6.9</sprindoc-openapi-ui.version>
+ 		<sprindoc-openapi-ui.version>1.6.11</sprindoc-openapi-ui.version>
 		<archunit.version>0.23.1</archunit.version>
-		<assertj-core.version>3.22.0</assertj-core.version>
+		<assertj-core.version>3.23.1</assertj-core.version>
 		<equalsverifier.version>3.10.1</equalsverifier.version>
 		<error-prone-core.version>2.15.0</error-prone-core.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
