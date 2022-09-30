@@ -3,7 +3,7 @@ package com.example.docsmanager.adapter.out.db.dto;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-public class OutDbDtoTest {
+public class OutDbTest {
 
   private static final String OUT_DB_DTO_PACKAGE = "com.example.docsmanager.adapter.out.db.dto";
 

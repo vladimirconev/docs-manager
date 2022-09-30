@@ -1,6 +1,6 @@
 package com.example.docsmanager.adapter.in;
 
-import com.example.docsmanager.adapter.in.dto.ErrorResponseDto;
+import com.example.docsmanager.adapter.in.dto.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.text.SimpleDateFormat;
@@ -47,16 +47,16 @@ public class RestExceptionHandler {
       final String message) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-    ErrorResponseDto errorResponseDto = buildErrorResponseDto(status, request, message);
+    ErrorResponse errorResponse = buildErrorResponseDto(status, request, message);
     try {
       return new ResponseEntity<>(
-          objectMapper.writeValueAsString(errorResponseDto), httpHeaders, status);
+          objectMapper.writeValueAsString(errorResponse), httpHeaders, status);
     } catch (JsonProcessingException jpe) {
       return new ResponseEntity<>(exception.getMessage(), httpHeaders, status);
     }
   }
 
-  protected ErrorResponseDto buildErrorResponseDto(
+  protected ErrorResponse buildErrorResponseDto(
       final HttpStatus httpStatus, final WebRequest webRequest, final String messageDetails) {
     ServletWebRequest servletRequest = (ServletWebRequest) webRequest;
     HttpServletRequest request = servletRequest.getNativeRequest(HttpServletRequest.class);
@@ -85,7 +85,7 @@ public class RestExceptionHandler {
         Optional.ofNullable(errors.get(PATH_KEY))
             .map(Object::toString)
             .orElse(request.getRequestURI());
-    return new ErrorResponseDto(
+    return new ErrorResponse(
         status,
         code,
         message,
@@ -117,7 +117,7 @@ public class RestExceptionHandler {
         ex,
         HttpStatus.NOT_ACCEPTABLE,
         request,
-        String.format("Use acceptable media types %s.", ex.getSupportedMediaTypes()));
+        "Use acceptable media types %s.".formatted(ex.getSupportedMediaTypes()));
   }
 
   @ResponseBody

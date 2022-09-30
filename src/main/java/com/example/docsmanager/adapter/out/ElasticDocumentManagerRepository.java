@@ -6,7 +6,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import co.elastic.clients.elasticsearch.core.ScrollRequest;
 import co.elastic.clients.elasticsearch.core.ScrollResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
+import com.example.docsmanager.adapter.out.db.dto.DocumentElastic;
 import com.example.docsmanager.domain.DocumentManagementRepository;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
@@ -88,10 +88,10 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
                                                   FILE_NAME))))
                       .query(boolQueryBuilder.build()._toQuery())
                       .scroll(time));
-      co.elastic.clients.elasticsearch.core.SearchResponse<DocumentElasticDto> searchResponse =
-          esClient.search(request, DocumentElasticDto.class);
+      co.elastic.clients.elasticsearch.core.SearchResponse<DocumentElastic> searchResponse =
+          esClient.search(request, DocumentElastic.class);
       var scrollId = searchResponse.scrollId();
-      List<Hit<DocumentElasticDto>> hits = searchResponse.hits().hits();
+      List<Hit<DocumentElastic>> hits = searchResponse.hits().hits();
       while (hits != null && !hits.isEmpty()) {
         Set<Document> docs =
             hits.stream()
@@ -104,8 +104,8 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
         }
         ScrollRequest scrollRequest =
             new ScrollRequest.Builder().scrollId(scrollId).scroll(time).build();
-        ScrollResponse<DocumentElasticDto> scrollResponse =
-            esClient.scroll(scrollRequest, DocumentElasticDto.class);
+        ScrollResponse<DocumentElastic> scrollResponse =
+            esClient.scroll(scrollRequest, DocumentElastic.class);
         scrollId = scrollResponse.scrollId();
         hits = scrollResponse.hits().hits();
       }
@@ -150,7 +150,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 
   @Override
   public List<Document> uploadDocuments(final List<Document> documents) {
-    Iterable<DocumentElasticDto> dtos =
+    Iterable<DocumentElastic> dtos =
         documentElasticRepository.saveAll(
             DocumentRepositoryMapper.mapDocumentsToDocumentElasticDtos(documents));
     return StreamSupport.stream(dtos.spliterator(), false)

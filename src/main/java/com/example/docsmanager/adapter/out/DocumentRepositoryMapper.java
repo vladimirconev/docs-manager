@@ -1,6 +1,6 @@
 package com.example.docsmanager.adapter.out;
 
-import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
+import com.example.docsmanager.adapter.out.db.dto.DocumentElastic;
 import com.example.docsmanager.domain.entity.Document;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,8 +12,8 @@ public final class DocumentRepositoryMapper {
 
   private DocumentRepositoryMapper() {}
 
-  public static DocumentElasticDto mapDocumentToDocumentElasticDto(final Document document) {
-    return new DocumentElasticDto(
+  public static DocumentElastic mapDocumentToDocumentElasticDto(final Document document) {
+    return new DocumentElastic(
         document.id(),
         document.extension(),
         document.fileName(),
@@ -22,7 +22,7 @@ public final class DocumentRepositoryMapper {
         document.userId());
   }
 
-  public static Document mapDocumentElasticDtoToDocument(final DocumentElasticDto dto) {
+  public static Document mapDocumentElasticDtoToDocument(final DocumentElastic dto) {
     byte[] decodedContent = new byte[0];
     if (StringUtils.isNotBlank(dto.content())) {
       decodedContent = Base64.getDecoder().decode(dto.content());
@@ -36,7 +36,7 @@ public final class DocumentRepositoryMapper {
         dto.userId());
   }
 
-  public static List<DocumentElasticDto> mapDocumentsToDocumentElasticDtos(
+  public static List<DocumentElastic> mapDocumentsToDocumentElasticDtos(
       final List<Document> documents) {
     return documents.stream()
         .map(DocumentRepositoryMapper::mapDocumentToDocumentElasticDto)

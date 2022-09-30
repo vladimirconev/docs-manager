@@ -3,7 +3,6 @@ package com.example.docsmanager.adapter.in;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.docsmanager.TestObjectFactory;
-import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
 import com.example.docsmanager.domain.entity.Document;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -14,7 +13,7 @@ public class DocumentRestMapperTest extends TestObjectFactory {
 
   @Test
   void mapDocumentToDocumentMetadataResponseDtoTest() {
-    Document document =
+    var document =
         buildDocumentInstance(
             DOCUMENT_ID,
             LocalDateTime.now(Clock.systemUTC()),
@@ -23,22 +22,21 @@ public class DocumentRestMapperTest extends TestObjectFactory {
             FILE_NAME,
             PNG_EXTENSION);
 
-    DocumentMetadataResponseDto dto =
-        DocumentRestMapper.mapDocumentToDocumentMetadataResponseDto(document);
+    var documentMetadata = DocumentRestMapper.mapDocumentToDocumentMetadataResponseDto(document);
 
-    assertNotNull(dto);
-    assertEquals(document.id(), dto.id());
-    assertEquals(document.extension(), dto.extension());
-    assertEquals(document.fileName(), dto.fileName());
+    assertNotNull(documentMetadata);
+    assertEquals(document.id(), documentMetadata.id());
+    assertEquals(document.extension(), documentMetadata.extension());
+    assertEquals(document.fileName(), documentMetadata.fileName());
     assertEquals(
         document.creationDate(),
-        LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME));
-    assertEquals(document.userId(), dto.userId());
+        LocalDateTime.parse(documentMetadata.creationDate(), DateTimeFormatter.ISO_DATE_TIME));
+    assertEquals(document.userId(), documentMetadata.userId());
   }
 
   @Test
   void mapMultipartFileToDocumentTest() {
-    Document document =
+    var document =
         DocumentRestMapper.mapMultipartFileToDocument(
             buildMockMultipartFile(IMAGE_PNG_CONTENT_TYPE, FILE_NAME, PNG_EXTENSION, BYTE_CONTENT),
             SAMPLE_USER_ID);
@@ -52,7 +50,7 @@ public class DocumentRestMapperTest extends TestObjectFactory {
   @Test
   void mapMultipartFileToDocumentWhenPassingOnFaultyContentType() {
     assertThrows(
-        IllegalStateException.class,
+        IllegalArgumentException.class,
         () ->
             DocumentRestMapper.mapMultipartFileToDocument(
                 buildMockMultipartFile(PDF_CONTENT_TYPE, FILE_NAME, PNG_EXTENSION, BYTE_CONTENT),

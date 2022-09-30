@@ -1,6 +1,6 @@
 package com.example.docsmanager;
 
-import com.example.docsmanager.adapter.out.db.dto.DocumentElasticDto;
+import com.example.docsmanager.adapter.out.db.dto.DocumentElastic;
 import com.example.docsmanager.domain.entity.Document;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -36,14 +36,14 @@ public class TestObjectFactory {
     return new Document(id, fileName, extension, creationDate, content, user);
   }
 
-  protected DocumentElasticDto buildDocumentElasticDto(
+  protected DocumentElastic buildDocumentElasticDto(
       final String id,
       final byte[] content,
       final LocalDateTime when,
       final String extension,
       final String fileName,
       final String userId) {
-    return new DocumentElasticDto(
+    return new DocumentElastic(
         id,
         extension,
         fileName,

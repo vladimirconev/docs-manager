@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 
 import com.example.docsmanager.TestObjectFactory;
-import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
+import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponse;
 import com.example.docsmanager.domain.DocumentManager;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class DocumentRestControllerTest extends TestObjectFactory {
     Mockito.when(documentManager.uploadDocuments(Mockito.anyList()))
         .thenReturn(List.of(sampleDocument));
 
-    ResponseEntity<List<DocumentMetadataResponseDto>> responseEntity =
+    ResponseEntity<List<DocumentMetadataResponse>> responseEntity =
         documentRestController.uploadDocuments(multipartFiles, SAMPLE_USER_ID);
 
     assertNotNull(responseEntity);

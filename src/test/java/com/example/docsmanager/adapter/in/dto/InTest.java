@@ -3,7 +3,7 @@ package com.example.docsmanager.adapter.in.dto;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-public class InDtoTest {
+public class InTest {
 
   private static final String IN_DTO_PACKAGE = "com.example.docsmanager.adapter.in.dto";
 

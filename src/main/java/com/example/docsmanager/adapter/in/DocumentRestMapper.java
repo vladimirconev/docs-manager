@@ -1,6 +1,6 @@
 package com.example.docsmanager.adapter.in;
 
-import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
+import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponse;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -18,9 +18,9 @@ public final class DocumentRestMapper {
 
   private DocumentRestMapper() {}
 
-  public static DocumentMetadataResponseDto mapDocumentToDocumentMetadataResponseDto(
+  public static DocumentMetadataResponse mapDocumentToDocumentMetadataResponseDto(
       final Document document) {
-    return new DocumentMetadataResponseDto(
+    return new DocumentMetadataResponse(
         document.id(),
         document.fileName(),
         document.extension(),
@@ -42,7 +42,7 @@ public final class DocumentRestMapper {
               .getExtension();
       fileExtension = StringUtils.substringAfterLast(extension, ".");
     } catch (MimeTypeException ex) {
-      throw new IllegalStateException("Media Type name is Invalid", ex);
+      throw new IllegalArgumentException("Media Type name is Invalid", ex);
     }
     byte[] content;
     try {
@@ -66,7 +66,7 @@ public final class DocumentRestMapper {
         .toList();
   }
 
-  public static List<DocumentMetadataResponseDto> mapDocumentsToDocumentMetadataResponseDtos(
+  public static List<DocumentMetadataResponse> mapDocumentsToDocumentMetadataResponseDtos(
       final List<Document> documents) {
     return documents.stream()
         .map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto)

@@ -1,7 +1,7 @@
 package com.example.docsmanager.adapter.in;
 
-import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponseDto;
-import com.example.docsmanager.adapter.in.dto.ErrorResponseDto;
+import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponse;
+import com.example.docsmanager.adapter.in.dto.ErrorResponse;
 import com.example.docsmanager.domain.DocumentManagement;
 import com.example.docsmanager.domain.entity.Document;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,11 +56,11 @@ public class DocumentRestController {
         @ApiResponse(
             responseCode = "503",
             description = "Service temporally unavailable",
-            content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(
             responseCode = "404",
             description = "Not Found",
-            content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
       })
   @GetMapping(path = "/documents/{documentId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
   public ResponseEntity<byte[]> getDocumentContent(
@@ -82,18 +82,18 @@ public class DocumentRestController {
                 @Content(
                     array =
                         @ArraySchema(
-                            schema = @Schema(implementation = DocumentMetadataResponseDto.class)))),
+                            schema = @Schema(implementation = DocumentMetadataResponse.class)))),
         @ApiResponse(
             responseCode = "503",
             description = "Service temporally unavailable",
-            content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
       })
   @PostMapping(
       path = "/documents",
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @SuppressWarnings("SameParameterValue")
-  public ResponseEntity<List<DocumentMetadataResponseDto>> uploadDocuments(
+  public ResponseEntity<List<DocumentMetadataResponse>> uploadDocuments(
       final @RequestPart("files") MultipartFile[] files,
       final @RequestParam("userId") String userId) {
     logger.info("Start of Uploading documents for user: {}.", userId);
@@ -114,7 +114,7 @@ public class DocumentRestController {
         @ApiResponse(
             responseCode = "503",
             description = "Service temporally unavailable",
-            content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
       })
   @DeleteMapping(path = "/documents")
   public ResponseEntity<Void> deleteDocuments(
@@ -137,14 +137,14 @@ public class DocumentRestController {
                 @Content(
                     array =
                         @ArraySchema(
-                            schema = @Schema(implementation = DocumentMetadataResponseDto.class)))),
+                            schema = @Schema(implementation = DocumentMetadataResponse.class)))),
         @ApiResponse(
             responseCode = "503",
             description = "Service temporally unavailable",
-            content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
       })
   @GetMapping(path = "/documents", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Set<DocumentMetadataResponseDto>> getDocumentsByUserId(
+  public ResponseEntity<Set<DocumentMetadataResponse>> getDocumentsByUserId(
       final @RequestParam("userId") String userId,
       final @RequestParam(name = "extension", required = false) String extension,
       final @RequestParam(name = "from", required = false) @DateTimeFormat(
@@ -159,10 +159,10 @@ public class DocumentRestController {
         to);
     Set<Document> documentsByUserId =
         documentManagement.getDocumentsByUserId(userId, extension, from, to);
-    Set<DocumentMetadataResponseDto> documentMetadataDtos =
+    Set<DocumentMetadataResponse> documentsMetadata =
         documentsByUserId.stream()
             .map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto)
             .collect(Collectors.toSet());
-    return new ResponseEntity<>(documentMetadataDtos, HttpStatus.OK);
+    return new ResponseEntity<>(documentsMetadata, HttpStatus.OK);
   }
 }
