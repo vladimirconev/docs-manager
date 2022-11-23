@@ -19,6 +19,10 @@ Documents manager that allows Upload and deleting of files. It is basically a pl
 ````
 docker compose up --build -d
 ````
+````
+docker compose down
+````
+
 
 To Build:
 ````
