@@ -3,7 +3,6 @@ package com.example.docsmanager.adapter.in;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.docsmanager.TestObjectFactory;
-import com.example.docsmanager.domain.entity.Document;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

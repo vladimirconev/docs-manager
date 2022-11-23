@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -124,9 +123,11 @@ public class RestExceptionHandler {
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   protected ResponseEntity<String> handleHttpRequestMethodNotSupported(
       final HttpRequestMethodNotSupportedException ex, final WebRequest request) {
-    Set<HttpMethod> supportedMethods = ex.getSupportedHttpMethods();
-    String detail = String.format("Use a supported HTTP methods %s.", supportedMethods);
-    return handleException(ex, HttpStatus.METHOD_NOT_ALLOWED, request, detail);
+    return handleException(
+        ex,
+        HttpStatus.METHOD_NOT_ALLOWED,
+        request,
+        "Use supported HTTP methods %s.".formatted(ex.getSupportedHttpMethods()));
   }
 
   @ResponseBody
