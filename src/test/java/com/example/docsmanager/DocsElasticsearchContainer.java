@@ -10,6 +10,7 @@ public class DocsElasticsearchContainer extends ElasticsearchContainer {
 
   public DocsElasticsearchContainer() {
     super(DockerImageName.parse(DOCKER_IMAGE_FULL_NAME_ELASTICSEARCH));
+    this.withReuse(true);
     this.addFixedExposedPort(9200, 9200);
     this.addFixedExposedPort(9300, 9300);
   }

@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,14 +20,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers(disabledWithoutDocker = true)
 public class DocsManagerApplicationTest {
 
-  @Container
   private static final ElasticsearchContainer elasticsearchContainer =
       new DocsElasticsearchContainer();
 
@@ -39,9 +38,15 @@ public class DocsManagerApplicationTest {
     elasticsearchContainer.start();
   }
 
+  @AfterAll
+  static void tearDown() {
+    elasticsearchContainer.stop();
+    assertThat(elasticsearchContainer.isRunning()).isFalse();
+  }
+
   @BeforeEach
   void testIsContainerRunning() {
-    assertTrue(elasticsearchContainer.isRunning());
+    assertThat(elasticsearchContainer.isRunning()).isTrue();
   }
 
   @Test
