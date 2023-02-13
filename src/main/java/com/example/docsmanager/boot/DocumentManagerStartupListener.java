@@ -22,7 +22,6 @@ public class DocumentManagerStartupListener implements ApplicationListener<Conte
     this.indexName = indexName;
   }
 
-  @SuppressWarnings("NullableProblems")
   @Override
   public void onApplicationEvent(final ContextRefreshedEvent event) {
     try {
@@ -36,11 +35,16 @@ public class DocumentManagerStartupListener implements ApplicationListener<Conte
   private void createIndex() throws IOException {
     BooleanResponse booleanResponse = esClient.indices().exists(e -> e.index(indexName));
     if (!booleanResponse.value()) {
-      var inputStream = this.getClass().getResourceAsStream(EXPLICIT_MAPPINGS_JSON_PATH);
-      var createIndexResponse =
-          esClient.indices().create(c -> c.index(indexName).mappings(m -> m.withJson(inputStream)));
-      logger.info(
-          "Creation of Index {} is acknowledged:{}", indexName, createIndexResponse.acknowledged());
+      try (var inputStream = this.getClass().getResourceAsStream(EXPLICIT_MAPPINGS_JSON_PATH)) {
+        var createIndexResponse =
+            esClient
+                .indices()
+                .create(c -> c.index(indexName).mappings(m -> m.withJson(inputStream)));
+        logger.info(
+            "Creation of Index {} is acknowledged:{}",
+            indexName,
+            createIndexResponse.acknowledged());
+      }
     }
   }
 }
