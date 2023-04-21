@@ -1,13 +1,16 @@
 package com.example.docsmanager.adapter.in;
 
+import static java.time.ZoneOffset.UTC;
+import static java.util.UUID.randomUUID;
+
 import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponse;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.config.TikaConfig;
@@ -30,7 +33,7 @@ public final class DocumentRestMapper {
 
   public static Document mapMultipartFileToDocument(
       final MultipartFile multipartFile, final String userId) {
-    var documentId = UUID.randomUUID().toString();
+    var documentId = randomUUID().toString();
     var fileName = StringUtils.substringBeforeLast(multipartFile.getOriginalFilename(), ".");
     var fileExtension = multipartFile.getContentType();
     try {
@@ -50,13 +53,9 @@ public final class DocumentRestMapper {
     } catch (IOException ioException) {
       throw new IllegalStateException("Error while extracting byte array content.", ioException);
     }
+    Clock fixed = Clock.fixed(Instant.EPOCH, UTC);
     return new Document(
-        documentId,
-        fileName,
-        fileExtension,
-        LocalDateTime.now(ZoneId.systemDefault()),
-        content,
-        userId);
+        documentId, fileName, fileExtension, LocalDateTime.now(fixed), content, userId);
   }
 
   public static List<Document> mapMultipartFilesToDocuments(

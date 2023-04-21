@@ -1,4 +1,4 @@
-FROM  openjdk:19
+FROM  openjdk:20
 
 ARG JAR_FILE=target/*.jar
 
