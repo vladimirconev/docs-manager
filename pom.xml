@@ -19,18 +19,18 @@
 		<commons-io.version>2.11.0</commons-io.version>
 		<mockito-core.version>3.11.0</mockito-core.version>
  		<sprindoc-openapi-ui.version>2.0.4</sprindoc-openapi-ui.version>
-		<archunit.version>1.0.0</archunit.version>
+		<archunit.version>1.0.1</archunit.version>
 		<assertj-core.version>3.24.2</assertj-core.version>
 		<equalsverifier.version>3.12.3</equalsverifier.version>
-		<error-prone-core.version>2.17.0</error-prone-core.version>
-		<error-prone-support.version>0.7.0</error-prone-support.version>
+		<error-prone-core.version>2.18.0</error-prone-core.version>
+		<error-prone-support.version>0.9.0</error-prone-support.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-		<testcontainers-elasticsearch.version>1.17.6</testcontainers-elasticsearch.version>
+		<testcontainers-elasticsearch.version>1.18.0</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.3.0</rest-assured.version>
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 		<jakarta-json-api.version>2.1.1</jakarta-json-api.version>
 		<fmt-maven-plugin.goal>check</fmt-maven-plugin.goal>
-		<fmt-maven-plugin.version>2.19</fmt-maven-plugin.version>
+		<fmt-maven-plugin.version>2.20</fmt-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -180,6 +180,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<parallel>methods</parallel>
+					<useUnlimitedThreads>true</useUnlimitedThreads>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
