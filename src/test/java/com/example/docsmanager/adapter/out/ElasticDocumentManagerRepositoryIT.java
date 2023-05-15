@@ -1,5 +1,6 @@
 package com.example.docsmanager.adapter.out;
 
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +13,8 @@ import com.example.docsmanager.boot.DocsManagerApplication;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
 import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.*;
@@ -58,27 +60,28 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     // Create Index + Mappings
     BooleanResponse booleanResponse = esClient.indices().exists(e -> e.index(documentIndexName));
     if (!booleanResponse.value()) {
-      var inputStream = this.getClass().getResourceAsStream(EXPLICIT_MAPPINGS_JSON_PATH);
-      var createIndexResponse =
-          esClient
-              .indices()
-              .create(c -> c.index(documentIndexName).mappings(m -> m.withJson(inputStream)));
-      assertNotNull(createIndexResponse);
-      assertEquals(Boolean.TRUE, createIndexResponse.acknowledged());
+      try (var inputStream = this.getClass().getResourceAsStream(EXPLICIT_MAPPINGS_JSON_PATH)) {
+        var createIndexResponse =
+            esClient
+                .indices()
+                .create(c -> c.index(documentIndexName).mappings(m -> m.withJson(inputStream)));
+        assertNotNull(createIndexResponse);
+        assertEquals(Boolean.TRUE, createIndexResponse.acknowledged());
+      }
     }
     // Load sample data
     List<Document> uploadDocuments =
         uploadDocuments(
             buildDocumentInstance(
                 DOCUMENT_ID,
-                LocalDateTime.now(Clock.systemUTC()),
+                Clock.fixed(Instant.EPOCH, UTC).instant(),
                 BYTE_CONTENT,
                 IT_DEMO_USER,
                 FILE_NAME,
                 PNG_EXTENSION),
             buildDocumentInstance(
                 SAMPLE_DOCUMENT_ID,
-                LocalDateTime.now(Clock.systemUTC()),
+                Clock.fixed(Instant.EPOCH, UTC).instant(),
                 BYTE_CONTENT,
                 IT_DEMO_USER,
                 FILE_NAME,
@@ -108,7 +111,7 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
     var sampleDocument =
         buildDocumentInstance(
             id,
-            LocalDateTime.now(Clock.systemUTC()),
+            Clock.fixed(Instant.EPOCH, UTC).instant(),
             BYTE_CONTENT,
             IT_DEMO_USER,
             FILE_NAME,
@@ -166,8 +169,8 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
         esDocsManagerRepo.getAllDocumentsByUserId(
             IT_DEMO_USER,
             PNG_EXTENSION,
-            LocalDateTime.now(Clock.systemUTC()).minusDays(1L),
-            LocalDateTime.now(Clock.systemUTC()));
+            Clock.fixed(Instant.EPOCH, UTC).instant().minus(1L, ChronoUnit.DAYS),
+            Clock.fixed(Instant.EPOCH, UTC).instant());
 
     assertNotNull(allDocumentsByUserIdWithPNGExtension);
     assertFalse(allDocumentsByUserIdWithPNGExtension.isEmpty());
@@ -176,8 +179,8 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
         esDocsManagerRepo.getAllDocumentsByUserId(
             IT_DEMO_USER,
             PDF_CONTENT_TYPE,
-            LocalDateTime.now(Clock.systemUTC()).minusDays(1L),
-            LocalDateTime.now(Clock.systemUTC()));
+            Clock.fixed(Instant.EPOCH, UTC).instant().minus(1L, ChronoUnit.DAYS),
+            Clock.fixed(Instant.EPOCH, UTC).instant());
 
     assertNotNull(allDocumentsByUserIdWithPDFExtension);
     assertTrue(allDocumentsByUserIdWithPDFExtension.isEmpty());
@@ -186,8 +189,8 @@ public class ElasticDocumentManagerRepositoryIT extends TestObjectFactory {
         esDocsManagerRepo.getAllDocumentsByUserId(
             IT_DEMO_USER,
             null,
-            LocalDateTime.now(Clock.systemUTC()).minusDays(1L),
-            LocalDateTime.now(Clock.systemUTC()));
+            Clock.fixed(Instant.EPOCH, UTC).instant().minus(1L, ChronoUnit.DAYS),
+            Clock.fixed(Instant.EPOCH, UTC).instant());
 
     assertNotNull(allDocumentsByUserId);
     assertEquals(allDocumentsByUserIdWithPNGExtension.size(), allDocumentsByUserId.size());

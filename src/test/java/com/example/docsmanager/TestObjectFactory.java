@@ -3,6 +3,7 @@ package com.example.docsmanager;
 import com.example.docsmanager.adapter.out.db.dto.DocumentElastic;
 import com.example.docsmanager.domain.entity.Document;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
@@ -28,7 +29,7 @@ public class TestObjectFactory {
 
   protected Document buildDocumentInstance(
       final String id,
-      final LocalDateTime creationDate,
+      final Instant creationDate,
       final byte[] content,
       final String user,
       final String fileName,

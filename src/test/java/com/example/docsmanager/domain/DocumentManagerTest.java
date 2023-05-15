@@ -1,5 +1,6 @@
 package com.example.docsmanager.domain;
 
+import static java.time.ZoneOffset.UTC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
@@ -7,7 +8,7 @@ import static org.mockito.Mockito.times;
 import com.example.docsmanager.TestObjectFactory;
 import com.example.docsmanager.domain.entity.Document;
 import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ public class DocumentManagerTest extends TestObjectFactory {
     Document document =
         buildDocumentInstance(
             DOCUMENT_ID,
-            LocalDateTime.now(Clock.systemUTC()),
+            Clock.fixed(Instant.EPOCH, UTC).instant(),
             BYTE_CONTENT,
             SAMPLE_USER_ID,
             FILE_NAME,

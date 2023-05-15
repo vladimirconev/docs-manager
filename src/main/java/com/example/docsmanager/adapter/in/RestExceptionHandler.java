@@ -1,5 +1,9 @@
 package com.example.docsmanager.adapter.in;
 
+import static java.time.ZoneOffset.UTC;
+import static java.util.Objects.requireNonNull;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import com.example.docsmanager.adapter.in.dto.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +16,6 @@ import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -45,7 +48,7 @@ public class RestExceptionHandler {
       final WebRequest request,
       final String message) {
     HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+    httpHeaders.setContentType(APPLICATION_JSON);
     ErrorResponse errorResponse = buildErrorResponseDto(status, request, message);
     try {
       return new ResponseEntity<>(
@@ -60,7 +63,7 @@ public class RestExceptionHandler {
     ServletWebRequest servletRequest = (ServletWebRequest) webRequest;
     HttpServletRequest request = servletRequest.getNativeRequest(HttpServletRequest.class);
 
-    Objects.requireNonNull(request, "Http servlet request should not be null.");
+    requireNonNull(request, "Http servlet request should not be null.");
 
     Map<String, Object> errors =
         errorAttributes.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults());
@@ -84,6 +87,7 @@ public class RestExceptionHandler {
         Optional.ofNullable(errors.get(PATH_KEY))
             .map(Object::toString)
             .orElse(request.getRequestURI());
+    Clock fixed = Clock.fixed(Instant.EPOCH, UTC);
     return new ErrorResponse(
         status,
         code,
@@ -91,7 +95,7 @@ public class RestExceptionHandler {
         path,
         request.getMethod(),
         exception,
-        new SimpleDateFormat(DATE_TIME_FORMAT).format(Date.from(Instant.now(Clock.systemUTC()))));
+        new SimpleDateFormat(DATE_TIME_FORMAT).format(Date.from(fixed.instant())));
   }
 
   @ResponseBody

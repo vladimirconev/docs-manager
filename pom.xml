@@ -22,8 +22,8 @@
 		<archunit.version>1.0.1</archunit.version>
 		<assertj-core.version>3.24.2</assertj-core.version>
 		<equalsverifier.version>3.12.3</equalsverifier.version>
-		<error-prone-core.version>2.18.0</error-prone-core.version>
-		<error-prone-support.version>0.9.0</error-prone-support.version>
+		<error-prone-core.version>2.19.1</error-prone-core.version>
+		<error-prone-support.version>0.11.0</error-prone-support.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<testcontainers-elasticsearch.version>1.18.0</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.3.0</rest-assured.version>
@@ -231,12 +231,12 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
-					<release>19</release>
+					<release>${java.version}</release>
 					<showWarnings>true</showWarnings>
 					<failOnWarning>false</failOnWarning>
 					<compilerArgs>
-						<arg>-XDcompilePolicy=simple</arg>
 						<arg>-Xplugin:ErrorProne</arg>
+						<arg>-XDcompilePolicy=simple</arg>
 					</compilerArgs>
 					<annotationProcessorPaths>
 						<path>

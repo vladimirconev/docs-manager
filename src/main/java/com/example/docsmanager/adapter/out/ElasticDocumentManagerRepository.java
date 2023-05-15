@@ -10,8 +10,7 @@ import com.example.docsmanager.adapter.out.db.dto.DocumentElastic;
 import com.example.docsmanager.domain.DocumentManagementRepository;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -62,10 +61,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 
   @Override
   public Set<Document> getAllDocumentsByUserId(
-      final String userId,
-      final String extension,
-      final LocalDateTime from,
-      final LocalDateTime to) {
+      final String userId, final String extension, final Instant from, final Instant to) {
     Set<Document> documents = new HashSet<>();
     BoolQuery.Builder boolQueryBuilder = getBoolQueryBuilder(userId, extension, from, to);
     try {
@@ -129,7 +125,7 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
 
   @NotNull
   private BoolQuery.Builder getBoolQueryBuilder(
-      String userId, String extension, LocalDateTime from, LocalDateTime to) {
+      String userId, String extension, Instant from, Instant to) {
     Query byUserId = TermQuery.of(t -> t.field(USER_ID).value(userId))._toQuery();
     BoolQuery.Builder boolQueryBuilder = new BoolQuery.Builder().filter(byUserId);
     if (StringUtils.isNotBlank(extension)) {
@@ -138,10 +134,10 @@ public class ElasticDocumentManagerRepository implements DocumentManagementRepos
     if (from != null || to != null) {
       RangeQuery.Builder rangeQueryBuilder = new RangeQuery.Builder().field(CREATION_DATE);
       if (from != null) {
-        rangeQueryBuilder.from(from.format(DateTimeFormatter.ISO_DATE_TIME));
+        rangeQueryBuilder.from(from.toString());
       }
       if (to != null) {
-        rangeQueryBuilder.to(to.format(DateTimeFormatter.ISO_DATE_TIME));
+        rangeQueryBuilder.to(to.toString());
       }
       boolQueryBuilder.must(rangeQueryBuilder.build()._toQuery());
     }

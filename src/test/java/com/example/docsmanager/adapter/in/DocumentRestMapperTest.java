@@ -1,11 +1,11 @@
 package com.example.docsmanager.adapter.in;
 
+import static java.time.ZoneOffset.UTC;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.docsmanager.TestObjectFactory;
 import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import org.junit.jupiter.api.Test;
 
 public class DocumentRestMapperTest extends TestObjectFactory {
@@ -15,7 +15,7 @@ public class DocumentRestMapperTest extends TestObjectFactory {
     var document =
         buildDocumentInstance(
             DOCUMENT_ID,
-            LocalDateTime.now(Clock.systemUTC()),
+            Clock.fixed(Instant.EPOCH, UTC).instant(),
             BYTE_CONTENT,
             SAMPLE_USER_ID,
             FILE_NAME,
@@ -27,9 +27,7 @@ public class DocumentRestMapperTest extends TestObjectFactory {
     assertEquals(document.id(), documentMetadata.id());
     assertEquals(document.extension(), documentMetadata.extension());
     assertEquals(document.fileName(), documentMetadata.fileName());
-    assertEquals(
-        document.creationDate(),
-        LocalDateTime.parse(documentMetadata.creationDate(), DateTimeFormatter.ISO_DATE_TIME));
+    assertEquals(document.creationDate(), Instant.parse(documentMetadata.creationDate()));
     assertEquals(document.userId(), documentMetadata.userId());
   }
 

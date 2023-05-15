@@ -1,5 +1,6 @@
 package com.example.docsmanager.adapter.out;
 
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
@@ -7,6 +8,7 @@ import static org.mockito.Mockito.times;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.example.docsmanager.TestObjectFactory;
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 import org.junit.jupiter.api.AfterEach;
@@ -52,7 +54,7 @@ public class ElasticDocumentManagerRepositoryTest extends TestObjectFactory {
     var document =
         buildDocumentInstance(
             DOCUMENT_ID,
-            LocalDateTime.now(Clock.systemUTC()),
+            Clock.fixed(Instant.EPOCH, UTC).instant(),
             BYTE_CONTENT,
             SAMPLE_USER_ID,
             FILE_NAME,

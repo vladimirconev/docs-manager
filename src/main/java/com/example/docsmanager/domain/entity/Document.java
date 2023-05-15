@@ -1,11 +1,11 @@
 package com.example.docsmanager.domain.entity;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record Document(
     String id,
     String fileName,
     String extension,
-    LocalDateTime creationDate,
+    Instant creationDate,
     byte[] content,
     String userId) {}

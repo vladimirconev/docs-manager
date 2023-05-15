@@ -1,5 +1,9 @@
 package com.example.docsmanager.adapter.in;
 
+import static java.util.stream.Collectors.toSet;
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
+import static org.springframework.http.MediaType.*;
+
 import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponse;
 import com.example.docsmanager.adapter.in.dto.ErrorResponse;
 import com.example.docsmanager.domain.DocumentManagement;
@@ -11,15 +15,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,7 +64,7 @@ public class DocumentRestController {
             description = "Not Found",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
       })
-  @GetMapping(path = "/documents/{documentId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+  @GetMapping(path = "/documents/{documentId}", produces = APPLICATION_OCTET_STREAM_VALUE)
   public ResponseEntity<byte[]> getDocumentContent(
       final @PathVariable("documentId") String documentId) {
     logger.info("Fetching Document Data content with id:{}.", documentId);
@@ -90,8 +92,8 @@ public class DocumentRestController {
       })
   @PostMapping(
       path = "/documents",
-      produces = MediaType.APPLICATION_JSON_VALUE,
-      consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+      produces = APPLICATION_JSON_VALUE,
+      consumes = MULTIPART_FORM_DATA_VALUE)
   @SuppressWarnings("SameParameterValue")
   public ResponseEntity<List<DocumentMetadataResponse>> uploadDocuments(
       final @RequestPart("files") MultipartFile[] files,
@@ -143,14 +145,14 @@ public class DocumentRestController {
             description = "Service temporally unavailable",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
       })
-  @GetMapping(path = "/documents", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(path = "/documents", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<Set<DocumentMetadataResponse>> getDocumentsByUserId(
       final @RequestParam("userId") String userId,
       final @RequestParam(name = "extension", required = false) String extension,
-      final @RequestParam(name = "from", required = false) @DateTimeFormat(
-              iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
-      final @RequestParam(name = "to", required = false) @DateTimeFormat(
-              iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
+      final @RequestParam(name = "from", required = false) @DateTimeFormat(iso = DATE_TIME) Instant
+              from,
+      final @RequestParam(name = "to", required = false) @DateTimeFormat(iso = DATE_TIME) Instant
+              to) {
     logger.info(
         "Fetch documents metadata bu user:{} and by extension (optionally):{} using date range starting from:{} to:{}.",
         userId,
@@ -162,7 +164,7 @@ public class DocumentRestController {
     Set<DocumentMetadataResponse> documentsMetadata =
         documentsByUserId.stream()
             .map(DocumentRestMapper::mapDocumentToDocumentMetadataResponseDto)
-            .collect(Collectors.toSet());
+            .collect(toSet());
     return new ResponseEntity<>(documentsMetadata, HttpStatus.OK);
   }
 }

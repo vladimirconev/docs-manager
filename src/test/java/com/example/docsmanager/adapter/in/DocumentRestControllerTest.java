@@ -1,5 +1,6 @@
 package com.example.docsmanager.adapter.in;
 
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,7 +13,7 @@ import com.example.docsmanager.domain.DocumentManager;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
 import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -53,10 +54,11 @@ public class DocumentRestControllerTest extends TestObjectFactory {
     MultipartFile multipartFile =
         buildMockMultipartFile(IMAGE_PNG_CONTENT_TYPE, FILE_NAME, PNG_EXTENSION, BYTE_CONTENT);
     MultipartFile[] multipartFiles = {multipartFile};
+
     Document sampleDocument =
         buildDocumentInstance(
             DOCUMENT_ID,
-            LocalDateTime.now(Clock.systemUTC()),
+            Clock.fixed(Instant.EPOCH, UTC).instant(),
             BYTE_CONTENT,
             SAMPLE_USER_ID,
             FILE_NAME,

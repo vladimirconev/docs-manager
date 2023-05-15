@@ -1,9 +1,11 @@
 package com.example.docsmanager.adapter.out;
 
+import static java.time.ZoneOffset.UTC;
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+
 import com.example.docsmanager.adapter.out.db.dto.DocumentElastic;
 import com.example.docsmanager.domain.entity.Document;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +19,7 @@ public final class DocumentRepositoryMapper {
         document.id(),
         document.extension(),
         document.fileName(),
-        document.creationDate().format(DateTimeFormatter.ISO_DATE_TIME),
+        document.creationDate().toString(),
         Base64.getEncoder().encodeToString(document.content()),
         document.userId());
   }
@@ -31,7 +33,7 @@ public final class DocumentRepositoryMapper {
         dto.id(),
         dto.fileName(),
         dto.extension(),
-        LocalDateTime.parse(dto.creationDate(), DateTimeFormatter.ISO_DATE_TIME),
+        LocalDateTime.parse(dto.creationDate(), ISO_DATE_TIME).toInstant(UTC),
         decodedContent,
         dto.userId());
   }

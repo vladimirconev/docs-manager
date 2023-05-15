@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import com.example.docsmanager.DocsElasticsearchContainer;
 import com.example.docsmanager.adapter.in.DocumentRestController;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers(disabledWithoutDocker = true)
 public class DocsManagerApplicationTest {
 
@@ -81,7 +82,7 @@ public class DocsManagerApplicationTest {
     given()
         .when()
         .port(webServerAppCtxt.getWebServer().getPort())
-        .get(String.format("api/v2/documents?userId=%s", RandomStringUtils.random(5)))
+        .get("api/v2/documents?userId=%s".formatted( RandomStringUtils.random(5)))
         .then()
         .assertThat()
         .statusCode(is(HttpStatus.OK.value()));
