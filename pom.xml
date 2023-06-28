@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.6</version>
+		<version>3.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -22,8 +22,8 @@
 		<archunit.version>1.0.1</archunit.version>
 		<assertj-core.version>3.24.2</assertj-core.version>
 		<equalsverifier.version>3.12.3</equalsverifier.version>
-		<error-prone-core.version>2.19.1</error-prone-core.version>
-		<error-prone-support.version>0.11.0</error-prone-support.version>
+		<error-prone-core.version>2.20.0</error-prone-core.version>
+		<error-prone-support.version>0.12.0</error-prone-support.version>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
 		<testcontainers-elasticsearch.version>1.18.0</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.3.0</rest-assured.version>

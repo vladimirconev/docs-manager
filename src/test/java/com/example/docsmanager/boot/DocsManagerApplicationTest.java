@@ -82,7 +82,7 @@ public class DocsManagerApplicationTest {
     given()
         .when()
         .port(webServerAppCtxt.getWebServer().getPort())
-        .get("api/v2/documents?userId=%s".formatted( RandomStringUtils.random(5)))
+        .get("api/v2/documents?userId=%s".formatted(RandomStringUtils.random(5)))
         .then()
         .assertThat()
         .statusCode(is(HttpStatus.OK.value()));
