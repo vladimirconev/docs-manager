@@ -25,10 +25,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers(disabledWithoutDocker = true)
-public class DocsManagerApplicationTest {
+class DocsManagerApplicationTest {
 
-  private static final ElasticsearchContainer elasticsearchContainer =
-      new DocsElasticsearchContainer();
+  static final ElasticsearchContainer elasticsearchContainer = new DocsElasticsearchContainer();
 
   @Autowired private DocumentRestController documentRestController;
 
