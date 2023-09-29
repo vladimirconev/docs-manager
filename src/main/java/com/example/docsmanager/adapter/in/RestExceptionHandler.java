@@ -1,15 +1,10 @@
 package com.example.docsmanager.adapter.in;
 
-import static java.time.ZoneOffset.UTC;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.example.docsmanager.adapter.in.dto.ErrorResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.time.Clock;
 import java.time.Instant;
 import java.util.*;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -28,38 +23,32 @@ import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice(basePackageClasses = DocumentRestController.class)
 public class RestExceptionHandler {
-
-  private static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:SS.ssZ";
   private static final String PATH_KEY = "path";
   private static final String MESSAGE_KEY = "message";
 
   private final DefaultErrorAttributes errorAttributes;
-  private final ObjectMapper objectMapper;
 
-  public RestExceptionHandler(
-      final DefaultErrorAttributes errorAttributes, final ObjectMapper objectMapper) {
+  public RestExceptionHandler(final DefaultErrorAttributes errorAttributes) {
     this.errorAttributes = errorAttributes;
-    this.objectMapper = objectMapper;
   }
 
-  protected ResponseEntity<String> handleException(
+  protected ResponseEntity<ErrorResponse> handleException(
       final Exception exception,
       final HttpStatus status,
       final WebRequest request,
       final String message) {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setContentType(APPLICATION_JSON);
-    ErrorResponse errorResponse = buildErrorResponseDto(status, request, message);
-    try {
-      return new ResponseEntity<>(
-          objectMapper.writeValueAsString(errorResponse), httpHeaders, status);
-    } catch (JsonProcessingException jpe) {
-      return new ResponseEntity<>(exception.getMessage(), httpHeaders, status);
-    }
+    ErrorResponse errorResponse = buildErrorResponseDto(status, request, exception, message);
+
+    return new ResponseEntity<>(errorResponse, httpHeaders, status);
   }
 
   protected ErrorResponse buildErrorResponseDto(
-      final HttpStatus httpStatus, final WebRequest webRequest, final String messageDetails) {
+      final HttpStatus httpStatus,
+      final WebRequest webRequest,
+      final Exception exception,
+      final String messageDetails) {
     ServletWebRequest servletRequest = (ServletWebRequest) webRequest;
     HttpServletRequest request = servletRequest.getNativeRequest(HttpServletRequest.class);
 
@@ -67,12 +56,7 @@ public class RestExceptionHandler {
 
     Map<String, Object> errors =
         errorAttributes.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults());
-    final Throwable webRequestThrowable = errorAttributes.getError(webRequest);
 
-    String exception =
-        Optional.ofNullable(webRequestThrowable.getCause())
-            .map(cause -> cause.getClass().getSimpleName())
-            .orElse(webRequestThrowable.getClass().getSimpleName());
     String status = httpStatus.getReasonPhrase();
     String code = String.valueOf(httpStatus.value());
     if (httpStatus == HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -87,34 +71,34 @@ public class RestExceptionHandler {
         Optional.ofNullable(errors.get(PATH_KEY))
             .map(Object::toString)
             .orElse(request.getRequestURI());
-    Clock fixed = Clock.fixed(Instant.EPOCH, UTC);
+
     return new ErrorResponse(
         status,
         code,
         message,
         path,
         request.getMethod(),
-        exception,
-        new SimpleDateFormat(DATE_TIME_FORMAT).format(Date.from(fixed.instant())));
+        exception.getClass().getSimpleName(),
+        Instant.now());
   }
 
   @ResponseBody
   @ExceptionHandler(IllegalStateException.class)
-  protected ResponseEntity<String> handleIllegalStateException(
+  protected ResponseEntity<ErrorResponse> handleIllegalStateException(
       final IllegalStateException ex, final WebRequest webRequest) {
     return handleException(ex, HttpStatus.CONFLICT, webRequest, null);
   }
 
   @ResponseBody
   @ExceptionHandler(IllegalArgumentException.class)
-  protected ResponseEntity<String> handleIllegalArgumentException(
+  protected ResponseEntity<ErrorResponse> handleIllegalArgumentException(
       final IllegalArgumentException ex, final WebRequest webRequest) {
     return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, null);
   }
 
   @ResponseBody
   @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-  protected ResponseEntity<String> handleHttpMediaTypeNotAcceptable(
+  protected ResponseEntity<ErrorResponse> handleHttpMediaTypeNotAcceptable(
       final HttpMediaTypeNotAcceptableException ex, final WebRequest request) {
     return handleException(
         ex,
@@ -125,7 +109,7 @@ public class RestExceptionHandler {
 
   @ResponseBody
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-  protected ResponseEntity<String> handleHttpRequestMethodNotSupported(
+  protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupported(
       final HttpRequestMethodNotSupportedException ex, final WebRequest request) {
     return handleException(
         ex,
@@ -136,21 +120,21 @@ public class RestExceptionHandler {
 
   @ResponseBody
   @ExceptionHandler(NoSuchElementException.class)
-  protected ResponseEntity<String> handleNoSuchElementException(
+  protected ResponseEntity<ErrorResponse> handleNoSuchElementException(
       final NoSuchElementException ex, final WebRequest webRequest) {
     return handleException(ex, HttpStatus.NOT_FOUND, webRequest, ex.getMessage());
   }
 
   @ResponseBody
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  protected ResponseEntity<String> handleNMethodArgumentNotValidException(
+  protected ResponseEntity<ErrorResponse> handleNMethodArgumentNotValidException(
       final MethodArgumentNotValidException ex, final WebRequest webRequest) {
     return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, ex.getMessage());
   }
 
   @ResponseBody
   @ExceptionHandler(Exception.class)
-  protected ResponseEntity<String> handleGenericException(
+  protected ResponseEntity<ErrorResponse> handleGenericException(
       final Exception ex, final WebRequest webRequest) {
     return handleException(ex, HttpStatus.SERVICE_UNAVAILABLE, webRequest, ex.getMessage());
   }

@@ -1,7 +1,8 @@
 package com.example.docsmanager.adapter.in.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
+import java.time.Instant;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ErrorResponse(
@@ -11,4 +12,5 @@ public record ErrorResponse(
     String path,
     String httpMethod,
     String exception,
-    @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:SS.ssZ") String timestamp) {}
+    Instant timestamp)
+    implements Serializable {}
