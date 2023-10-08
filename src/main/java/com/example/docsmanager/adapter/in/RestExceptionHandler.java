@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 
 @RestControllerAdvice(basePackageClasses = DocumentRestController.class)
 public class RestExceptionHandler {
@@ -87,6 +89,13 @@ public class RestExceptionHandler {
   protected ResponseEntity<ErrorResponse> handleIllegalStateException(
       final IllegalStateException ex, final WebRequest webRequest) {
     return handleException(ex, HttpStatus.CONFLICT, webRequest, null);
+  }
+
+  @ResponseBody
+  @ExceptionHandler(MaxUploadSizeExceededException.class)
+  protected ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(
+      final MaxUploadSizeExceededException ex, final WebRequest webRequest) {
+    return handleException(ex, HttpStatus.PAYLOAD_TOO_LARGE, webRequest, ex.getMessage());
   }
 
   @ResponseBody
