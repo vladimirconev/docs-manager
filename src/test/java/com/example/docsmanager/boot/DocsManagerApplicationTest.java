@@ -59,7 +59,7 @@ class DocsManagerApplicationTest {
     given()
         .when()
         .port(webServerAppCtxt.getWebServer().getPort())
-        .get(String.format("api/v2/documents/%s", UUID.randomUUID()))
+        .get("api/v2/documents/%s".formatted(UUID.randomUUID()))
         .then()
         .assertThat()
         .statusCode(is(HttpStatus.NOT_FOUND.value()));
@@ -70,7 +70,7 @@ class DocsManagerApplicationTest {
     given()
         .when()
         .port(webServerAppCtxt.getWebServer().getPort())
-        .delete(String.format("api/v2/documents?documentIds=%s", UUID.randomUUID()))
+        .delete("api/v2/documents?documentIds=%s".formatted( UUID.randomUUID()))
         .then()
         .assertThat()
         .statusCode(is(HttpStatus.NO_CONTENT.value()));
