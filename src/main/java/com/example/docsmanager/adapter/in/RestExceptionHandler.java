@@ -7,6 +7,7 @@ import com.example.docsmanager.adapter.in.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpHeaders;
@@ -15,13 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.multipart.MultipartException;
 
 @RestControllerAdvice(basePackageClasses = DocumentRestController.class)
 public class RestExceptionHandler {
@@ -99,6 +100,13 @@ public class RestExceptionHandler {
   }
 
   @ResponseBody
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  protected ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
+      final MissingServletRequestParameterException ex, final WebRequest webRequest) {
+    return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, ex.getMessage());
+  }
+
+  @ResponseBody
   @ExceptionHandler(IllegalArgumentException.class)
   protected ResponseEntity<ErrorResponse> handleIllegalArgumentException(
       final IllegalArgumentException ex, final WebRequest webRequest) {
@@ -138,7 +146,18 @@ public class RestExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   protected ResponseEntity<ErrorResponse> handleNMethodArgumentNotValidException(
       final MethodArgumentNotValidException ex, final WebRequest webRequest) {
-    return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, ex.getMessage());
+    var fieldErrors = ex.getFieldErrors();
+    var message =
+        fieldErrors.stream()
+            .map(
+                fieldError ->
+                    "Validation failed for field '%s' with rejected value '%s' due to: '%s'"
+                        .formatted(
+                            fieldError.getField(),
+                            fieldError.getRejectedValue(),
+                            fieldError.getDefaultMessage()))
+            .collect(Collectors.joining(System.lineSeparator()));
+    return handleException(ex, HttpStatus.BAD_REQUEST, webRequest, message);
   }
 
   @ResponseBody

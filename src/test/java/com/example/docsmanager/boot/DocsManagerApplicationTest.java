@@ -70,7 +70,7 @@ class DocsManagerApplicationTest {
     given()
         .when()
         .port(webServerAppCtxt.getWebServer().getPort())
-        .delete("api/v2/documents?documentIds=%s".formatted( UUID.randomUUID()))
+        .delete("api/v2/documents?documentIds=%s".formatted(UUID.randomUUID()))
         .then()
         .assertThat()
         .statusCode(is(HttpStatus.NO_CONTENT.value()));
@@ -89,9 +89,12 @@ class DocsManagerApplicationTest {
 
   @Test
   void noSuchElementExceptionOnGetDocumentContent() {
-    assertThrows(
-        NoSuchElementException.class,
-        () -> documentRestController.getDocumentContent(UUID.randomUUID().toString()));
+    var noSuchElementException =
+        assertThrows(
+            NoSuchElementException.class,
+            () -> documentRestController.getDocumentContent(UUID.randomUUID().toString()));
+    assertThat(noSuchElementException).isNotNull();
+    assertThat(noSuchElementException.getMessage()).isNull();
   }
 
   @Test

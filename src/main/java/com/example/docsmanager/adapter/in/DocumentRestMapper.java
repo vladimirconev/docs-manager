@@ -1,12 +1,10 @@
 package com.example.docsmanager.adapter.in;
 
-import static java.time.ZoneOffset.UTC;
 import static java.util.UUID.randomUUID;
 
 import com.example.docsmanager.adapter.in.dto.DocumentMetadataResponse;
 import com.example.docsmanager.domain.entity.Document;
 import java.io.IOException;
-import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
@@ -51,8 +49,8 @@ public final class DocumentRestMapper {
     } catch (IOException ioException) {
       throw new IllegalStateException("Error while extracting byte array content.", ioException);
     }
-    Clock clock = Clock.fixed(Instant.EPOCH, UTC);
-    return new Document(documentId, fileName, fileExtension, clock.instant(), content, userId);
+
+    return new Document(documentId, fileName, fileExtension, Instant.now(), content, userId);
   }
 
   public static List<Document> mapMultipartFilesToDocuments(
