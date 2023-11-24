@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.5</version>
+		<version>3.2.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -19,13 +19,11 @@
 		<commons-io.version>2.11.0</commons-io.version>
 		<mockito-core.version>3.11.0</mockito-core.version>
  		<sprindoc-openapi-ui.version>2.0.4</sprindoc-openapi-ui.version>
-		<archunit.version>1.1.0</archunit.version>
-		<assertj-core.version>3.24.2</assertj-core.version>
-		<equalsverifier.version>3.12.3</equalsverifier.version>
+		<archunit.version>1.2.0</archunit.version>
+		<equalsverifier.version>3.15.3</equalsverifier.version>
 		<error-prone-core.version>2.22.0</error-prone-core.version>
 		<error-prone-support.version>0.14.0</error-prone-support.version>
-		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-		<testcontainers-elasticsearch.version>1.19.0</testcontainers-elasticsearch.version>
+		<testcontainers-elasticsearch.version>1.19.3</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.3.0</rest-assured.version>
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 		<jakarta-json-api.version>2.1.1</jakarta-json-api.version>
@@ -153,7 +151,6 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>${assertj-core.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -179,7 +176,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<parallel>methods</parallel>
 					<useUnlimitedThreads>true</useUnlimitedThreads>
@@ -229,7 +225,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<release>${java.version}</release>
 					<showWarnings>true</showWarnings>
