@@ -28,7 +28,7 @@
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 		<jakarta-json-api.version>2.1.1</jakarta-json-api.version>
 		<fmt-maven-plugin.goal>check</fmt-maven-plugin.goal>
-		<fmt-maven-plugin.version>2.21.1</fmt-maven-plugin.version>
+		<fmt-maven-plugin.version>2.22.1</fmt-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
