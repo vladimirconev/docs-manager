@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.2</version>
+		<version>3.3.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -20,15 +20,15 @@
 		<mockito-core.version>3.11.0</mockito-core.version>
  		<sprindoc-openapi-ui.version>2.3.0</sprindoc-openapi-ui.version>
 		<archunit.version>1.2.2</archunit.version>
-		<equalsverifier.version>3.16</equalsverifier.version>
-		<error-prone-core.version>2.29.2</error-prone-core.version>
-		<error-prone-support.version>0.17.0</error-prone-support.version>
-		<testcontainers-elasticsearch.version>1.20.0</testcontainers-elasticsearch.version>
+		<equalsverifier.version>3.16.2</equalsverifier.version>
+		<error-prone-core.version>2.30.0</error-prone-core.version>
+		<error-prone-support.version>0.18.0</error-prone-support.version>
+		<testcontainers-elasticsearch.version>1.20.1</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.3.0</rest-assured.version>
 		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 		<jakarta-json-api.version>2.1.3</jakarta-json-api.version>
 		<fmt-maven-plugin.goal>check</fmt-maven-plugin.goal>
-		<fmt-maven-plugin.version>2.23</fmt-maven-plugin.version>
+		<fmt-maven-plugin.version>2.24</fmt-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
