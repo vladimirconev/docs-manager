@@ -21,7 +21,7 @@
  		<sprindoc-openapi-ui.version>2.3.0</sprindoc-openapi-ui.version>
 		<archunit.version>1.2.2</archunit.version>
 		<equalsverifier.version>3.16.2</equalsverifier.version>
-		<error-prone-core.version>2.30.0</error-prone-core.version>
+		<error-prone-core.version>2.32.0</error-prone-core.version>
 		<error-prone-support.version>0.18.0</error-prone-support.version>
 		<testcontainers-elasticsearch.version>1.20.1</testcontainers-elasticsearch.version>
 		<rest-assured.version>5.3.0</rest-assured.version>
